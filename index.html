@@ -24,60 +24,10 @@
                 height: 100vh;
                 position: relative;
                 background: 
-                    /* Coffee beans scattered around */
-                    radial-gradient(circle at 15% 25%, rgba(101, 67, 33, 0.8) 2px, transparent 2px),
-                    radial-gradient(circle at 85% 15%, rgba(101, 67, 33, 0.8) 2px, transparent 2px),
-                    radial-gradient(circle at 25% 75%, rgba(101, 67, 33, 0.8) 1.5px, transparent 1.5px),
-                    radial-gradient(circle at 75% 85%, rgba(101, 67, 33, 0.8) 2px, transparent 2px),
-                    radial-gradient(circle at 45% 35%, rgba(101, 67, 33, 0.8) 1px, transparent 1px),
-                    radial-gradient(circle at 65% 55%, rgba(101, 67, 33, 0.8) 1.5px, transparent 1.5px),
-                    /* Floating book pages */
-                    radial-gradient(ellipse at 30% 40%, rgba(255, 248, 220, 0.3) 0%, transparent 15%),
-                    radial-gradient(ellipse at 70% 30%, rgba(255, 248, 220, 0.25) 0%, transparent 12%),
-                    radial-gradient(ellipse at 20% 70%, rgba(255, 248, 220, 0.2) 0%, transparent 10%),
-                    radial-gradient(ellipse at 80% 80%, rgba(255, 248, 220, 0.3) 0%, transparent 14%),
-                    /* Coffee steam effects */
-                    radial-gradient(circle at 40% 20%, rgba(255,255,255,0.1) 0%, transparent 30%),
-                    radial-gradient(circle at 60% 60%, rgba(255,255,255,0.08) 0%, transparent 25%),
-                    /* Warm lighting */
-                    radial-gradient(circle at 20% 20%, rgba(255,215,0,0.15) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 60%, rgba(255,140,0,0.12) 0%, transparent 50%),
-                    /* Base coffee shop atmosphere */
-                    linear-gradient(45deg, #8B4513 0%, #A0522D 25%, #CD853F 50%, #D2691E 75%, #8B4513 100%);
-                background-size: 
-                    200px 200px, 250px 250px, 180px 180px, 220px 220px, 150px 150px, 190px 190px,
-                    300px 200px, 280px 180px, 250px 160px, 320px 220px,
-                    400px 400px, 350px 350px,
-                    600px 600px, 550px 550px,
-                    100% 100%;
-                background-position: 
-                    0 0, 100px 50px, 200px 150px, 50px 100px, 300px 80px, 150px 200px,
-                    0 0, 200px 100px, 100px 200px, 300px 50px,
-                    0 0, 200px 200px,
-                    0 0, 400px 300px,
-                    0 0;
-                animation: subtle-float 20s ease-in-out infinite;
+                    /* Clean coffee shop atmosphere */
+                    linear-gradient(135deg, #F5E6D3 0%, #E8D5B7 25%, #D4C4A8 50%, #C9B99C 75%, #B8A082 100%);
                 background-attachment: fixed;
                 transition: transform 0.1s ease-out;
-            }
-
-            @keyframes subtle-float {
-                0%, 100% { 
-                    background-position: 
-                        0 0, 100px 50px, 200px 150px, 50px 100px, 300px 80px, 150px 200px,
-                        0 0, 200px 100px, 100px 200px, 300px 50px,
-                        0 0, 200px 200px,
-                        0 0, 400px 300px,
-                        0 0;
-                }
-                50% { 
-                    background-position: 
-                        10px 5px, 110px 55px, 210px 155px, 60px 105px, 310px 85px, 160px 205px,
-                        5px 3px, 205px 103px, 105px 203px, 305px 53px,
-                        0 0, 200px 200px,
-                        0 0, 400px 300px,
-                        0 0;
-                }
             }
     
             .screen-shake {
@@ -100,44 +50,92 @@
     
             .bookshelf {
                 position: absolute;
-                width: 80px;
-                height: 150px;
-                background: linear-gradient(90deg, #654321 0%, #8B4513 50%, #654321 100%);
-                border: 3px solid #4A4A4A;
+                width: 100px;
+                height: 180px;
+                background: linear-gradient(90deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
+                border: 4px solid #654321;
                 border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+                z-index: 10;
             }
     
             .bookshelf:before {
                 content: '';
                 position: absolute;
-                top: 25px;
+                top: 20px;
                 left: 8px;
                 right: 8px;
-                height: 20px;
-                background: repeating-linear-gradient(90deg, #FF6B6B 0px, #FF6B6B 10px, #4ECDC4 10px, #4ECDC4 20px, #45B7D1 20px, #45B7D1 30px, #96CEB4 30px, #96CEB4 40px);
+                height: 25px;
+                background: repeating-linear-gradient(90deg, 
+                    #FF6B6B 0px, #FF6B6B 12px, 
+                    #4ECDC4 12px, #4ECDC4 24px, 
+                    #45B7D1 24px, #45B7D1 36px, 
+                    #96CEB4 36px, #96CEB4 48px);
                 border-radius: 3px;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
             }
     
             .bookshelf:after {
                 content: '';
                 position: absolute;
-                bottom: 25px;
+                bottom: 20px;
                 left: 8px;
                 right: 8px;
-                height: 20px;
-                background: repeating-linear-gradient(90deg, #DDA0DD 0px, #DDA0DD 10px, #F0E68C 10px, #F0E68C 20px, #FFB6C1 20px, #FFB6C1 30px, #98FB98 30px, #98FB98 40px);
+                height: 25px;
+                background: repeating-linear-gradient(90deg, 
+                    #DDA0DD 0px, #DDA0DD 12px, 
+                    #F0E68C 12px, #F0E68C 24px, 
+                    #FFB6C1 24px, #FFB6C1 36px, 
+                    #98FB98 36px, #98FB98 48px);
                 border-radius: 3px;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+            }
+
+            .couch {
+                position: absolute;
+                width: 120px;
+                height: 80px;
+                background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
+                border-radius: 15px;
+                border: 3px solid #654321;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+                z-index: 10;
+            }
+
+            .couch:before {
+                content: '';
+                position: absolute;
+                top: -8px;
+                left: 10px;
+                right: 10px;
+                height: 20px;
+                background: linear-gradient(135deg, #A0522D, #8B4513);
+                border-radius: 10px 10px 5px 5px;
+                border: 2px solid #654321;
+            }
+
+            .couch:after {
+                content: '';
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                right: 15px;
+                bottom: 10px;
+                background: repeating-linear-gradient(45deg, 
+                    transparent, transparent 8px, 
+                    rgba(101, 67, 33, 0.2) 8px, rgba(101, 67, 33, 0.2) 10px);
+                border-radius: 8px;
             }
     
             .cafe-table {
                 position: absolute;
-                width: 60px;
-                height: 60px;
+                width: 80px;
+                height: 80px;
                 background: radial-gradient(circle, #8B4513 30%, #654321 70%);
                 border-radius: 50%;
                 border: 4px solid #4A4A4A;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+                box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+                z-index: 10;
             }
     
             .cafe-table:after {
@@ -146,7 +144,8 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 24px;
+                font-size: 28px;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.5);
             }
     
             #player {
@@ -241,6 +240,35 @@
             .speech-bubble.show {
                 opacity: 1;
                 transform: scale(1);
+            }
+
+            .score-popup {
+                position: absolute;
+                font-size: 24px;
+                font-weight: bold;
+                pointer-events: none;
+                z-index: 200;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+                animation: score-float 1.5s ease-out forwards;
+            }
+
+            .score-popup.positive {
+                color: #FFD700;
+            }
+
+            .score-popup.negative {
+                color: #FF4444;
+            }
+
+            @keyframes score-float {
+                0% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-80px) scale(1.2);
+                }
             }
     
             .collectible {
@@ -414,6 +442,10 @@
                 align-items: center;
                 flex-wrap: wrap;
                 gap: 10px;
+                background: rgba(0,0,0,0.1);
+                padding: 10px;
+                border-radius: 15px;
+                backdrop-filter: blur(5px);
             }
     
             #score, #timer, #highScore {
@@ -447,42 +479,42 @@
     
             #popup {
                 position: fixed;
-                top: 60%;
+                top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 background: linear-gradient(135deg, #FFE4E1, #FFF0F5);
-                padding: 25px;
+                padding: 30px;
                 border-radius: 20px;
                 border: 4px solid #FF69B4;
                 text-align: center;
                 z-index: 300;
                 display: none;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                max-width: 85%;
-                max-height: 35%;
-                overflow-y: auto;
+                max-width: 90%;
+                width: 400px;
+                min-height: 250px;
             }
     
             #popup h2 {
                 color: #FF1493;
-                margin-bottom: 12px;
-                font-size: 20px;
+                margin-bottom: 15px;
+                font-size: 24px;
             }
     
             #popup p {
                 color: #8B008B;
-                font-size: 16px;
-                margin-bottom: 15px;
-                line-height: 1.3;
+                font-size: 18px;
+                margin-bottom: 20px;
+                line-height: 1.4;
             }
     
             #popup button {
                 background: linear-gradient(45deg, #FF69B4, #FF1493);
                 color: white;
                 border: none;
-                padding: 10px 20px;
-                border-radius: 20px;
-                font-size: 14px;
+                padding: 12px 25px;
+                border-radius: 25px;
+                font-size: 16px;
                 font-weight: bold;
                 cursor: pointer;
                 transition: transform 0.2s;
@@ -579,11 +611,10 @@
             @media (max-height: 600px) {
                 #startScreen h1 { font-size: 24px; }
                 #startScreen p { font-size: 14px; }
-                #popup h2 { font-size: 18px; }
-                #popup p { font-size: 14px; }
+                #popup h2 { font-size: 20px; }
+                #popup p { font-size: 16px; }
                 #ui { gap: 5px; }
                 #score, #timer, #highScore { font-size: 14px; padding: 8px 12px; }
-                #popup { top: 55%; max-height: 40%; }
             }
     </style>
 </head>
@@ -604,7 +635,7 @@
     <div id="gameContainer">
         <div id="ui">
             <div id="score">Score: 0</div>
-            <div id="timer">Time: 90</div>
+            <div id="timer">Time: 60</div>
             <div id="highScore">High Score: 0</div>
             <button id="restartButton">Restart Game</button>
         </div>
@@ -622,7 +653,7 @@
     <script>
         // Game variables
         let score = 0;
-        let timeLeft = 90;
+        let timeLeft = 60;
         let highScore = localStorage.getItem('cafeQuestHighScore') || 0;
         let gameRunning = false;
         let player = document.getElementById('player');
@@ -698,20 +729,25 @@
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         
         function playSound(frequency, duration, type = 'sine') {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = frequency;
-            oscillator.type = type;
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
+            if (!audioContext) return;
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = type;
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                console.log('Audio context error:', e);
+            }
         }
 
         function playCollectSound() {
@@ -738,6 +774,22 @@
             }, 500);
         }
 
+        function showScorePopup(x, y, points) {
+            const popup = document.createElement('div');
+            popup.className = `score-popup ${points > 0 ? 'positive' : 'negative'}`;
+            popup.textContent = points > 0 ? `+${points}` : `${points}`;
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.parentNode.removeChild(popup);
+                }
+            }, 1500);
+        }
+
         // Initialize game
         function initGame() {
             // Initialize player history
@@ -761,16 +813,21 @@
 
         function createStaticElements() {
             // Clear existing static elements
-            document.querySelectorAll('.bookshelf, .cafe-table').forEach(el => el.remove());
+            document.querySelectorAll('.bookshelf, .cafe-table, .couch').forEach(el => el.remove());
             
-            // Create bookshelves in organized pattern
-            const positions = [
-                {x: 50, y: 120}, {x: 50, y: 320}, {x: 50, y: 520},
-                {x: window.innerWidth - 130, y: 150}, {x: window.innerWidth - 130, y: 350}
+            const UI_HEIGHT = 100; // Space for UI panel
+            
+            // Create bookshelves - positioned below UI
+            const bookshelfPositions = [
+                {x: 60, y: UI_HEIGHT + 40}, 
+                {x: 60, y: UI_HEIGHT + 280}, 
+                {x: window.innerWidth - 160, y: UI_HEIGHT + 40}, 
+                {x: window.innerWidth - 160, y: UI_HEIGHT + 280},
+                {x: window.innerWidth / 2 - 50, y: UI_HEIGHT + 20}
             ];
             
-            positions.forEach(pos => {
-                if (pos.y < window.innerHeight - 170) {
+            bookshelfPositions.forEach(pos => {
+                if (pos.y < window.innerHeight - 200) {
                     const bookshelf = document.createElement('div');
                     bookshelf.className = 'bookshelf';
                     bookshelf.style.left = pos.x + 'px';
@@ -779,35 +836,41 @@
                 }
             });
             
-            // Create café tables with better positioning
-            const tablePositions = [
-                {x: 200, y: 180}, {x: 200, y: 350}, {x: 200, y: 520},
-                {x: window.innerWidth - 260, y: 180}, {x: window.innerWidth - 260, y: 350},
-                {x: window.innerWidth/2 - 30, y: 200}, {x: window.innerWidth/2 - 30, y: 400}
+            // Create couches - positioned below UI
+            const couchPositions = [
+                {x: 200, y: UI_HEIGHT + 80}, 
+                {x: 200, y: UI_HEIGHT + 250}, 
+                {x: window.innerWidth - 320, y: UI_HEIGHT + 80}, 
+                {x: window.innerWidth - 320, y: UI_HEIGHT + 250}
             ];
             
-            const filteredPositions = [];
-            tablePositions.forEach(newPos => {
-                if (newPos.x > 100 && newPos.x < window.innerWidth - 160 && newPos.y < window.innerHeight - 120) {
-                    let canPlace = true;
-                    filteredPositions.forEach(existingPos => {
-                        const distance = Math.sqrt(Math.pow(newPos.x - existingPos.x, 2) + Math.pow(newPos.y - existingPos.y, 2));
-                        if (distance < 120) {
-                            canPlace = false;
-                        }
-                    });
-                    if (canPlace) {
-                        filteredPositions.push(newPos);
-                    }
+            couchPositions.forEach(pos => {
+                if (pos.x > 150 && pos.x < window.innerWidth - 270 && pos.y < window.innerHeight - 120) {
+                    const couch = document.createElement('div');
+                    couch.className = 'couch';
+                    couch.style.left = pos.x + 'px';
+                    couch.style.top = pos.y + 'px';
+                    gameContainer.appendChild(couch);
                 }
             });
             
-            filteredPositions.forEach(pos => {
-                const table = document.createElement('div');
-                table.className = 'cafe-table';
-                table.style.left = pos.x + 'px';
-                table.style.top = pos.y + 'px';
-                gameContainer.appendChild(table);
+            // Create café tables - positioned below UI
+            const tablePositions = [
+                {x: 150, y: UI_HEIGHT + 180}, 
+                {x: 150, y: UI_HEIGHT + 350}, 
+                {x: window.innerWidth - 230, y: UI_HEIGHT + 180}, 
+                {x: window.innerWidth - 230, y: UI_HEIGHT + 350},
+                {x: window.innerWidth/2 - 40, y: UI_HEIGHT + 200}
+            ];
+            
+            tablePositions.forEach(pos => {
+                if (pos.x > 100 && pos.x < window.innerWidth - 180 && pos.y < window.innerHeight - 120) {
+                    const table = document.createElement('div');
+                    table.className = 'cafe-table';
+                    table.style.left = pos.x + 'px';
+                    table.style.top = pos.y + 'px';
+                    gameContainer.appendChild(table);
+                }
             });
         }
 
@@ -1054,7 +1117,7 @@
             document.getElementById('startScreen').style.display = 'none';
             gameRunning = true;
             score = 0;
-            timeLeft = 90;
+            timeLeft = 60;
             spawnAreas = { positive: [], negative: [] };
             currentSpeakingKid = null;
             
@@ -1066,7 +1129,7 @@
             });
             collectibles = [];
             
-            if (audioContext.state === 'suspended') {
+            if (audioContext && audioContext.state === 'suspended') {
                 audioContext.resume();
             }
             
@@ -1109,9 +1172,18 @@
             if (spawnTimer) clearInterval(spawnTimer);
             if (speechTimer) clearInterval(speechTimer);
             
-            // Clear speech bubbles
+            // Clear speech bubbles and score popups
             document.querySelectorAll('.speech-bubble').forEach(bubble => bubble.remove());
+            document.querySelectorAll('.score-popup').forEach(popup => popup.remove());
             currentSpeakingKid = null;
+            
+            // Clear collectibles
+            collectibles.forEach(collectible => {
+                if (collectible.parentNode) {
+                    collectible.parentNode.removeChild(collectible);
+                }
+            });
+            collectibles = [];
             
             // Reset positions
             playerX = window.innerWidth / 2 - 35;
@@ -1120,11 +1192,23 @@
             targetY = playerY;
             cassianX = playerX - 100;
             cassianY = playerY + 80;
+            cassianVelX = 0;
+            cassianVelY = 0;
             charlieX = playerX + 100;
             charlieY = playerY - 80;
+            charlieVelX = 0;
+            charlieVelY = 0;
+            
+            // Reset player history
+            playerHistory = [];
+            for (let i = 0; i < maxHistoryLength; i++) {
+                playerHistory.push({ x: playerX, y: playerY });
+            }
             
             // Start new game
-            startGame();
+            setTimeout(() => {
+                startGame();
+            }, 100);
         }
 
         function spawnCollectible() {
@@ -1145,10 +1229,11 @@
             let validPosition = false;
             const ITEM_SIZE = 45; // Size of collectible items
             const MIN_SPACING = 80; // Minimum distance between items
+            const UI_HEIGHT = 140; // Space for UI panel
             
             do {
                 x = Math.random() * (window.innerWidth - 100) + 50;
-                y = Math.random() * (window.innerHeight - 250) + 150;
+                y = Math.random() * (window.innerHeight - 250) + UI_HEIGHT;
                 attempts++;
                 
                 validPosition = !isNearStaticElement(x, y) && 
@@ -1158,7 +1243,6 @@
             } while (!validPosition && attempts < 50); // Increased attempts
             
             if (!validPosition) {
-                console.log("Could not find valid spawn position, skipping this spawn");
                 return; // Skip spawn if no valid position found
             }
             
@@ -1194,13 +1278,22 @@
         }
 
         function isNearStaticElement(x, y) {
-            const MIN_DISTANCE_FROM_STATIC = 100; // Minimum distance from tables/bookshelves
+            const MIN_DISTANCE_FROM_STATIC = 110; // Minimum distance from tables/bookshelves/couches
             
-            const elements = document.querySelectorAll('.cafe-table, .bookshelf');
+            const elements = document.querySelectorAll('.cafe-table, .bookshelf, .couch');
             for (let element of elements) {
                 // Get static element position from style properties
-                const elementX = parseInt(element.style.left) + (element.classList.contains('cafe-table') ? 30 : 40); // center
-                const elementY = parseInt(element.style.top) + (element.classList.contains('cafe-table') ? 30 : 75);  // center
+                let elementX, elementY;
+                if (element.classList.contains('cafe-table')) {
+                    elementX = parseInt(element.style.left) + 40; // center of 80px table
+                    elementY = parseInt(element.style.top) + 40;
+                } else if (element.classList.contains('bookshelf')) {
+                    elementX = parseInt(element.style.left) + 50; // center of 100px bookshelf
+                    elementY = parseInt(element.style.top) + 90;
+                } else if (element.classList.contains('couch')) {
+                    elementX = parseInt(element.style.left) + 60; // center of 120px couch
+                    elementY = parseInt(element.style.top) + 40;
+                }
                 
                 const distance = Math.sqrt(Math.pow(x - elementX, 2) + Math.pow(y - elementY, 2));
                 if (distance < MIN_DISTANCE_FROM_STATIC) {
@@ -1261,6 +1354,10 @@
                 case 'dirty-dish': points = -20; isNegative = true; break;
                 case 'laundry': points = -25; isNegative = true; break;
             }
+            
+            // Show score popup
+            const rect = collectible.getBoundingClientRect();
+            showScorePopup(rect.left + rect.width/2, rect.top + rect.height/2, points);
             
             score += points;
             updateScore();
@@ -1375,7 +1472,7 @@
             }
             
             let finalMessage = "";
-            if (score >= 500) {
+            if (score >= 400) {
                 finalMessage = winMessages[0];
             } else if (score >= 200) {
                 finalMessage = winMessages[1];
@@ -1385,7 +1482,7 @@
             
             setTimeout(() => {
                 showPopup("🎉 Game Complete! 🎉", 
-                    `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br><br>You're amazing at 33! 💕<br><br>Cassian and Charlie are so proud of you!`);
+                    `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br><br>You're amazing at 33! 💕<br>Cassian and Charlie are so proud of you!`);
             }, 3000);
         }
 
