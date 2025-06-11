@@ -858,7 +858,7 @@
                 showSpeechBubble(dada, "11/10! 🏆", true);
             }, 1000);
             
-            // After Dada speaks, gather everyone around Mama
+            // Gather family around centered Mama
             setTimeout(() => {
                 gatherFamilyAroundMama();
             }, 2000);
@@ -1425,25 +1425,26 @@
         }
 
         function gatherFamilyAroundMama() {
+            // Use current Mama position (should be centered by now)
             const mamaCenterX = playerX + PLAYER_RADIUS;
             const mamaCenterY = playerY + PLAYER_RADIUS;
             
-            // Closer formation
-            const gatherDistance = 75;
+            // Calculate positions around Mama
+            const gatherDistance = 90;
             
-            // Cassian - left side
+            // Cassian - bottom left
             const cassianTargetX = mamaCenterX - gatherDistance - KID_RADIUS;
-            const cassianTargetY = mamaCenterY - KID_RADIUS;
+            const cassianTargetY = mamaCenterY + gatherDistance - KID_RADIUS;
             
-            // Charlie - right side
+            // Charlie - bottom right  
             const charlieTargetX = mamaCenterX + gatherDistance - KID_RADIUS;
-            const charlieTargetY = mamaCenterY - KID_RADIUS;
+            const charlieTargetY = mamaCenterY + gatherDistance - KID_RADIUS;
             
-            // Dada - directly behind Mama
+            // Dada - top center (behind Mama)
             const dadaTargetX = mamaCenterX - KID_RADIUS;
             const dadaTargetY = mamaCenterY - gatherDistance - KID_RADIUS;
             
-            // Animate to positions
+            // Animate everyone to their positions
             animateToPosition(cassian, cassianTargetX, cassianTargetY, 2000);
             animateToPosition(charlie, charlieTargetX, charlieTargetY, 2000);
             animateToPosition(dada, dadaTargetX, dadaTargetY, 2500);
@@ -1728,6 +1729,48 @@
             document.getElementById('timer').textContent = `Time: ${timeLeft}`;
         }
 
+        function moveMamaToCenter() {
+            // Calculate center position accounting for UI
+            const centerX = (window.innerWidth / 2) - PLAYER_RADIUS;
+            const centerY = ((window.innerHeight + UI_HEIGHT) / 2) - PLAYER_RADIUS;
+            
+            // Animate Mama to center
+            animatePlayerToPosition(centerX, centerY, 1500);
+        }
+
+        function animatePlayerToPosition(targetX, targetY, duration) {
+            const startX = playerX;
+            const startY = playerY;
+            const startTime = Date.now();
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Bouncy easing for more dramatic effect
+                const easeProgress = progress < 0.5 
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                
+                playerX = startX + (targetX - startX) * easeProgress;
+                playerY = startY + (targetY - startY) * easeProgress;
+                
+                // Update targets
+                targetX = playerX;
+                targetY = playerY;
+                
+                // Update DOM
+                player.style.left = playerX + 'px';
+                player.style.top = playerY + 'px';
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+
         function endGame() {
             gameRunning = false;
             clearInterval(gameTimer);
@@ -1738,6 +1781,11 @@
             
             playWinSound();
             
+            // Move Mama to center of screen first
+            setTimeout(() => {
+                moveMamaToCenter();
+            }, 500);
+            
             if (!currentSpeakingKid) {
                 showSpeechBubble(cassian, "You did great! 🏆");
                 setTimeout(() => {
@@ -1747,10 +1795,10 @@
                 }, 2000);
             }
             
-            // Add Dada entrance after 1 second
+            // Add Dada entrance after Mama is centered
             setTimeout(() => {
                 showDadaEntrance();
-            }, 1000);
+            }, 2500);
             
             let finalMessage = "";
             finalMessage = winMessages[0];
@@ -1758,7 +1806,7 @@
             setTimeout(() => {
                 showPopup("🎉 Game Complete! 🎉", 
                     `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br><br>You're amazing at 33! 💕<br>The whole family is so proud of you!`);
-            }, 6000); // Extended delay to let family gather
+            }, 7000); // Extended delay for full sequence
         }
 
         function showPopup(title, message) {
