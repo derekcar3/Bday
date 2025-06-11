@@ -1255,7 +1255,7 @@
                 }
             }, 1000);
             
-            spawnTimer = setInterval(spawnCollectible, 400);
+            spawnTimer = setInterval(spawnCollectible, 500);
             
             speechTimer = setInterval(() => {
                 if (Math.random() < 0.3 && !currentSpeakingKid) {
@@ -1399,7 +1399,7 @@
             gameContainer.appendChild(collectible);
             collectibles.push(collectible);
             
-            const lifetime = 5000 + Math.random() * 3000;
+            const lifetime = 8000 + Math.random() * 3000;
             setTimeout(() => {
                 if (collectible.parentNode) {
                     collectible.parentNode.removeChild(collectible);
