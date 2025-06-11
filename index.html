@@ -33,20 +33,64 @@
             .screen-shake {
                 animation: screen-shake 0.5s ease-in-out;
             }
-    
-            @keyframes screen-shake {
-                0% { transform: translate(0); }
-                10% { transform: translate(-10px, -5px) rotate(-1deg); }
-                20% { transform: translate(10px, 5px) rotate(1deg); }
-                30% { transform: translate(-8px, 3px) rotate(-1deg); }
-                40% { transform: translate(8px, -3px) rotate(1deg); }
-                50% { transform: translate(-6px, 2px) rotate(-0.5deg); }
-                60% { transform: translate(6px, -2px) rotate(0.5deg); }
-                70% { transform: translate(-4px, 1px) rotate(-0.5deg); }
-                80% { transform: translate(4px, -1px) rotate(0.5deg); }
-                90% { transform: translate(-2px, 1px) rotate(0); }
-                100% { transform: translate(0); }
+
+            /* Add this new class for content that should shake */
+            .screen-shake .shake-content {
+                animation: screen-shake-content 0.5s ease-in-out;
             }
+        
+        /* Keep the original animation for the container */
+        @keyframes screen-shake {
+            0% { transform: translate(0); }
+            10% { transform: translate(-10px, -5px) rotate(-1deg); }
+            20% { transform: translate(10px, 5px) rotate(1deg); }
+            30% { transform: translate(-8px, 3px) rotate(-1deg); }
+            40% { transform: translate(8px, -3px) rotate(1deg); }
+            50% { transform: translate(-6px, 2px) rotate(-0.5deg); }
+            60% { transform: translate(6px, -2px) rotate(0.5deg); }
+            70% { transform: translate(-4px, 1px) rotate(-0.5deg); }
+            80% { transform: translate(4px, -1px) rotate(0.5deg); }
+            90% { transform: translate(-2px, 1px) rotate(0); }
+            100% { transform: translate(0); }
+        }
+        
+        /* New animation that only affects game elements, not UI */
+        @keyframes screen-shake-content {
+            0% { transform: translate(0); }
+            10% { transform: translate(-8px, -4px); }
+            20% { transform: translate(8px, 4px); }
+            30% { transform: translate(-6px, 2px); }
+            40% { transform: translate(6px, -2px); }
+            50% { transform: translate(-4px, 1px); }
+            60% { transform: translate(4px, -1px); }
+            70% { transform: translate(-2px, 1px); }
+            80% { transform: translate(2px, -1px); }
+            90% { transform: translate(-1px, 0px); }
+            100% { transform: translate(0); }
+        }
+        
+        /* Ensure UI stays fixed during shake */
+        #ui {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 200;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 18px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            height: 80px;
+            /* Add this to prevent shake interference */
+            transform: translateZ(0);
+            will-change: auto;
+        }
 
             .tree {
                 position: absolute;
@@ -638,9 +682,12 @@
             <div id="highScore">High Score: 0</div>
             <button id="restartButton">Restart Game</button>
         </div>
-        <div id="player"></div>
-        <div id="cassian" class="kid"></div>
-        <div id="charlie" class="kid"></div>
+        <!-- Wrap the game content that should shake -->
+        <div class="shake-content">
+            <div id="player"></div>
+            <div id="cassian" class="kid"></div>
+            <div id="charlie" class="kid"></div>
+        </div>
     </div>
 
     <div id="popup">
