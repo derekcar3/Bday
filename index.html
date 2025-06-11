@@ -1738,7 +1738,7 @@
             animatePlayerToPosition(centerX, centerY, 1500);
         }
 
-        function animatePlayerToPosition(targetX, targetY, duration) {
+        function animatePlayerToPosition(newTargetX, newTargetY, duration) {
             const startX = playerX;
             const startY = playerY;
             const startTime = Date.now();
@@ -1747,19 +1747,22 @@
                 const elapsed = Date.now() - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Bouncy easing for more dramatic effect
-                const easeProgress = progress < 0.5 
-                    ? 4 * progress * progress * progress
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                // Smooth easing function
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
                 
-                playerX = startX + (targetX - startX) * easeProgress;
-                playerY = startY + (targetY - startY) * easeProgress;
+                // Calculate current position
+                const currentX = startX + (newTargetX - startX) * easeProgress;
+                const currentY = startY + (newTargetY - startY) * easeProgress;
                 
-                // Update targets
-                targetX = playerX;
-                targetY = playerY;
+                // Update player position variables
+                playerX = currentX;
+                playerY = currentY;
                 
-                // Update DOM
+                // Update global targets to prevent drift back
+                targetX = currentX;
+                targetY = currentY;
+                
+                // Update DOM position
                 player.style.left = playerX + 'px';
                 player.style.top = playerY + 'px';
                 
