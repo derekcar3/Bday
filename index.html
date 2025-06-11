@@ -578,9 +578,9 @@
         let maxHistoryLength = 30; // Frames of delay
         
         // Enhanced movement physics
-        const FOLLOW_STRENGTH = 0.03;
-        const DAMPING = 0.88;
-        const MAX_SPEED = 4;
+        const FOLLOW_STRENGTH = 0.02;
+        const DAMPING = 0.92;
+        const MAX_SPEED = 2;
         const MIN_DISTANCE = 50;
         const PLAYER_SMOOTHING = 0.2; // For smoother player movement
         
@@ -936,7 +936,7 @@
                 }
             }, 1000);
             
-            spawnTimer = setInterval(spawnCollectible, 1000);
+            spawnTimer = setInterval(spawnCollectible, 400);
             
             speechTimer = setInterval(() => {
                 if (Math.random() < 0.3) {
