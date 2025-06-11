@@ -857,6 +857,11 @@
             setTimeout(() => {
                 showSpeechBubble(dada, "11/10! 🏆", true);
             }, 1000);
+            
+            // After Dada speaks, gather everyone around Mama
+            setTimeout(() => {
+                gatherFamilyAroundMama();
+            }, 2000);
         }
 
         function showScorePopup(x, y, points) {
@@ -1091,6 +1096,10 @@
 
         // SOFT BOUNCE collision system - no teleporting
         function updateKidsPositions() {
+            if (!gameRunning) {
+                return;
+            }
+
             // Get delayed positions from player history for more natural following
             const cassianDelay = Math.floor(maxHistoryLength * 0.6);
             const charlieDelay = Math.floor(maxHistoryLength * 0.8);
@@ -1415,6 +1424,62 @@
             startGame();
         }
 
+        function gatherFamilyAroundMama() {
+            const mamaCenterX = playerX + PLAYER_RADIUS;
+            const mamaCenterY = playerY + PLAYER_RADIUS;
+            
+            // Closer formation
+            const gatherDistance = 75;
+            
+            // Cassian - left side
+            const cassianTargetX = mamaCenterX - gatherDistance - KID_RADIUS;
+            const cassianTargetY = mamaCenterY - KID_RADIUS;
+            
+            // Charlie - right side
+            const charlieTargetX = mamaCenterX + gatherDistance - KID_RADIUS;
+            const charlieTargetY = mamaCenterY - KID_RADIUS;
+            
+            // Dada - directly behind Mama
+            const dadaTargetX = mamaCenterX - KID_RADIUS;
+            const dadaTargetY = mamaCenterY - gatherDistance - KID_RADIUS;
+            
+            // Animate to positions
+            animateToPosition(cassian, cassianTargetX, cassianTargetY, 2000);
+            animateToPosition(charlie, charlieTargetX, charlieTargetY, 2000);
+            animateToPosition(dada, dadaTargetX, dadaTargetY, 2500);
+            
+            // Add a final family speech bubble
+            setTimeout(() => {
+                showSpeechBubble(dada, "Family hug! 🤗", true);
+            }, 3000);
+        }
+
+        function animateToPosition(element, targetX, targetY, duration) {
+            const startX = parseInt(element.style.left) || 0;
+            const startY = parseInt(element.style.top) || 0;
+            const startTime = Date.now();
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Smooth easing function
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                
+                const currentX = startX + (targetX - startX) * easeProgress;
+                const currentY = startY + (targetY - startY) * easeProgress;
+                
+                element.style.left = currentX + 'px';
+                element.style.top = currentY + 'px';
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+
         function spawnCollectible() {
             if (!gameRunning) return;
             
@@ -1692,9 +1757,9 @@
             
             setTimeout(() => {
                 showPopup("🎉 Game Complete! 🎉", 
-                    `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br><br>You're amazing at 33! 💕<br>Cassian and Charlie are so proud of you!`);
-            }, 4000); // Delay popup to let Dada appear first
-}
+                    `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br><br>You're amazing at 33! 💕<br>The whole family is so proud of you!`);
+            }, 6000); // Extended delay to let family gather
+        }
 
         function showPopup(title, message) {
             document.getElementById('popupTitle').textContent = title;
