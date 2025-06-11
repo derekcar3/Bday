@@ -139,13 +139,16 @@
             }
     
             .cafe-table:after {
-                content: '☕';
+                content: '';
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 28px;
-                text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+                width: 30px;
+                height: 30px;
+                background: radial-gradient(circle, #654321, #4A4A4A);
+                border-radius: 50%;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
             }
     
             #player {
@@ -374,6 +377,21 @@
                 transform: translate(-50%, -50%);
                 font-size: 40px;
             }
+
+            .airplane {
+                background: linear-gradient(45deg, #87CEEB, #4169E1);
+                border: 3px solid #FFF;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            }
+    
+            .airplane:before {
+                content: '✈️';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 40px;
+            }
     
             /* Negative Items */
             .dirty-dish {
@@ -442,10 +460,11 @@
                 align-items: center;
                 flex-wrap: wrap;
                 gap: 10px;
-                background: rgba(0,0,0,0.1);
-                padding: 10px;
-                border-radius: 15px;
-                backdrop-filter: blur(5px);
+                background: rgba(0,0,0,0.2);
+                padding: 15px;
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             }
     
             #score, #timer, #highScore {
@@ -475,6 +494,10 @@
     
             #restartButton:hover {
                 transform: scale(1.05);
+            }
+
+            #restartButton:active {
+                transform: scale(0.95);
             }
     
             #popup {
@@ -613,7 +636,7 @@
                 #startScreen p { font-size: 14px; }
                 #popup h2 { font-size: 20px; }
                 #popup p { font-size: 16px; }
-                #ui { gap: 5px; }
+                #ui { gap: 5px; padding: 10px; }
                 #score, #timer, #highScore { font-size: 14px; padding: 8px 12px; }
             }
     </style>
@@ -693,6 +716,7 @@
         const MIN_DISTANCE = 50;
         const MIN_DISTANCE_FROM_PLAYER = 65; // Prevent overlap with mom
         const PLAYER_SMOOTHING = 0.2; // For smoother player movement
+        const UI_HEIGHT = 120; // Height of UI section
         
         // Track occupied spawn areas
         let spawnAreas = {
@@ -792,6 +816,8 @@
 
         // Initialize game
         function initGame() {
+            console.log('Initializing game...');
+            
             // Initialize player history
             for (let i = 0; i < maxHistoryLength; i++) {
                 playerHistory.push({ x: playerX, y: playerY });
@@ -807,27 +833,44 @@
             gameContainer.addEventListener('touchmove', handleTouch, { passive: false });
             gameContainer.addEventListener('click', handleClick);
             
-            document.getElementById('startButton').addEventListener('click', startGame);
-            document.getElementById('restartButton').addEventListener('click', restartGame);
+            // Button event listeners
+            const startButton = document.getElementById('startButton');
+            const restartButton = document.getElementById('restartButton');
+            
+            if (startButton) {
+                startButton.addEventListener('click', startGame);
+                console.log('Start button listener added');
+            }
+            
+            if (restartButton) {
+                restartButton.addEventListener('click', function(e) {
+                    console.log('Restart button clicked!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    restartGame();
+                });
+                console.log('Restart button listener added');
+            }
         }
 
         function createStaticElements() {
             // Clear existing static elements
             document.querySelectorAll('.bookshelf, .cafe-table, .couch').forEach(el => el.remove());
             
-            const UI_HEIGHT = 100; // Space for UI panel
-            
-            // Create bookshelves - positioned below UI
+            // Create more bookshelves - positioned well below UI
             const bookshelfPositions = [
-                {x: 60, y: UI_HEIGHT + 40}, 
-                {x: 60, y: UI_HEIGHT + 280}, 
-                {x: window.innerWidth - 160, y: UI_HEIGHT + 40}, 
-                {x: window.innerWidth - 160, y: UI_HEIGHT + 280},
-                {x: window.innerWidth / 2 - 50, y: UI_HEIGHT + 20}
+                {x: 40, y: UI_HEIGHT + 50}, 
+                {x: 40, y: UI_HEIGHT + 280}, 
+                {x: 40, y: UI_HEIGHT + 450},
+                {x: window.innerWidth - 140, y: UI_HEIGHT + 50}, 
+                {x: window.innerWidth - 140, y: UI_HEIGHT + 280},
+                {x: window.innerWidth - 140, y: UI_HEIGHT + 450},
+                {x: window.innerWidth / 2 - 50, y: UI_HEIGHT + 30},
+                {x: window.innerWidth / 2 - 50, y: UI_HEIGHT + 350}
             ];
             
             bookshelfPositions.forEach(pos => {
-                if (pos.y < window.innerHeight - 200) {
+                if (pos.y < window.innerHeight - 200 && pos.x > 20 && pos.x < window.innerWidth - 120) {
                     const bookshelf = document.createElement('div');
                     bookshelf.className = 'bookshelf';
                     bookshelf.style.left = pos.x + 'px';
@@ -836,12 +879,14 @@
                 }
             });
             
-            // Create couches - positioned below UI
+            // Create couches - positioned well below UI
             const couchPositions = [
-                {x: 200, y: UI_HEIGHT + 80}, 
-                {x: 200, y: UI_HEIGHT + 250}, 
-                {x: window.innerWidth - 320, y: UI_HEIGHT + 80}, 
-                {x: window.innerWidth - 320, y: UI_HEIGHT + 250}
+                {x: 180, y: UI_HEIGHT + 80}, 
+                {x: 180, y: UI_HEIGHT + 220}, 
+                {x: 180, y: UI_HEIGHT + 360},
+                {x: window.innerWidth - 300, y: UI_HEIGHT + 80}, 
+                {x: window.innerWidth - 300, y: UI_HEIGHT + 220},
+                {x: window.innerWidth - 300, y: UI_HEIGHT + 360}
             ];
             
             couchPositions.forEach(pos => {
@@ -854,17 +899,20 @@
                 }
             });
             
-            // Create café tables - positioned below UI
+            // Create more café tables - positioned well below UI
             const tablePositions = [
-                {x: 150, y: UI_HEIGHT + 180}, 
-                {x: 150, y: UI_HEIGHT + 350}, 
-                {x: window.innerWidth - 230, y: UI_HEIGHT + 180}, 
-                {x: window.innerWidth - 230, y: UI_HEIGHT + 350},
-                {x: window.innerWidth/2 - 40, y: UI_HEIGHT + 200}
+                {x: 120, y: UI_HEIGHT + 160}, 
+                {x: 120, y: UI_HEIGHT + 300}, 
+                {x: 120, y: UI_HEIGHT + 440},
+                {x: window.innerWidth - 200, y: UI_HEIGHT + 160}, 
+                {x: window.innerWidth - 200, y: UI_HEIGHT + 300},
+                {x: window.innerWidth - 200, y: UI_HEIGHT + 440},
+                {x: window.innerWidth/2 - 40, y: UI_HEIGHT + 180},
+                {x: window.innerWidth/2 - 40, y: UI_HEIGHT + 320}
             ];
             
             tablePositions.forEach(pos => {
-                if (pos.x > 100 && pos.x < window.innerWidth - 180 && pos.y < window.innerHeight - 120) {
+                if (pos.x > 80 && pos.x < window.innerWidth - 160 && pos.y < window.innerHeight - 120) {
                     const table = document.createElement('div');
                     table.className = 'cafe-table';
                     table.style.left = pos.x + 'px';
@@ -890,6 +938,11 @@
         function handleClick(e) {
             if (!gameRunning) return;
             
+            // Don't handle clicks on the restart button
+            if (e.target.id === 'restartButton') {
+                return;
+            }
+            
             // Get click position relative to the game container
             const rect = gameContainer.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -902,7 +955,7 @@
             // Center the character on the touch/click point with proper boundaries
             // Character is 70px wide/tall, so offset by 35px to center it
             targetX = Math.max(35, Math.min(window.innerWidth - 35, x - 35));
-            targetY = Math.max(125, Math.min(window.innerHeight - 35, y - 35));
+            targetY = Math.max(UI_HEIGHT + 35, Math.min(window.innerHeight - 35, y - 35));
         }
 
         function updatePlayerPosition() {
@@ -1038,8 +1091,8 @@
                 cassianX = window.innerWidth - 30;
                 cassianVelX = -Math.abs(cassianVelX) * 0.8;
             }
-            if (cassianY < 125) {
-                cassianY = 125;
+            if (cassianY < UI_HEIGHT + 30) {
+                cassianY = UI_HEIGHT + 30;
                 cassianVelY = Math.abs(cassianVelY) * 0.8;
             }
             if (cassianY > window.innerHeight - 30) {
@@ -1055,8 +1108,8 @@
                 charlieX = window.innerWidth - 30;
                 charlieVelX = -Math.abs(charlieVelX) * 0.8;
             }
-            if (charlieY < 125) {
-                charlieY = 125;
+            if (charlieY < UI_HEIGHT + 30) {
+                charlieY = UI_HEIGHT + 30;
                 charlieVelY = Math.abs(charlieVelY) * 0.8;
             }
             if (charlieY > window.innerHeight - 30) {
@@ -1114,6 +1167,7 @@
         }
 
         function startGame() {
+            console.log('Starting game...');
             document.getElementById('startScreen').style.display = 'none';
             gameRunning = true;
             score = 0;
@@ -1166,18 +1220,31 @@
         }
 
         function restartGame() {
-            // Stop current game
-            gameRunning = false;
-            if (gameTimer) clearInterval(gameTimer);
-            if (spawnTimer) clearInterval(spawnTimer);
-            if (speechTimer) clearInterval(speechTimer);
+            console.log('Restarting game...');
             
-            // Clear speech bubbles and score popups
+            // Stop current game immediately
+            gameRunning = false;
+            
+            // Clear all timers
+            if (gameTimer) {
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
+            if (spawnTimer) {
+                clearInterval(spawnTimer);
+                spawnTimer = null;
+            }
+            if (speechTimer) {
+                clearInterval(speechTimer);
+                speechTimer = null;
+            }
+            
+            // Clear all visual elements
             document.querySelectorAll('.speech-bubble').forEach(bubble => bubble.remove());
             document.querySelectorAll('.score-popup').forEach(popup => popup.remove());
             currentSpeakingKid = null;
             
-            // Clear collectibles
+            // Clear collectibles from DOM and array
             collectibles.forEach(collectible => {
                 if (collectible.parentNode) {
                     collectible.parentNode.removeChild(collectible);
@@ -1185,9 +1252,9 @@
             });
             collectibles = [];
             
-            // Reset positions
+            // Reset all positions
             playerX = window.innerWidth / 2 - 35;
-            playerY = window.innerHeight / 2 - 35;
+            playerY = (window.innerHeight + UI_HEIGHT) / 2 - 35;  // Center below UI
             targetX = playerX;
             targetY = playerY;
             cassianX = playerX - 100;
@@ -1205,16 +1272,20 @@
                 playerHistory.push({ x: playerX, y: playerY });
             }
             
-            // Start new game
+            // Update positions immediately
+            updatePlayerPosition();
+            updateKidsPositions();
+            
+            // Start new game after a brief delay
             setTimeout(() => {
                 startGame();
-            }, 100);
+            }, 200);
         }
 
         function spawnCollectible() {
             if (!gameRunning) return;
             
-            const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water'];
+            const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water', 'airplane'];
             const negativeTypes = ['dirty-dish', 'laundry'];
             
             const isPositive = Math.random() < 0.75;
@@ -1229,11 +1300,10 @@
             let validPosition = false;
             const ITEM_SIZE = 45; // Size of collectible items
             const MIN_SPACING = 80; // Minimum distance between items
-            const UI_HEIGHT = 140; // Space for UI panel
             
             do {
                 x = Math.random() * (window.innerWidth - 100) + 50;
-                y = Math.random() * (window.innerHeight - 250) + UI_HEIGHT;
+                y = Math.random() * (window.innerHeight - UI_HEIGHT - 100) + UI_HEIGHT + 50;
                 attempts++;
                 
                 validPosition = !isNearStaticElement(x, y) && 
@@ -1351,6 +1421,7 @@
                 case 'running-shoe': points = 35; break;
                 case 'apple': points = 15; break;
                 case 'water': points = 15; break;
+                case 'airplane': points = 40; break;
                 case 'dirty-dish': points = -20; isNegative = true; break;
                 case 'laundry': points = -25; isNegative = true; break;
             }
@@ -1508,6 +1579,7 @@
 
         // Initialize everything
         window.addEventListener('load', () => {
+            console.log('Window loaded, initializing...');
             initGame();
             gameLoop();
         });
