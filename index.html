@@ -1376,22 +1376,22 @@
             
             let x, y, attempts = 0;
             let validPosition = false;
-            const MIN_SPACING = 70; // Same spacing for all items now
+            const MIN_SPACING = 70; // Reduced from 100
             
             do {
                 x = Math.random() * (window.innerWidth - 120) + 60;
                 y = Math.random() * (window.innerHeight - UI_HEIGHT - 120) + UI_HEIGHT + 60;
                 attempts++;
                 
-                validPosition = !isNearStaticElement(x, y, 120) && 
+                validPosition = !isNearStaticElement(x, y, 80) &&  // Reduced from 120
                                !isNearAnyCollectibles(x, y, MIN_SPACING) &&
-                               !isNearPlayer(x, y, 140) &&
+                               !isNearPlayer(x, y, 90) &&  // Reduced from 140
                                y > UI_HEIGHT + 80;
                 
-            } while (!validPosition && attempts < 100);
+            } while (!validPosition && attempts < 200); // Increased from 100
             
             if (!validPosition) {
-                console.log('Could not find valid position for collectible after 100 attempts');
+                console.log('Could not find valid position for collectible after 200 attempts');
                 return;
             }
             
@@ -1410,7 +1410,6 @@
                 }
             }, lifetime);
         }
-
         function isNearAnyCollectibles(x, y, minDistance) {
             for (let collectible of collectibles) {
                 const existingX = parseInt(collectible.style.left) + 30;
