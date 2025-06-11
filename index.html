@@ -1211,19 +1211,22 @@
             
             currentSpeakingKid = kid;
             
+            // Get kid's absolute position on screen
+            const kidRect = kid.getBoundingClientRect();
             const bubble = document.createElement('div');
             bubble.className = 'speech-bubble';
             bubble.textContent = message;
             
-            // Set positioning and make immediately visible at top level
-            bubble.style.bottom = '65px';
-            bubble.style.left = '50%';
-            bubble.style.transform = 'translateX(-50%) scale(1)'; // Full size immediately
-            bubble.style.opacity = '1'; // Fully visible immediately
-            bubble.style.zIndex = '250';
-            bubble.style.position = 'absolute';
-            
-            kid.appendChild(bubble);
+            // Position relative to viewport instead of kid
+            bubble.style.position = 'fixed';
+            bubble.style.left = (kidRect.left + kidRect.width/2) + 'px';
+            bubble.style.top = (kidRect.top - 70) + 'px'; // 70px above kid
+            bubble.style.transform = 'translateX(-50%)';
+            bubble.style.opacity = '1';
+            bubble.style.zIndex = '9999';
+
+            // Append to body instead of kid
+            document.body.appendChild(bubble);
             
             // Add the show class immediately (no delay)
             bubble.classList.add('show');
