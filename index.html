@@ -50,10 +50,10 @@
     
             .bookshelf {
                 position: absolute;
-                width: 100px;
-                height: 180px;
+                width: 90px;
+                height: 160px;
                 background: linear-gradient(90deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
-                border: 4px solid #654321;
+                border: 3px solid #654321;
                 border-radius: 8px;
                 box-shadow: 0 6px 12px rgba(0,0,0,0.4);
                 z-index: 10;
@@ -65,12 +65,12 @@
                 top: 20px;
                 left: 8px;
                 right: 8px;
-                height: 25px;
+                height: 22px;
                 background: repeating-linear-gradient(90deg, 
-                    #FF6B6B 0px, #FF6B6B 12px, 
-                    #4ECDC4 12px, #4ECDC4 24px, 
-                    #45B7D1 24px, #45B7D1 36px, 
-                    #96CEB4 36px, #96CEB4 48px);
+                    #FF6B6B 0px, #FF6B6B 10px, 
+                    #4ECDC4 10px, #4ECDC4 20px, 
+                    #45B7D1 20px, #45B7D1 30px, 
+                    #96CEB4 30px, #96CEB4 40px);
                 border-radius: 3px;
                 box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
             }
@@ -81,60 +81,60 @@
                 bottom: 20px;
                 left: 8px;
                 right: 8px;
-                height: 25px;
+                height: 22px;
                 background: repeating-linear-gradient(90deg, 
-                    #DDA0DD 0px, #DDA0DD 12px, 
-                    #F0E68C 12px, #F0E68C 24px, 
-                    #FFB6C1 24px, #FFB6C1 36px, 
-                    #98FB98 36px, #98FB98 48px);
+                    #DDA0DD 0px, #DDA0DD 10px, 
+                    #F0E68C 10px, #F0E68C 20px, 
+                    #FFB6C1 20px, #FFB6C1 30px, 
+                    #98FB98 30px, #98FB98 40px);
                 border-radius: 3px;
                 box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
             }
 
             .couch {
                 position: absolute;
-                width: 120px;
-                height: 80px;
+                width: 110px;
+                height: 70px;
                 background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
-                border-radius: 15px;
+                border-radius: 12px;
                 border: 3px solid #654321;
-                box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+                box-shadow: 0 6px 14px rgba(0,0,0,0.3);
                 z-index: 10;
             }
 
             .couch:before {
                 content: '';
                 position: absolute;
-                top: -8px;
-                left: 10px;
-                right: 10px;
-                height: 20px;
+                top: -6px;
+                left: 8px;
+                right: 8px;
+                height: 18px;
                 background: linear-gradient(135deg, #A0522D, #8B4513);
-                border-radius: 10px 10px 5px 5px;
+                border-radius: 8px 8px 4px 4px;
                 border: 2px solid #654321;
             }
 
             .couch:after {
                 content: '';
                 position: absolute;
-                top: 15px;
-                left: 15px;
-                right: 15px;
-                bottom: 10px;
+                top: 12px;
+                left: 12px;
+                right: 12px;
+                bottom: 8px;
                 background: repeating-linear-gradient(45deg, 
-                    transparent, transparent 8px, 
-                    rgba(101, 67, 33, 0.2) 8px, rgba(101, 67, 33, 0.2) 10px);
-                border-radius: 8px;
+                    transparent, transparent 6px, 
+                    rgba(101, 67, 33, 0.15) 6px, rgba(101, 67, 33, 0.15) 8px);
+                border-radius: 6px;
             }
     
             .cafe-table {
                 position: absolute;
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
                 background: radial-gradient(circle, #8B4513 30%, #654321 70%);
                 border-radius: 50%;
-                border: 4px solid #4A4A4A;
-                box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+                border: 3px solid #4A4A4A;
+                box-shadow: 0 5px 12px rgba(0,0,0,0.4);
                 z-index: 10;
             }
     
@@ -144,11 +144,28 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 30px;
-                height: 30px;
+                width: 25px;
+                height: 25px;
                 background: radial-gradient(circle, #654321, #4A4A4A);
                 border-radius: 50%;
                 box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+            }
+
+            .plant {
+                position: absolute;
+                width: 60px;
+                height: 80px;
+                z-index: 10;
+            }
+
+            .plant:before {
+                content: '🌱';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 45px;
+                filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
             }
     
             #player {
@@ -460,11 +477,12 @@
                 align-items: center;
                 flex-wrap: wrap;
                 gap: 10px;
-                background: rgba(0,0,0,0.2);
-                padding: 15px;
-                border-radius: 20px;
-                backdrop-filter: blur(10px);
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                background: rgba(0,0,0,0.3);
+                padding: 18px;
+                border-radius: 25px;
+                backdrop-filter: blur(15px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+                height: 80px;
             }
     
             #score, #timer, #highScore {
@@ -483,21 +501,24 @@
                 background: linear-gradient(45deg, #FF69B4, #FF1493);
                 color: white;
                 border: none;
-                padding: 10px 15px;
+                padding: 12px 18px;
                 border-radius: 20px;
                 font-size: 14px;
                 font-weight: bold;
                 cursor: pointer;
-                transition: transform 0.2s;
+                transition: all 0.2s;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                user-select: none;
             }
     
             #restartButton:hover {
                 transform: scale(1.05);
+                box-shadow: 0 6px 12px rgba(0,0,0,0.4);
             }
 
             #restartButton:active {
                 transform: scale(0.95);
+                background: linear-gradient(45deg, #FF1493, #FF69B4);
             }
     
             #popup {
@@ -636,7 +657,7 @@
                 #startScreen p { font-size: 14px; }
                 #popup h2 { font-size: 20px; }
                 #popup p { font-size: 16px; }
-                #ui { gap: 5px; padding: 10px; }
+                #ui { gap: 5px; padding: 12px; height: 70px; }
                 #score, #timer, #highScore { font-size: 14px; padding: 8px 12px; }
             }
     </style>
@@ -687,7 +708,7 @@
         let gameTimer;
         let spawnTimer;
         let speechTimer;
-        let currentSpeakingKid = null; // Track which kid is currently speaking
+        let currentSpeakingKid = null;
         
         // Player position with smoother tracking
         let playerX = window.innerWidth / 2 - 35;
@@ -716,7 +737,7 @@
         const MIN_DISTANCE = 50;
         const MIN_DISTANCE_FROM_PLAYER = 65; // Prevent overlap with mom
         const PLAYER_SMOOTHING = 0.2; // For smoother player movement
-        const UI_HEIGHT = 120; // Height of UI section
+        const UI_HEIGHT = 140; // Height of UI section - INCREASED
         
         // Track occupied spawn areas
         let spawnAreas = {
@@ -843,81 +864,168 @@
             }
             
             if (restartButton) {
-                restartButton.addEventListener('click', function(e) {
-                    console.log('Restart button clicked!');
-                    e.preventDefault();
-                    e.stopPropagation();
-                    restartGame();
-                });
-                console.log('Restart button listener added');
+                // Use mousedown for more immediate response
+                restartButton.addEventListener('mousedown', handleRestartClick);
+                restartButton.addEventListener('touchstart', handleRestartClick, { passive: false });
+                console.log('Restart button listeners added');
             }
+        }
+
+        function handleRestartClick(e) {
+            console.log('Restart button activated!');
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            // Immediate visual feedback
+            const button = e.target;
+            button.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                button.style.transform = '';
+            }, 150);
+            
+            // Execute restart
+            restartGameImmediate();
         }
 
         function createStaticElements() {
             // Clear existing static elements
-            document.querySelectorAll('.bookshelf, .cafe-table, .couch').forEach(el => el.remove());
+            document.querySelectorAll('.bookshelf, .cafe-table, .couch, .plant').forEach(el => el.remove());
             
-            // Create more bookshelves - positioned well below UI
+            // Grid system to prevent overlaps - WELL BELOW UI
+            const startY = UI_HEIGHT + 60; // MUCH MORE SPACE BELOW UI
+            const gridSize = 140; // Spacing between elements
+            const elementSpacing = 160; // Minimum distance between elements
+            
+            // Create a clean grid layout
+            const cols = Math.floor((window.innerWidth - 100) / gridSize);
+            const rows = Math.floor((window.innerHeight - startY - 100) / gridSize);
+            
+            console.log(`Creating grid: ${cols}x${rows}, startY: ${startY}`);
+            
+            // Track occupied positions
+            const occupiedPositions = new Set();
+            
+            // Function to check if position is safe
+            function isPositionSafe(x, y, width, height) {
+                // Check if it's below UI
+                if (y < startY) return false;
+                
+                // Check boundaries
+                if (x < 50 || x + width > window.innerWidth - 50) return false;
+                if (y + height > window.innerHeight - 50) return false;
+                
+                return true;
+            }
+            
+            // Function to get grid key
+            function getGridKey(gridX, gridY) {
+                return `${gridX}-${gridY}`;
+            }
+            
+            // Place bookshelves in corners and edges
             const bookshelfPositions = [
-                {x: 40, y: UI_HEIGHT + 50}, 
-                {x: 40, y: UI_HEIGHT + 280}, 
-                {x: 40, y: UI_HEIGHT + 450},
-                {x: window.innerWidth - 140, y: UI_HEIGHT + 50}, 
-                {x: window.innerWidth - 140, y: UI_HEIGHT + 280},
-                {x: window.innerWidth - 140, y: UI_HEIGHT + 450},
-                {x: window.innerWidth / 2 - 50, y: UI_HEIGHT + 30},
-                {x: window.innerWidth / 2 - 50, y: UI_HEIGHT + 350}
+                {gridX: 0, gridY: 0},
+                {gridX: cols-1, gridY: 0},
+                {gridX: 0, gridY: Math.floor(rows/2)},
+                {gridX: cols-1, gridY: Math.floor(rows/2)},
+                {gridX: Math.floor(cols/2), gridY: 0},
             ];
             
             bookshelfPositions.forEach(pos => {
-                if (pos.y < window.innerHeight - 200 && pos.x > 20 && pos.x < window.innerWidth - 120) {
-                    const bookshelf = document.createElement('div');
-                    bookshelf.className = 'bookshelf';
-                    bookshelf.style.left = pos.x + 'px';
-                    bookshelf.style.top = pos.y + 'px';
-                    gameContainer.appendChild(bookshelf);
+                if (pos.gridY < rows && pos.gridX < cols) {
+                    const x = 50 + pos.gridX * gridSize;
+                    const y = startY + pos.gridY * gridSize;
+                    const key = getGridKey(pos.gridX, pos.gridY);
+                    
+                    if (isPositionSafe(x, y, 90, 160) && !occupiedPositions.has(key)) {
+                        const bookshelf = document.createElement('div');
+                        bookshelf.className = 'bookshelf';
+                        bookshelf.style.left = x + 'px';
+                        bookshelf.style.top = y + 'px';
+                        gameContainer.appendChild(bookshelf);
+                        occupiedPositions.add(key);
+                        console.log(`Bookshelf placed at ${x}, ${y}`);
+                    }
                 }
             });
             
-            // Create couches - positioned well below UI
+            // Place couches in mid areas
             const couchPositions = [
-                {x: 180, y: UI_HEIGHT + 80}, 
-                {x: 180, y: UI_HEIGHT + 220}, 
-                {x: 180, y: UI_HEIGHT + 360},
-                {x: window.innerWidth - 300, y: UI_HEIGHT + 80}, 
-                {x: window.innerWidth - 300, y: UI_HEIGHT + 220},
-                {x: window.innerWidth - 300, y: UI_HEIGHT + 360}
+                {gridX: 1, gridY: 1},
+                {gridX: cols-2, gridY: 1},
+                {gridX: 1, gridY: Math.floor(rows/2) + 1},
+                {gridX: cols-2, gridY: Math.floor(rows/2) + 1},
             ];
             
             couchPositions.forEach(pos => {
-                if (pos.x > 150 && pos.x < window.innerWidth - 270 && pos.y < window.innerHeight - 120) {
-                    const couch = document.createElement('div');
-                    couch.className = 'couch';
-                    couch.style.left = pos.x + 'px';
-                    couch.style.top = pos.y + 'px';
-                    gameContainer.appendChild(couch);
+                if (pos.gridY < rows && pos.gridX < cols && pos.gridX >= 0) {
+                    const x = 50 + pos.gridX * gridSize;
+                    const y = startY + pos.gridY * gridSize;
+                    const key = getGridKey(pos.gridX, pos.gridY);
+                    
+                    if (isPositionSafe(x, y, 110, 70) && !occupiedPositions.has(key)) {
+                        const couch = document.createElement('div');
+                        couch.className = 'couch';
+                        couch.style.left = x + 'px';
+                        couch.style.top = y + 'px';
+                        gameContainer.appendChild(couch);
+                        occupiedPositions.add(key);
+                        console.log(`Couch placed at ${x}, ${y}`);
+                    }
                 }
             });
             
-            // Create more café tables - positioned well below UI
+            // Place tables scattered around
             const tablePositions = [
-                {x: 120, y: UI_HEIGHT + 160}, 
-                {x: 120, y: UI_HEIGHT + 300}, 
-                {x: 120, y: UI_HEIGHT + 440},
-                {x: window.innerWidth - 200, y: UI_HEIGHT + 160}, 
-                {x: window.innerWidth - 200, y: UI_HEIGHT + 300},
-                {x: window.innerWidth - 200, y: UI_HEIGHT + 440},
-                {x: window.innerWidth/2 - 40, y: UI_HEIGHT + 180},
-                {x: window.innerWidth/2 - 40, y: UI_HEIGHT + 320}
+                {gridX: Math.floor(cols/4), gridY: 1},
+                {gridX: Math.floor(cols*3/4), gridY: 1},
+                {gridX: Math.floor(cols/4), gridY: Math.floor(rows/2)},
+                {gridX: Math.floor(cols*3/4), gridY: Math.floor(rows/2)},
+                {gridX: Math.floor(cols/2), gridY: Math.floor(rows/3)},
             ];
             
             tablePositions.forEach(pos => {
-                if (pos.x > 80 && pos.x < window.innerWidth - 160 && pos.y < window.innerHeight - 120) {
-                    const table = document.createElement('div');
-                    table.className = 'cafe-table';
-                    table.style.left = pos.x + 'px';
-                    table.style.top = pos.y + 'px';
-                    gameContainer.appendChild(table);
+                if (pos.gridY < rows && pos.gridX < cols) {
+                    const x = 50 + pos.gridX * gridSize;
+                    const y = startY + pos.gridY * gridSize;
+                    const key = getGridKey(pos.gridX, pos.gridY);
+                    
+                    if (isPositionSafe(x, y, 70, 70) && !occupiedPositions.has(key)) {
+                        const table = document.createElement('div');
+                        table.className = 'cafe-table';
+                        table.style.left = x + 'px';
+                        table.style.top = y + 'px';
+                        gameContainer.appendChild(table);
+                        occupiedPositions.add(key);
+                        console.log(`Table placed at ${x}, ${y}`);
+                    }
+                }
+            });
+            
+            // Place plants as decoration
+            const plantPositions = [
+                {gridX: Math.floor(cols/3), gridY: 2},
+                {gridX: Math.floor(cols*2/3), gridY: 2},
+                {gridX: 2, gridY: Math.floor(rows/3)},
+                {gridX: cols-3, gridY: Math.floor(rows/3)},
+            ];
+            
+            plantPositions.forEach(pos => {
+                if (pos.gridY < rows && pos.gridX < cols && pos.gridX >= 0) {
+                    const x = 50 + pos.gridX * gridSize;
+                    const y = startY + pos.gridY * gridSize;
+                    const key = getGridKey(pos.gridX, pos.gridY);
+                    
+                    if (isPositionSafe(x, y, 60, 80) && !occupiedPositions.has(key)) {
+                        const plant = document.createElement('div');
+                        plant.className = 'plant';
+                        plant.style.left = x + 'px';
+                        plant.style.top = y + 'px';
+                        gameContainer.appendChild(plant);
+                        occupiedPositions.add(key);
+                        console.log(`Plant placed at ${x}, ${y}`);
+                    }
                 }
             });
         }
@@ -927,7 +1035,6 @@
             if (!gameRunning) return;
             
             const touch = e.touches[0] || e.changedTouches[0];
-            // Get the actual touch position relative to the game container
             const rect = gameContainer.getBoundingClientRect();
             const touchX = touch.clientX - rect.left;
             const touchY = touch.clientY - rect.top;
@@ -938,12 +1045,11 @@
         function handleClick(e) {
             if (!gameRunning) return;
             
-            // Don't handle clicks on the restart button
-            if (e.target.id === 'restartButton') {
+            // Don't handle clicks on UI elements
+            if (e.target.closest('#ui')) {
                 return;
             }
             
-            // Get click position relative to the game container
             const rect = gameContainer.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             const clickY = e.clientY - rect.top;
@@ -952,8 +1058,7 @@
         }
         
         function setPlayerTarget(x, y) {
-            // Center the character on the touch/click point with proper boundaries
-            // Character is 70px wide/tall, so offset by 35px to center it
+            // Ensure player stays well below UI
             targetX = Math.max(35, Math.min(window.innerWidth - 35, x - 35));
             targetY = Math.max(UI_HEIGHT + 35, Math.min(window.innerHeight - 35, y - 35));
         }
@@ -975,8 +1080,8 @@
 
         function updateKidsPositions() {
             // Get delayed positions from player history for more natural following
-            const cassianDelay = Math.floor(maxHistoryLength * 0.6); // Cassian follows with 60% delay
-            const charlieDelay = Math.floor(maxHistoryLength * 0.8); // Charlie follows with 80% delay
+            const cassianDelay = Math.floor(maxHistoryLength * 0.6);
+            const charlieDelay = Math.floor(maxHistoryLength * 0.8);
             
             const cassianTarget = playerHistory[Math.max(0, playerHistory.length - cassianDelay - 1)];
             const charlieTarget = playerHistory[Math.max(0, playerHistory.length - charlieDelay - 1)];
@@ -990,7 +1095,7 @@
             
             // Enhanced physics for Cassian
             const cassianDist = Math.sqrt(Math.pow(cassianTargetX - cassianX, 2) + Math.pow(cassianTargetY - cassianY, 2));
-            const cassianForceMultiplier = Math.min(cassianDist / 50, 1.5); // Stronger force when farther away
+            const cassianForceMultiplier = Math.min(cassianDist / 50, 1.5);
             
             const cassianForceX = (cassianTargetX - cassianX) * FOLLOW_STRENGTH * cassianForceMultiplier;
             const cassianForceY = (cassianTargetY - cassianY) * FOLLOW_STRENGTH * cassianForceMultiplier;
@@ -1012,9 +1117,9 @@
             charlieVelX *= DAMPING;
             charlieVelY *= DAMPING;
             
-            // Limit speeds with dynamic adjustment
+            // Limit speeds
             const cassianSpeed = Math.sqrt(cassianVelX * cassianVelX + cassianVelY * cassianVelY);
-            const maxCassianSpeed = MAX_SPEED * (cassianDist > 100 ? 1.3 : 1); // Speed up when far behind
+            const maxCassianSpeed = MAX_SPEED * (cassianDist > 100 ? 1.3 : 1);
             if (cassianSpeed > maxCassianSpeed) {
                 cassianVelX = (cassianVelX / cassianSpeed) * maxCassianSpeed;
                 cassianVelY = (cassianVelY / cassianSpeed) * maxCassianSpeed;
@@ -1033,89 +1138,11 @@
             charlieX += charlieVelX;
             charlieY += charlieVelY;
             
-            // Improved collision avoidance between kids
-            const distanceBetweenKids = Math.sqrt(Math.pow(cassianX - charlieX, 2) + Math.pow(cassianY - charlieY, 2));
-            if (distanceBetweenKids < MIN_DISTANCE) {
-                const angle = Math.atan2(charlieY - cassianY, charlieX - cassianX);
-                const overlap = MIN_DISTANCE - distanceBetweenKids;
-                const pushDistance = overlap / 2;
-                
-                // Push apart with momentum
-                const pushForce = 0.3;
-                cassianX -= Math.cos(angle) * pushDistance;
-                cassianY -= Math.sin(angle) * pushDistance;
-                charlieX += Math.cos(angle) * pushDistance;
-                charlieY += Math.sin(angle) * pushDistance;
-                
-                // Add separation to velocities
-                cassianVelX -= Math.cos(angle) * pushForce;
-                cassianVelY -= Math.sin(angle) * pushForce;
-                charlieVelX += Math.cos(angle) * pushForce;
-                charlieVelY += Math.sin(angle) * pushForce;
-            }
-
-            // Prevent kids from overlapping with player
-            const playerCenterX = playerX + 35;
-            const playerCenterY = playerY + 35;
-            
-            // Check Cassian-Player overlap
-            const cassianPlayerDist = Math.sqrt(Math.pow(cassianX + 30 - playerCenterX, 2) + Math.pow(cassianY + 30 - playerCenterY, 2));
-            if (cassianPlayerDist < MIN_DISTANCE_FROM_PLAYER) {
-                const angle = Math.atan2(cassianY + 30 - playerCenterY, cassianX + 30 - playerCenterX);
-                const pushDistance = MIN_DISTANCE_FROM_PLAYER - cassianPlayerDist;
-                
-                cassianX += Math.cos(angle) * pushDistance;
-                cassianY += Math.sin(angle) * pushDistance;
-                cassianVelX += Math.cos(angle) * 0.5;
-                cassianVelY += Math.sin(angle) * 0.5;
-            }
-            
-            // Check Charlie-Player overlap
-            const charliePlayerDist = Math.sqrt(Math.pow(charlieX + 30 - playerCenterX, 2) + Math.pow(charlieY + 30 - playerCenterY, 2));
-            if (charliePlayerDist < MIN_DISTANCE_FROM_PLAYER) {
-                const angle = Math.atan2(charlieY + 30 - playerCenterY, charlieX + 30 - playerCenterX);
-                const pushDistance = MIN_DISTANCE_FROM_PLAYER - charliePlayerDist;
-                
-                charlieX += Math.cos(angle) * pushDistance;
-                charlieY += Math.sin(angle) * pushDistance;
-                charlieVelX += Math.cos(angle) * 0.5;
-                charlieVelY += Math.sin(angle) * 0.5;
-            }
-            
-            // Keep kids on screen with bouncing - update these boundary checks
-            if (cassianX < 30) {
-                cassianX = 30;
-                cassianVelX = Math.abs(cassianVelX) * 0.8;
-            }
-            if (cassianX > window.innerWidth - 30) {
-                cassianX = window.innerWidth - 30;
-                cassianVelX = -Math.abs(cassianVelX) * 0.8;
-            }
-            if (cassianY < UI_HEIGHT + 30) {
-                cassianY = UI_HEIGHT + 30;
-                cassianVelY = Math.abs(cassianVelY) * 0.8;
-            }
-            if (cassianY > window.innerHeight - 30) {
-                cassianY = window.innerHeight - 30;
-                cassianVelY = -Math.abs(cassianVelY) * 0.8;
-            }
-            
-            if (charlieX < 30) {
-                charlieX = 30;
-                charlieVelX = Math.abs(charlieVelX) * 0.8;
-            }
-            if (charlieX > window.innerWidth - 30) {
-                charlieX = window.innerWidth - 30;
-                charlieVelX = -Math.abs(charlieVelX) * 0.8;
-            }
-            if (charlieY < UI_HEIGHT + 30) {
-                charlieY = UI_HEIGHT + 30;
-                charlieVelY = Math.abs(charlieVelY) * 0.8;
-            }
-            if (charlieY > window.innerHeight - 30) {
-                charlieY = window.innerHeight - 30;
-                charlieVelY = -Math.abs(charlieVelY) * 0.8;
-            }
+            // Keep kids in bounds and below UI
+            cassianX = Math.max(30, Math.min(window.innerWidth - 30, cassianX));
+            cassianY = Math.max(UI_HEIGHT + 30, Math.min(window.innerHeight - 30, cassianY));
+            charlieX = Math.max(30, Math.min(window.innerWidth - 30, charlieX));
+            charlieY = Math.max(UI_HEIGHT + 30, Math.min(window.innerHeight - 30, charlieY));
             
             // Update DOM positions
             cassian.style.left = cassianX + 'px';
@@ -1125,18 +1152,15 @@
         }
 
         function showSpeechBubble(kid, message) {
-            // Don't show if another kid is already speaking
             if (currentSpeakingKid && currentSpeakingKid !== kid) {
                 return;
             }
 
-            // Remove any existing bubble for this kid
             const existingBubble = kid.querySelector('.speech-bubble');
             if (existingBubble) {
                 existingBubble.remove();
             }
             
-            // Set current speaking kid
             currentSpeakingKid = kid;
             
             const bubble = document.createElement('div');
@@ -1158,7 +1182,6 @@
                     if (bubble.parentNode) {
                         bubble.remove();
                     }
-                    // Clear current speaking kid when bubble is completely gone
                     if (currentSpeakingKid === kid) {
                         currentSpeakingKid = null;
                     }
@@ -1212,15 +1235,10 @@
             setTimeout(() => {
                 showSpeechBubble(cassian, "Go Mom! 💪");
             }, 1000);
-            setTimeout(() => {
-                if (!currentSpeakingKid) {
-                    showSpeechBubble(charlie, "Love you! 💕");
-                }
-            }, 4000);
         }
 
-        function restartGame() {
-            console.log('Restarting game...');
+        function restartGameImmediate() {
+            console.log('Executing immediate restart...');
             
             // Stop current game immediately
             gameRunning = false;
@@ -1244,7 +1262,7 @@
             document.querySelectorAll('.score-popup').forEach(popup => popup.remove());
             currentSpeakingKid = null;
             
-            // Clear collectibles from DOM and array
+            // Clear collectibles
             collectibles.forEach(collectible => {
                 if (collectible.parentNode) {
                     collectible.parentNode.removeChild(collectible);
@@ -1252,9 +1270,9 @@
             });
             collectibles = [];
             
-            // Reset all positions
+            // Reset positions below UI
             playerX = window.innerWidth / 2 - 35;
-            playerY = (window.innerHeight + UI_HEIGHT) / 2 - 35;  // Center below UI
+            playerY = (window.innerHeight + UI_HEIGHT) / 2 - 35;
             targetX = playerX;
             targetY = playerY;
             cassianX = playerX - 100;
@@ -1276,10 +1294,8 @@
             updatePlayerPosition();
             updateKidsPositions();
             
-            // Start new game after a brief delay
-            setTimeout(() => {
-                startGame();
-            }, 200);
+            // Start new game immediately
+            startGame();
         }
 
         function spawnCollectible() {
@@ -1295,25 +1311,24 @@
             const collectible = document.createElement('div');
             collectible.className = `collectible ${type}`;
             
-            // Enhanced spawn positioning to prevent ALL overlaps
             let x, y, attempts = 0;
             let validPosition = false;
-            const ITEM_SIZE = 45; // Size of collectible items
-            const MIN_SPACING = 80; // Minimum distance between items
+            const MIN_SPACING = 80;
             
             do {
-                x = Math.random() * (window.innerWidth - 100) + 50;
-                y = Math.random() * (window.innerHeight - UI_HEIGHT - 100) + UI_HEIGHT + 50;
+                x = Math.random() * (window.innerWidth - 120) + 60;
+                y = Math.random() * (window.innerHeight - UI_HEIGHT - 120) + UI_HEIGHT + 60;
                 attempts++;
                 
                 validPosition = !isNearStaticElement(x, y) && 
                                !isNearAnyCollectibles(x, y, MIN_SPACING) &&
-                               !isNearPlayer(x, y);
+                               !isNearPlayer(x, y) &&
+                               y > UI_HEIGHT + 60; // ENSURE BELOW UI
                 
-            } while (!validPosition && attempts < 50); // Increased attempts
+            } while (!validPosition && attempts < 50);
             
             if (!validPosition) {
-                return; // Skip spawn if no valid position found
+                return;
             }
             
             collectible.style.left = x + 'px';
@@ -1333,35 +1348,35 @@
         }
 
         function isNearAnyCollectibles(x, y, minDistance) {
-            // Check against ALL existing collectibles using their actual positions
             for (let collectible of collectibles) {
-                // Get the collectible's position from its style properties
-                const existingX = parseInt(collectible.style.left) + 30; // center of 60px item
-                const existingY = parseInt(collectible.style.top) + 30;  // center of 60px item
+                const existingX = parseInt(collectible.style.left) + 30;
+                const existingY = parseInt(collectible.style.top) + 30;
                 
                 const distance = Math.sqrt(Math.pow(x - existingX, 2) + Math.pow(y - existingY, 2));
                 if (distance < minDistance) {
-                    return true; // Too close to existing item
+                    return true;
                 }
             }
-            return false; // Safe to spawn here
+            return false;
         }
 
         function isNearStaticElement(x, y) {
-            const MIN_DISTANCE_FROM_STATIC = 110; // Minimum distance from tables/bookshelves/couches
+            const MIN_DISTANCE_FROM_STATIC = 120;
             
-            const elements = document.querySelectorAll('.cafe-table, .bookshelf, .couch');
+            const elements = document.querySelectorAll('.cafe-table, .bookshelf, .couch, .plant');
             for (let element of elements) {
-                // Get static element position from style properties
                 let elementX, elementY;
                 if (element.classList.contains('cafe-table')) {
-                    elementX = parseInt(element.style.left) + 40; // center of 80px table
-                    elementY = parseInt(element.style.top) + 40;
+                    elementX = parseInt(element.style.left) + 35;
+                    elementY = parseInt(element.style.top) + 35;
                 } else if (element.classList.contains('bookshelf')) {
-                    elementX = parseInt(element.style.left) + 50; // center of 100px bookshelf
-                    elementY = parseInt(element.style.top) + 90;
+                    elementX = parseInt(element.style.left) + 45;
+                    elementY = parseInt(element.style.top) + 80;
                 } else if (element.classList.contains('couch')) {
-                    elementX = parseInt(element.style.left) + 60; // center of 120px couch
+                    elementX = parseInt(element.style.left) + 55;
+                    elementY = parseInt(element.style.top) + 35;
+                } else if (element.classList.contains('plant')) {
+                    elementX = parseInt(element.style.left) + 30;
                     elementY = parseInt(element.style.top) + 40;
                 }
                 
@@ -1374,10 +1389,9 @@
         }
         
         function isNearPlayer(x, y) {
-            const MIN_DISTANCE_FROM_PLAYER = 120; // Don't spawn too close to player
-            const MIN_DISTANCE_FROM_KIDS = 100;   // Don't spawn too close to kids
+            const MIN_DISTANCE_FROM_PLAYER = 120;
+            const MIN_DISTANCE_FROM_KIDS = 100;
             
-            // Use actual game coordinates, not screen coordinates
             const playerCenterX = playerX + 35;
             const playerCenterY = playerY + 35;
             const cassianCenterX = cassianX + 30;
@@ -1426,7 +1440,6 @@
                 case 'laundry': points = -25; isNegative = true; break;
             }
             
-            // Show score popup
             const rect = collectible.getBoundingClientRect();
             showScorePopup(rect.left + rect.width/2, rect.top + rect.height/2, points);
             
@@ -1439,7 +1452,6 @@
                 collectible.classList.add('flex-hit');
                 createNegativeParticles(collectible);
                 
-                // Show appropriate message for each negative item type
                 if (!currentSpeakingKid) {
                     const kid = Math.random() < 0.5 ? cassian : charlie;
                     let message;
@@ -1509,7 +1521,6 @@
         function updateScore() {
             document.getElementById('score').textContent = `Score: ${score}`;
             
-            // Update high score if current score is higher
             if (score > highScore) {
                 highScore = score;
                 localStorage.setItem('cafeQuestHighScore', highScore);
@@ -1587,11 +1598,7 @@
         // Handle orientation changes
         window.addEventListener('orientationchange', () => {
             setTimeout(() => {
-                targetX = Math.min(targetX, window.innerWidth - 75);
-                targetY = Math.min(targetY, window.innerHeight - 75);
-                playerX = Math.min(playerX, window.innerWidth - 75);
-                playerY = Math.min(playerY, window.innerHeight - 75);
-                createStaticElements(); // Recreate elements for new screen size
+                createStaticElements();
             }, 100);
         });
     </script>
