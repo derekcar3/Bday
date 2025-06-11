@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Happy 33rd Birthday - Café Literary Quest</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; }
+<html> <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Happy 33rd Birthday - Café Literary Quest</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; }
 
 
 Copy
@@ -19,6 +19,25 @@ Copy
             radial-gradient(circle at 80% 60%, rgba(255,140,0,0.1) 0%, transparent 50%),
             linear-gradient(45deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
         background-attachment: fixed;
+        transition: transform 0.1s ease-out;
+    }
+
+    .screen-shake {
+        animation: screen-shake 0.5s ease-in-out;
+    }
+
+    @keyframes screen-shake {
+        0% { transform: translate(0); }
+        10% { transform: translate(-10px, -5px) rotate(-1deg); }
+        20% { transform: translate(10px, 5px) rotate(1deg); }
+        30% { transform: translate(-8px, 3px) rotate(-1deg); }
+        40% { transform: translate(8px, -3px) rotate(1deg); }
+        50% { transform: translate(-6px, 2px) rotate(-0.5deg); }
+        60% { transform: translate(6px, -2px) rotate(0.5deg); }
+        70% { transform: translate(-4px, 1px) rotate(-0.5deg); }
+        80% { transform: translate(4px, -1px) rotate(0.5deg); }
+        90% { transform: translate(-2px, 1px) rotate(0); }
+        100% { transform: translate(0); }
     }
 
     .bookshelf {
@@ -100,9 +119,17 @@ Copy
         background: linear-gradient(45deg, #FFE135, #FFA500);
         border-radius: 50%;
         border: 3px solid #FFF;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease-out;
         z-index: 95;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    #cassian {
+        background: linear-gradient(45deg, #87CEEB, #4682B4);
+    }
+
+    #charlie {
+        background: linear-gradient(45deg, #FFB6C1, #FF69B4);
     }
 
     #cassian:before {
@@ -511,13 +538,23 @@ Copy
     let spawnTimer;
     let speechTimer;
     
-    // Player and kids positions
+    // Player and kids positions with velocity for natural movement
     let playerX = window.innerWidth / 2 - 25;
     let playerY = window.innerHeight / 2 - 25;
     let cassianX = playerX - 80;
     let cassianY = playerY + 60;
+    let cassianVelX = 0;
+    let cassianVelY = 0;
     let charlieX = playerX + 80;
     let charlieY = playerY - 60;
+    let charlieVelX = 0;
+    let charlieVelY = 0;
+    
+    // Movement physics constants
+    const FOLLOW_STRENGTH = 0.02; // How strongly kids are attracted to follow positions
+    const DAMPING = 0.85; // Velocity damping to prevent overshooting
+    const MAX_SPEED = 3; // Maximum speed for kids
+    const MIN_DISTANCE = 45; // Minimum distance between kids (touching circumference)
     
     // Speech bubble messages for kids
     const encouragingMessages = [
@@ -566,6 +603,7 @@ Copy
 
     function playNegativeSound() {
         playSound(200, 0.3, 'sawtooth');
+        playSound(150, 0.4, 'square');
     }
 
     function playWinSound() {
@@ -573,6 +611,13 @@ Copy
         notes.forEach((note, index) => {
             setTimeout(() => playSound(note, 0.3), index * 200);
         });
+    }
+
+    function shakeScreen() {
+        gameContainer.classList.add('screen-shake');
+        setTimeout(() => {
+            gameContainer.classList.remove('screen-shake');
+        }, 500);
     }
 
     // Initialize game
@@ -606,21 +651,36 @@ Copy
             }
         });
         
-        // Create café tables in organized grid
+        // Create café tables in organized grid with better spacing
         const tablePositions = [
             {x: 200, y: 180}, {x: 200, y: 350}, {x: 200, y: 520},
             {x: window.innerWidth - 260, y: 180}, {x: window.innerWidth - 260, y: 350},
             {x: window.innerWidth/2 - 30, y: 200}, {x: window.innerWidth/2 - 30, y: 400}
         ];
         
-        tablePositions.forEach(pos => {
-            if (pos.x > 100 && pos.x < window.innerWidth - 160 && pos.y < window.innerHeight - 120) {
-                const table = document.createElement('div');
-                table.className = 'cafe-table';
-                table.style.left = pos.x + 'px';
-                table.style.top = pos.y + 'px';
-                gameContainer.appendChild(table);
+        // Filter out overlapping positions and ensure minimum distance
+        const filteredPositions = [];
+        tablePositions.forEach(newPos => {
+            if (newPos.x > 100 && newPos.x < window.innerWidth - 160 && newPos.y < window.innerHeight - 120) {
+                let canPlace = true;
+                filteredPositions.forEach(existingPos => {
+                    const distance = Math.sqrt(Math.pow(newPos.x - existingPos.x, 2) + Math.pow(newPos.y - existingPos.y, 2));
+                    if (distance < 120) { // Minimum distance between tables
+                        canPlace = false;
+                    }
+                });
+                if (canPlace) {
+                    filteredPositions.push(newPos);
+                }
             }
+        });
+        
+        filteredPositions.forEach(pos => {
+            const table = document.createElement('div');
+            table.className = 'cafe-table';
+            table.style.left = pos.x + 'px';
+            table.style.top = pos.y + 'px';
+            gameContainer.appendChild(table);
         });
     }
 
@@ -649,34 +709,73 @@ Copy
     }
 
     function updateKidsPositions() {
-        // Kids follow with different patterns and avoid overlap
-        const followSpeed = 0.15;
-        const minDistance = 70; // Minimum distance between kids
+        // Calculate desired follow positions with different offsets and patterns
+        const time = Date.now() * 0.001;
         
-        // Cassian follows with offset
-        const cassianTargetX = playerX - 90 + Math.sin(Date.now() * 0.001) * 20;
-        const cassianTargetY = playerY + 70 + Math.cos(Date.now() * 0.001) * 15;
+        // Cassian follows from behind-left with slight wandering
+        const cassianTargetX = playerX - 100 + Math.sin(time * 0.5) * 30;
+        const cassianTargetY = playerY + 80 + Math.cos(time * 0.3) * 20;
         
-        cassianX += (cassianTargetX - cassianX) * followSpeed;
-        cassianY += (cassianTargetY - cassianY) * followSpeed;
+        // Charlie follows from behind-right with different wandering pattern
+        const charlieTargetX = playerX + 100 + Math.cos(time * 0.4) * 35;
+        const charlieTargetY = playerY - 80 + Math.sin(time * 0.6) * 25;
         
-        // Charlie follows with different offset
-        const charlieTargetX = playerX + 90 + Math.cos(Date.now() * 0.0008) * 25;
-        const charlieTargetY = playerY - 70 + Math.sin(Date.now() * 0.0008) * 20;
+        // Apply physics-based movement for Cassian
+        const cassianForceX = (cassianTargetX - cassianX) * FOLLOW_STRENGTH;
+        const cassianForceY = (cassianTargetY - cassianY) * FOLLOW_STRENGTH;
         
-        charlieX += (charlieTargetX - charlieX) * followSpeed;
-        charlieY += (charlieTargetY - charlieY) * followSpeed;
+        cassianVelX += cassianForceX;
+        cassianVelY += cassianForceY;
+        cassianVelX *= DAMPING;
+        cassianVelY *= DAMPING;
         
-        // Prevent kids from overlapping
+        // Limit speed
+        const cassianSpeed = Math.sqrt(cassianVelX * cassianVelX + cassianVelY * cassianVelY);
+        if (cassianSpeed > MAX_SPEED) {
+            cassianVelX = (cassianVelX / cassianSpeed) * MAX_SPEED;
+            cassianVelY = (cassianVelY / cassianSpeed) * MAX_SPEED;
+        }
+        
+        cassianX += cassianVelX;
+        cassianY += cassianVelY;
+        
+        // Apply physics-based movement for Charlie
+        const charlieForceX = (charlieTargetX - charlieX) * FOLLOW_STRENGTH;
+        const charlieForceY = (charlieTargetY - charlieY) * FOLLOW_STRENGTH;
+        
+        charlieVelX += charlieForceX;
+        charlieVelY += charlieForceY;
+        charlieVelX *= DAMPING;
+        charlieVelY *= DAMPING;
+        
+        // Limit speed
+        const charlieSpeed = Math.sqrt(charlieVelX * charlieVelX + charlieVelY * charlieVelY);
+        if (charlieSpeed > MAX_SPEED) {
+            charlieVelX = (charlieVelX / charlieSpeed) * MAX_SPEED;
+            charlieVelY = (charlieVelY / charlieSpeed) * MAX_SPEED;
+        }
+        
+        charlieX += charlieVelX;
+        charlieY += charlieVelY;
+        
+        // Prevent kids from overlapping (circumference touching only)
         const distanceBetweenKids = Math.sqrt(Math.pow(cassianX - charlieX, 2) + Math.pow(cassianY - charlieY, 2));
-        if (distanceBetweenKids < minDistance) {
+        if (distanceBetweenKids < MIN_DISTANCE) {
             const angle = Math.atan2(charlieY - cassianY, charlieX - cassianX);
-            const pushDistance = (minDistance - distanceBetweenKids) / 2;
+            const overlap = MIN_DISTANCE - distanceBetweenKids;
+            const pushDistance = overlap / 2;
             
+            // Push apart gently
             cassianX -= Math.cos(angle) * pushDistance;
             cassianY -= Math.sin(angle) * pushDistance;
             charlieX += Math.cos(angle) * pushDistance;
             charlieY += Math.sin(angle) * pushDistance;
+            
+            // Adjust velocities to prevent continued collision
+            cassianVelX -= Math.cos(angle) * 0.5;
+            cassianVelY -= Math.sin(angle) * 0.5;
+            charlieVelX += Math.cos(angle) * 0.5;
+            charlieVelY += Math.sin(angle) * 0.5;
         }
         
         // Keep kids on screen
@@ -685,6 +784,7 @@ Copy
         charlieX = Math.max(25, Math.min(window.innerWidth - 70, charlieX));
         charlieY = Math.max(90, Math.min(window.innerHeight - 70, charlieY));
         
+        // Update DOM positions
         cassian.style.left = cassianX + 'px';
         cassian.style.top = cassianY + 'px';
         charlie.style.left = charlieX + 'px';
@@ -758,7 +858,7 @@ Copy
             }
         }, 4000);
         
-        // Initial welcome message
+        // Initial welcome messages
         setTimeout(() => {
             showSpeechBubble(cassian, "Go Mom! 💪");
         }, 1000);
@@ -772,7 +872,6 @@ Copy
         
         const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water'];
         const negativeTypes = ['dirty-dish', 'laundry'];
-        const allTypes = [...positiveTypes, ...negativeTypes];
         
         // 70% chance for positive, 30% for negative
         const isPositive = Math.random() < 0.7;
@@ -854,12 +953,13 @@ Copy
         
         if (isNegative) {
             playNegativeSound();
+            shakeScreen(); // Screen shake effect
             collectible.classList.add('flex-hit');
             createNegativeParticles(collectible);
             
             // Show negative speech bubble
             const kid = Math.random() < 0.5 ? cassian : charlie;
-            const negativeMessages = ["Oh no! 😱", "Watch out! ⚠️", "Avoid those! 🚫"];
+            const negativeMessages = ["Oh no! 😱", "Watch out! ⚠️", "Avoid those! 🚫", "Yucky! 🤢"];
             const message = negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
             showSpeechBubble(kid, message);
         } else {
@@ -869,7 +969,7 @@ Copy
             // Show positive speech bubble occasionally
             if (Math.random() < 0.4) {
                 const kid = Math.random() < 0.5 ? cassian : charlie;
-                const positiveMessages = ["Great job! 🌟", "Nice one! 👏", "Keep going! 💪", "Awesome! ⭐"];
+                const positiveMessages = ["Great job! 🌟", "Nice one! 👏", "Keep going! 💪", "Awesome! ⭐", "Perfect! 🎯"];
                 const message = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
                 showSpeechBubble(kid, message);
             }
