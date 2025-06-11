@@ -1187,11 +1187,20 @@
             charlie.style.top = charlieY + 'px';
         }
 
-        function showSpeechBubble(kid, message) {
-            if (currentSpeakingKid && currentSpeakingKid !== kid) {
+        function showSpeechBubble(kid, message, priority = false) {
+            // If this is a priority message OR no one is speaking, show it
+            if (!priority && currentSpeakingKid && currentSpeakingKid !== kid) {
                 return;
             }
-
+        
+            // Clear any existing bubble from ANY kid if this is priority
+            if (priority) {
+                document.querySelectorAll('.speech-bubble').forEach(bubble => {
+                    bubble.remove();
+                });
+                currentSpeakingKid = null;
+            }
+        
             const existingBubble = kid.querySelector('.speech-bubble');
             if (existingBubble) {
                 existingBubble.remove();
@@ -1520,25 +1529,25 @@
             score += points;
             updateScore();
             
-            if (isNegative) {
-                playNegativeSound();
-                shakeScreen();
-                collectible.classList.add('flex-hit');
-                createNegativeParticles(collectible);
-                
-                if (!currentSpeakingKid) {
-                    const kid = Math.random() < 0.5 ? cassian : charlie;
-                    let message;
-                    
-                    if (type === 'laundry') {
-                        message = laundryMessages[Math.floor(Math.random() * laundryMessages.length)];
-                    } else if (type === 'dirty-dish') {
-                        message = dishMessages[Math.floor(Math.random() * dishMessages.length)];
-                    }
-                    
-                    showSpeechBubble(kid, message);
-                }
-            } else {
+        if (isNegative) {
+            playNegativeSound();
+            shakeScreen();
+            collectible.classList.add('flex-hit');
+            createNegativeParticles(collectible);
+            
+            // ALWAYS show negative message - override any existing speech
+            const kid = Math.random() < 0.5 ? cassian : charlie;
+            let message;
+            
+            if (type === 'laundry') {
+                message = laundryMessages[Math.floor(Math.random() * laundryMessages.length)];
+            } else if (type === 'dirty-dish') {
+                message = dishMessages[Math.floor(Math.random() * dishMessages.length)];
+            }
+            
+            // Force show the negative message even if someone is already speaking
+            showSpeechBubble(kid, message, true);
+        } else {
                 playCollectSound();
                 createParticles(collectible);
                 
