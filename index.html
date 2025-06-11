@@ -1005,14 +1005,30 @@
             }, lifetime);
         }
 
+        function isNearAnyCollectibles(x, y, minDistance) {
+            // Check against ALL existing collectibles using their actual positions
+            for (let collectible of collectibles) {
+                // Get the collectible's position from its style properties
+                const existingX = parseInt(collectible.style.left) + 22.5; // center of 45px item
+                const existingY = parseInt(collectible.style.top) + 22.5;  // center of 45px item
+                
+                const distance = Math.sqrt(Math.pow(x - existingX, 2) + Math.pow(y - existingY, 2));
+                if (distance < minDistance) {
+                    console.log(`Overlap detected: distance ${distance} < ${minDistance}`);
+                    return true; // Too close to existing item
+                }
+            }
+            return false; // Safe to spawn here
+        }
+
         function isNearStaticElement(x, y) {
             const MIN_DISTANCE_FROM_STATIC = 100; // Minimum distance from tables/bookshelves
             
             const elements = document.querySelectorAll('.cafe-table, .bookshelf');
             for (let element of elements) {
-                const rect = element.getBoundingClientRect();
-                const elementX = rect.left + rect.width / 2;
-                const elementY = rect.top + rect.height / 2;
+                // Get static element position from style properties
+                const elementX = parseInt(element.style.left) + (element.classList.contains('cafe-table') ? 30 : 40); // center
+                const elementY = parseInt(element.style.top) + (element.classList.contains('cafe-table') ? 30 : 75);  // center
                 
                 const distance = Math.sqrt(Math.pow(x - elementX, 2) + Math.pow(y - elementY, 2));
                 if (distance < MIN_DISTANCE_FROM_STATIC) {
@@ -1021,29 +1037,22 @@
             }
             return false;
         }
-
-        function isNearAnyCollectibles(x, y, minDistance) {
-            // Check against ALL existing collectibles
-            for (let collectible of collectibles) {
-                const rect = collectible.getBoundingClientRect();
-                const existingX = rect.left + rect.width / 2;
-                const existingY = rect.top + rect.height / 2;
-                
-                const distance = Math.sqrt(Math.pow(x - existingX, 2) + Math.pow(y - existingY, 2));
-                if (distance < minDistance) {
-                    return true; // Too close to existing item
-                }
-            }
-            return false; // Safe to spawn here
-        }
-
+        
         function isNearPlayer(x, y) {
             const MIN_DISTANCE_FROM_PLAYER = 120; // Don't spawn too close to player
             const MIN_DISTANCE_FROM_KIDS = 100;   // Don't spawn too close to kids
             
-            const playerDistance = Math.sqrt(Math.pow(x - (playerX + 25), 2) + Math.pow(y - (playerY + 25), 2));
-            const cassianDistance = Math.sqrt(Math.pow(x - (cassianX + 22.5), 2) + Math.pow(y - (cassianY + 22.5), 2));
-            const charlieDistance = Math.sqrt(Math.pow(x - (charlieX + 22.5), 2) + Math.pow(y - (charlieY + 22.5), 2));
+            // Use actual game coordinates, not screen coordinates
+            const playerCenterX = playerX + 25;
+            const playerCenterY = playerY + 25;
+            const cassianCenterX = cassianX + 22.5;
+            const cassianCenterY = cassianY + 22.5;
+            const charlieCenterX = charlieX + 22.5;
+            const charlieCenterY = charlieY + 22.5;
+            
+            const playerDistance = Math.sqrt(Math.pow(x - playerCenterX, 2) + Math.pow(y - playerCenterY, 2));
+            const cassianDistance = Math.sqrt(Math.pow(x - cassianCenterX, 2) + Math.pow(y - cassianCenterY, 2));
+            const charlieDistance = Math.sqrt(Math.pow(x - charlieCenterX, 2) + Math.pow(y - charlieCenterY, 2));
             
             return playerDistance < MIN_DISTANCE_FROM_PLAYER || 
                    cassianDistance < MIN_DISTANCE_FROM_KIDS || 
