@@ -1400,7 +1400,7 @@
             gameContainer.appendChild(collectible);
             collectibles.push(collectible);
             
-            const lifetime = 8000 + Math.random() * 4000;
+            const lifetime = 5000 + Math.random() * 3000;
             setTimeout(() => {
                 if (collectible.parentNode) {
                     collectible.parentNode.removeChild(collectible);
