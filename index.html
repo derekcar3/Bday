@@ -695,7 +695,7 @@
 
     <div id="ui">
         <div id="score">Score: 0</div>
-        <div id="timer">Time: 60</div>
+        <div id="timer">Time: 10</div>
         <div id="highScore">High Score: 0</div>
         <button id="restartButton">Restart Game</button>
     </div>
@@ -719,7 +719,7 @@
     <script>
         // Game variables
         let score = 0;
-        let timeLeft = 60;
+        let timeLeft = 10;
         let highScore = localStorage.getItem('cafeQuestHighScore') || 0;
         let gameRunning = false;
         let player = document.getElementById('player');
@@ -1284,7 +1284,7 @@
             document.getElementById('startScreen').style.display = 'none';
             gameRunning = true;
             score = 0;
-            timeLeft = 60;
+            timeLeft = 10;
             currentSpeakingKid = null;
             
             // Clear existing collectibles
