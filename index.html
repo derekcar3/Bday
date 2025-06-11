@@ -698,7 +698,7 @@
         const MAX_SPEED = 1;
         const PLAYER_SMOOTHING = 0.2;
         const UI_HEIGHT = 140;
-        const COLLISION_FORCE = 0.3; // Stronger collision repulsion
+        const COLLISION_FORCE = 0.4; // Stronger collision repulsion
         
         // Minimum distances - sum of radii to prevent overlap
         const MIN_DISTANCE_PLAYER_TO_KID = PLAYER_RADIUS + KID_RADIUS + 5; // 70px + small buffer
@@ -706,27 +706,20 @@
         
         // Speech bubble messages for kids
         const encouragingMessages = [
-            "Go Mama! 💪",
             "Love you Mama! 💕",
             "Happy Birthday! 🎂"
         ];
         
         const laundryMessages = [
             "Laundry is annoying! 😤",
-            "No more laundry! 🚫",
-            "Laundry stinks! 👎"
         ];
 
         const dishMessages = [
             "Let Dada do dishes! 🚫",
-            "Nasty dishes! 🤢",
-            "Yucky plates! 😝"
         ];
         
         const winMessages = [
-            "Happy Birthday From Charlie, Cassian and Dada! 🎉💕",
-            "You completed your literary café adventure! 📚☕",
-            "33 years of being absolutely wonderful! ✨🎂"
+            "Happy Birthday From Charlie, Nova, and Dada! We Love You! 🎉💕"
         ];
 
         // Sound effects using Web Audio API
@@ -1561,14 +1554,7 @@
                 }, 2000);
             }
             
-            let finalMessage = "";
-            if (score >= 400) {
-                finalMessage = winMessages[0];
-            } else if (score >= 200) {
-                finalMessage = winMessages[1];
-            } else {
-                finalMessage = winMessages[2];
-            }
+            let finalMessage = "winMessages[0]";
             
             setTimeout(() => {
                 showPopup("🎉 Game Complete! 🎉", 
