@@ -709,7 +709,7 @@
     <script>
         // Game variables
         let score = 0;
-        let timeLeft = 10;
+        let timeLeft = 60;
         let highScore = localStorage.getItem('cafeQuestHighScore') || 0;
         let gameRunning = false;
         let player = document.getElementById('player');
@@ -1285,7 +1285,7 @@
             document.getElementById('startScreen').style.display = 'none';
             gameRunning = true;
             score = 0;
-            timeLeft = 10;
+            timeLeft = 60;
             currentSpeakingKid = null;
             
             // Clear existing collectibles
