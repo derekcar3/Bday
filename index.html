@@ -721,13 +721,13 @@
             
             const touch = e.touches[0] || e.changedTouches[0];
             // Center the character on the touch point
-            setPlayerTarget(touch.clientX - 25, touch.clientY - 25);
+            setPlayerTarget(touch.clientX - 75, touch.clientY - 55);
         }
         
         function handleClick(e) {
             if (!gameRunning) return;
             // Center the character on the click point
-            setPlayerTarget(e.clientX - 25, e.clientY - 25);
+            setPlayerTarget(e.clientX - 75, e.clientY - 75);
         }
         
         function setPlayerTarget(x, y) {
