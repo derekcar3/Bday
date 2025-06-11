@@ -196,6 +196,9 @@
                 /* Force to top layer */
                 will-change: auto;
                 transform-origin: center bottom;
+                isolation: isolate; /* Create new stacking context */
+                position: fixed !important; /* Force fixed positioning */
+                z-index: 9999 !important; /* Maximum z-index */
             }
 
             .speech-bubble.show {
