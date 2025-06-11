@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 33rd Birthday - Café Literary Quest</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-Copy    body {
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Happy 33rd Birthday - Café Literary Quest</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+Copy
+    body {
         font-family: 'Georgia', serif;
         background: linear-gradient(135deg, #8B4513, #D2691E, #CD853F);
         overflow: hidden;
@@ -32,7 +24,7 @@ Copy    body {
     .bookshelf {
         position: absolute;
         width: 80px;
-        height: 140px;
+        height: 150px;
         background: linear-gradient(90deg, #654321 0%, #8B4513 50%, #654321 100%);
         border: 3px solid #4A4A4A;
         border-radius: 8px;
@@ -46,7 +38,7 @@ Copy    body {
         left: 8px;
         right: 8px;
         height: 20px;
-        background: repeating-linear-gradient(90deg, #FF6B6B 0px, #FF6B6B 12px, #4ECDC4 12px, #4ECDC4 24px, #45B7D1 24px, #45B7D1 36px, #96CEB4 36px, #96CEB4 48px);
+        background: repeating-linear-gradient(90deg, #FF6B6B 0px, #FF6B6B 10px, #4ECDC4 10px, #4ECDC4 20px, #45B7D1 20px, #45B7D1 30px, #96CEB4 30px, #96CEB4 40px);
         border-radius: 3px;
     }
 
@@ -57,7 +49,7 @@ Copy    body {
         left: 8px;
         right: 8px;
         height: 20px;
-        background: repeating-linear-gradient(90deg, #DDA0DD 0px, #DDA0DD 12px, #F0E68C 12px, #F0E68C 24px, #FFB6C1 24px, #FFB6C1 36px, #98FB98 36px, #98FB98 48px);
+        background: repeating-linear-gradient(90deg, #DDA0DD 0px, #DDA0DD 10px, #F0E68C 10px, #F0E68C 20px, #FFB6C1 20px, #FFB6C1 30px, #98FB98 30px, #98FB98 40px);
         border-radius: 3px;
     }
 
@@ -68,7 +60,7 @@ Copy    body {
         background: radial-gradient(circle, #8B4513 30%, #654321 70%);
         border-radius: 50%;
         border: 4px solid #4A4A4A;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
     .cafe-table:after {
@@ -82,8 +74,8 @@ Copy    body {
 
     #player {
         position: absolute;
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         background: linear-gradient(45deg, #FF6B9D, #FF8E53);
         border-radius: 50%;
         border: 4px solid #FFF;
@@ -98,22 +90,19 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 32px;
+        font-size: 28px;
     }
 
     .kid {
         position: absolute;
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(45deg, #FFE135, #FFA500);
         border-radius: 50%;
         border: 3px solid #FFF;
-        transition: all 0.3s ease;
-        z-index: 90;
+        transition: all 0.2s ease;
+        z-index: 95;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    }
-
-    #cassian {
-        background: linear-gradient(45deg, #4ECDC4, #45B7D1);
     }
 
     #cassian:before {
@@ -122,11 +111,7 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 28px;
-    }
-
-    #charlie {
-        background: linear-gradient(45deg, #FFB6C1, #FF69B4);
+        font-size: 24px;
     }
 
     #charlie:before {
@@ -135,73 +120,63 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 28px;
+        font-size: 24px;
     }
 
     .speech-bubble {
         position: absolute;
         background: white;
-        border-radius: 20px;
+        border: 3px solid #FF69B4;
+        border-radius: 15px;
         padding: 8px 12px;
-        border: 3px solid #333;
         font-size: 12px;
         font-weight: bold;
-        color: #333;
-        white-space: nowrap;
+        color: #8B008B;
+        max-width: 120px;
+        text-align: center;
         z-index: 150;
-        animation: bubble-appear 0.3s ease-out, bubble-disappear 0.3s ease-in 2.7s forwards;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s ease;
     }
 
     .speech-bubble:after {
         content: '';
         position: absolute;
-        bottom: -8px;
+        bottom: -10px;
         left: 50%;
         transform: translateX(-50%);
         width: 0;
         height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-top: 8px solid white;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #FF69B4;
     }
 
-    .speech-bubble:before {
-        content: '';
-        position: absolute;
-        bottom: -11px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 11px solid transparent;
-        border-right: 11px solid transparent;
-        border-top: 11px solid #333;
-    }
-
-    @keyframes bubble-appear {
-        0% { opacity: 0; transform: scale(0.5) translateY(10px); }
-        100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    @keyframes bubble-disappear {
-        0% { opacity: 1; transform: scale(1); }
-        100% { opacity: 0; transform: scale(0.8); }
+    .speech-bubble.show {
+        opacity: 1;
+        transform: scale(1);
     }
 
     .collectible {
         position: absolute;
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         animation: float 2s ease-in-out infinite;
         z-index: 50;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transition: transform 0.1s ease;
+    }
+
+    .collectible:hover {
+        transform: scale(1.1);
     }
 
     .book {
         background: linear-gradient(45deg, #4ECDC4, #45B7D1);
         border: 3px solid #FFF;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
     .book:before {
@@ -210,12 +185,13 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
+        font-size: 24px;
     }
 
     .coffee {
         background: linear-gradient(45deg, #D2691E, #8B4513);
         border: 3px solid #FFF;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
     .coffee:before {
@@ -224,12 +200,13 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
+        font-size: 24px;
     }
 
     .healthy-snack {
         background: linear-gradient(45deg, #98FB98, #90EE90);
         border: 3px solid #FFF;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
     .healthy-snack:before {
@@ -238,12 +215,13 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
+        font-size: 24px;
     }
 
     .running-shoe {
         background: linear-gradient(45deg, #FF1493, #FF69B4);
         border: 3px solid #FFF;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
     .running-shoe:before {
@@ -252,42 +230,45 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
+        font-size: 24px;
     }
 
-    .croissant {
-        background: linear-gradient(45deg, #DEB887, #F4A460);
+    .apple {
+        background: linear-gradient(45deg, #FF6347, #FF4500);
         border: 3px solid #FFF;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
-    .croissant:before {
-        content: '🥐';
+    .apple:before {
+        content: '🍎';
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
+        font-size: 24px;
     }
 
-    .tea {
-        background: linear-gradient(45deg, #228B22, #32CD32);
+    .water {
+        background: linear-gradient(45deg, #87CEEB, #4682B4);
         border: 3px solid #FFF;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
-    .tea:before {
-        content: '🍵';
+    .water:before {
+        content: '💧';
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
+        font-size: 24px;
     }
 
-    /* Negative items */
+    /* Negative Items */
     .dirty-dish {
-        background: linear-gradient(45deg, #DC143C, #B22222);
+        background: linear-gradient(45deg, #FF0000, #DC143C);
         border: 3px solid #8B0000;
-        animation: float 2s ease-in-out infinite, pulse-red 1s ease-in-out infinite;
+        box-shadow: 0 4px 8px rgba(139,0,0,0.5);
+        animation: float 2s ease-in-out infinite, shake 0.5s ease-in-out infinite;
     }
 
     .dirty-dish:before {
@@ -296,24 +277,25 @@ Copy    body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
-        filter: hue-rotate(0deg) saturate(2);
+        font-size: 24px;
+        filter: brightness(0.7) contrast(1.2);
     }
 
     .laundry {
-        background: linear-gradient(45deg, #8B4513, #A0522D);
-        border: 3px solid #654321;
-        animation: float 2s ease-in-out infinite, pulse-brown 1s ease-in-out infinite;
+        background: linear-gradient(45deg, #FF0000, #B22222);
+        border: 3px solid #8B0000;
+        box-shadow: 0 4px 8px rgba(139,0,0,0.5);
+        animation: float 2s ease-in-out infinite, shake 0.7s ease-in-out infinite;
     }
 
     .laundry:before {
-        content: '👔';
+        content: '👕';
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 26px;
-        filter: saturate(0.5);
+        font-size: 24px;
+        filter: brightness(0.6) saturate(1.5);
     }
 
     @keyframes float {
@@ -321,31 +303,20 @@ Copy    body {
         50% { transform: translateY(-15px); }
     }
 
-    @keyframes pulse-red {
-        0%, 100% { box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 0 0 rgba(220, 20, 60, 0.4); }
-        50% { box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 0 10px rgba(220, 20, 60, 0); }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0px) translateY(0px); }
+        25% { transform: translateX(-2px) translateY(-2px); }
+        75% { transform: translateX(2px) translateY(2px); }
     }
 
-    @keyframes pulse-brown {
-        0%, 100% { box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 0 0 rgba(139, 69, 19, 0.4); }
-        50% { box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 0 10px rgba(139, 69, 19, 0); }
+    .flex-hit {
+        animation: flex-hit 0.3s ease-out;
     }
 
-    @keyframes screen-shake {
-        0%, 100% { transform: translate(0, 0); }
-        10% { transform: translate(-5px, -5px); }
-        20% { transform: translate(5px, -5px); }
-        30% { transform: translate(-5px, 5px); }
-        40% { transform: translate(5px, 5px); }
-        50% { transform: translate(-5px, -5px); }
-        60% { transform: translate(5px, -5px); }
-        70% { transform: translate(-5px, 5px); }
-        80% { transform: translate(5px, 5px); }
-        90% { transform: translate(-5px, -5px); }
-    }
-
-    .screen-shake {
-        animation: screen-shake 0.5s ease-in-out;
+    @keyframes flex-hit {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3) rotate(5deg); }
+        100% { transform: scale(1); }
     }
 
     #ui {
@@ -472,6 +443,11 @@ Copy    body {
         animation: particle-float 3s ease-out forwards;
     }
 
+    .negative-particle {
+        background: #FF0000;
+        animation: negative-particle-float 2s ease-out forwards;
+    }
+
     @keyframes particle-float {
         0% {
             opacity: 1;
@@ -479,7 +455,18 @@ Copy    body {
         }
         100% {
             opacity: 0;
-            transform: translateY(-120px) scale(0);
+            transform: translateY(-100px) scale(0);
+        }
+    }
+
+    @keyframes negative-particle-float {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-80px) scale(0);
         }
     }
 
@@ -488,25 +475,13 @@ Copy    body {
         #startScreen p { font-size: 14px; }
         #popup h2 { font-size: 20px; }
         #popup p { font-size: 16px; }
-        .collectible { width: 40px; height: 40px; }
-        .collectible:before { font-size: 20px; }
     }
 </style>
-</head>
-<body>
-    <div id="startScreen">
-        <h1>🎉 Happy 33rd Birthday! 🎉</h1>
-        <p>Welcome to your personalized Café Literary Quest!<br>
-        Cassian and Charlie will chase you around with love!<br>
-        Collect books, coffee, and healthy treats!<br>
-        Avoid the dirty dishes and laundry!<br><br>
-        👆 Tap anywhere to move<br>
-        📚 Collect good items for points<br>
-        🍽️ Avoid red dishes and laundry<br>
-        ⏰ Beat the clock!</p>
-        <button id="startButton">Start Your Adventure!</button>
-    </div>
-Copy<div id="gameContainer">
+</head> <body> <div id="startScreen"> <h1>🎉 Happy 33rd Birthday! 🎉</h1> <p>Welcome to your personalized Café Literary Quest!<br> Explore the charming Parisian bookstore café,<br> collect books, coffee, and healthy treats!<br> Cassian and Charlie will cheer you on!<br><br> 👆 Tap anywhere to move<br> 📚 Collect good items for points<br> 🍽️ Avoid dirty dishes and laundry!<br> ⏰ Beat the clock!</p> <button id="startButton">Start Your Adventure!</button> </div>
+
+
+Copy
+<div id="gameContainer">
     <div id="ui">
         <div id="score">Score: 0</div>
         <div id="timer">Time: 90</div>
@@ -534,34 +509,37 @@ Copy<div id="gameContainer">
     let collectibles = [];
     let gameTimer;
     let spawnTimer;
-    let bubbleTimer;
+    let speechTimer;
     
     // Player and kids positions
-    let playerX = window.innerWidth / 2 - 30;
-    let playerY = window.innerHeight / 2 - 30;
-    let cassianX = window.innerWidth / 4;
-    let cassianY = window.innerHeight / 3;
-    let charlieX = (window.innerWidth * 3) / 4;
-    let charlieY = (window.innerHeight * 2) / 3;
+    let playerX = window.innerWidth / 2 - 25;
+    let playerY = window.innerHeight / 2 - 25;
+    let cassianX = playerX - 80;
+    let cassianY = playerY + 60;
+    let charlieX = playerX + 80;
+    let charlieY = playerY - 60;
     
-    // Table positions for better layout
-    let tablePositions = [];
-    
-    // Encouraging messages from kids
-    const kidMessages = [
-        "You're the best mommy! 💕",
-        "Go mommy go! 🏃‍♀️",
-        "We love you so much! ❤️",
-        "You're so fast! ⚡",
-        "Happy birthday mommy! 🎉",
+    // Speech bubble messages for kids
+    const encouragingMessages = [
+        "Go Mom! 💪",
         "You're amazing! ✨",
-        "Keep going! 💪",
-        "You're our superhero! 🦸‍♀️",
-        "We're so proud! 🌟",
-        "Best mommy ever! 👑"
+        "Keep going! 🌟",
+        "Love you Mom! 💕",
+        "You're the best! 🏆",
+        "Super Mom! 🦸‍♀️",
+        "You got this! 💪",
+        "Happy Birthday! 🎂",
+        "So proud! 🌈",
+        "You're awesome! ⭐"
+    ];
+    
+    const winMessages = [
+        "Happy Birthday From Charlie, Cassian and Dada! 🎉💕",
+        "You completed your literary café adventure! 📚☕",
+        "33 years of being absolutely wonderful! ✨🎂"
     ];
 
-    // Sound effects
+    // Sound effects using Web Audio API
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
     function playSound(frequency, duration, type = 'sine') {
@@ -593,7 +571,7 @@ Copy<div id="gameContainer">
     function playWinSound() {
         const notes = [523, 659, 784, 1047];
         notes.forEach((note, index) => {
-            setTimeout(() => playSound(note, 0.4), index * 200);
+            setTimeout(() => playSound(note, 0.3), index * 200);
         });
     }
 
@@ -612,39 +590,37 @@ Copy<div id="gameContainer">
     }
 
     function createStaticElements() {
-        // Create bookshelves in corners and edges
-        const bookshelfPositions = [
-            {x: 20, y: 120},
-            {x: window.innerWidth - 100, y: 120},
-            {x: 20, y: window.innerHeight - 260},
-            {x: window.innerWidth - 100, y: window.innerHeight - 260},
-            {x: window.innerWidth / 2 - 40, y: 120},
-            {x: window.innerWidth / 4, y: window.innerHeight - 260}
+        // Create bookshelves in organized pattern
+        const positions = [
+            {x: 50, y: 120}, {x: 50, y: 320}, {x: 50, y: 520},
+            {x: window.innerWidth - 130, y: 150}, {x: window.innerWidth - 130, y: 350}
         ];
-
-        bookshelfPositions.forEach(pos => {
-            const bookshelf = document.createElement('div');
-            bookshelf.className = 'bookshelf';
-            bookshelf.style.left = pos.x + 'px';
-            bookshelf.style.top = pos.y + 'px';
-            gameContainer.appendChild(bookshelf);
+        
+        positions.forEach(pos => {
+            if (pos.y < window.innerHeight - 170) {
+                const bookshelf = document.createElement('div');
+                bookshelf.className = 'bookshelf';
+                bookshelf.style.left = pos.x + 'px';
+                bookshelf.style.top = pos.y + 'px';
+                gameContainer.appendChild(bookshelf);
+            }
         });
         
-        // Create café tables in organized layout
-        tablePositions = [
-            {x: window.innerWidth / 4 - 30, y: window.innerHeight / 3},
-            {x: (window.innerWidth * 3) / 4 - 30, y: window.innerHeight / 3},
-            {x: window.innerWidth / 2 - 30, y: window.innerHeight / 2},
-            {x: window.innerWidth / 4 - 30, y: (window.innerHeight * 2) / 3},
-            {x: (window.innerWidth * 3) / 4 - 30, y: (window.innerHeight * 2) / 3}
+        // Create café tables in organized grid
+        const tablePositions = [
+            {x: 200, y: 180}, {x: 200, y: 350}, {x: 200, y: 520},
+            {x: window.innerWidth - 260, y: 180}, {x: window.innerWidth - 260, y: 350},
+            {x: window.innerWidth/2 - 30, y: 200}, {x: window.innerWidth/2 - 30, y: 400}
         ];
-
+        
         tablePositions.forEach(pos => {
-            const table = document.createElement('div');
-            table.className = 'cafe-table';
-            table.style.left = pos.x + 'px';
-            table.style.top = pos.y + 'px';
-            gameContainer.appendChild(table);
+            if (pos.x > 100 && pos.x < window.innerWidth - 160 && pos.y < window.innerHeight - 120) {
+                const table = document.createElement('div');
+                table.className = 'cafe-table';
+                table.style.left = pos.x + 'px';
+                table.style.top = pos.y + 'px';
+                gameContainer.appendChild(table);
+            }
         });
     }
 
@@ -662,8 +638,8 @@ Copy<div id="gameContainer">
     }
 
     function movePlayerTo(x, y) {
-        playerX = Math.max(30, Math.min(window.innerWidth - 90, x - 30));
-        playerY = Math.max(90, Math.min(window.innerHeight - 90, y - 30));
+        playerX = Math.max(25, Math.min(window.innerWidth - 75, x - 25));
+        playerY = Math.max(90, Math.min(window.innerHeight - 75, y - 25));
         updatePlayerPosition();
     }
 
@@ -673,31 +649,78 @@ Copy<div id="gameContainer">
     }
 
     function updateKidsPositions() {
-        // Kids slowly follow the player
-        const speed = 0.8;
+        // Kids follow with different patterns and avoid overlap
+        const followSpeed = 0.15;
+        const minDistance = 70; // Minimum distance between kids
         
-        // Cassian follows
-        const cassianDx = playerX - cassianX;
-        const cassianDy = playerY - cassianY;
-        cassianX += cassianDx * speed * 0.01;
-        cassianY += cassianDy * speed * 0.01;
+        // Cassian follows with offset
+        const cassianTargetX = playerX - 90 + Math.sin(Date.now() * 0.001) * 20;
+        const cassianTargetY = playerY + 70 + Math.cos(Date.now() * 0.001) * 15;
         
-        // Charlie follows
-        const charlieDx = playerX - charlieX;
-        const charlieDy = playerY - charlieY;
-        charlieX += charlieDx * speed * 0.01;
-        charlieY += charlieDy * speed * 0.01;
+        cassianX += (cassianTargetX - cassianX) * followSpeed;
+        cassianY += (cassianTargetY - cassianY) * followSpeed;
+        
+        // Charlie follows with different offset
+        const charlieTargetX = playerX + 90 + Math.cos(Date.now() * 0.0008) * 25;
+        const charlieTargetY = playerY - 70 + Math.sin(Date.now() * 0.0008) * 20;
+        
+        charlieX += (charlieTargetX - charlieX) * followSpeed;
+        charlieY += (charlieTargetY - charlieY) * followSpeed;
+        
+        // Prevent kids from overlapping
+        const distanceBetweenKids = Math.sqrt(Math.pow(cassianX - charlieX, 2) + Math.pow(cassianY - charlieY, 2));
+        if (distanceBetweenKids < minDistance) {
+            const angle = Math.atan2(charlieY - cassianY, charlieX - cassianX);
+            const pushDistance = (minDistance - distanceBetweenKids) / 2;
+            
+            cassianX -= Math.cos(angle) * pushDistance;
+            cassianY -= Math.sin(angle) * pushDistance;
+            charlieX += Math.cos(angle) * pushDistance;
+            charlieY += Math.sin(angle) * pushDistance;
+        }
         
         // Keep kids on screen
-        cassianX = Math.max(25, Math.min(window.innerWidth - 75, cassianX));
-        cassianY = Math.max(90, Math.min(window.innerHeight - 90, cassianY));
-        charlieX = Math.max(25, Math.min(window.innerWidth - 75, charlieX));
-        charlieY = Math.max(90, Math.min(window.innerHeight - 90, charlieY));
+        cassianX = Math.max(25, Math.min(window.innerWidth - 70, cassianX));
+        cassianY = Math.max(90, Math.min(window.innerHeight - 70, cassianY));
+        charlieX = Math.max(25, Math.min(window.innerWidth - 70, charlieX));
+        charlieY = Math.max(90, Math.min(window.innerHeight - 70, charlieY));
         
         cassian.style.left = cassianX + 'px';
         cassian.style.top = cassianY + 'px';
         charlie.style.left = charlieX + 'px';
         charlie.style.top = charlieY + 'px';
+    }
+
+    function showSpeechBubble(kid, message) {
+        // Remove existing speech bubble
+        const existingBubble = kid.querySelector('.speech-bubble');
+        if (existingBubble) {
+            existingBubble.remove();
+        }
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'speech-bubble';
+        bubble.textContent = message;
+        bubble.style.bottom = '55px';
+        bubble.style.left = '50%';
+        bubble.style.transform = 'translateX(-50%)';
+        
+        kid.appendChild(bubble);
+        
+        // Animate in
+        setTimeout(() => {
+            bubble.classList.add('show');
+        }, 50);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            bubble.classList.remove('show');
+            setTimeout(() => {
+                if (bubble.parentNode) {
+                    bubble.remove();
+                }
+            }, 300);
+        }, 3000);
     }
 
     function startGame() {
@@ -726,47 +749,46 @@ Copy<div id="gameContainer">
         // More frequent spawning
         spawnTimer = setInterval(spawnCollectible, 800);
         
-        // Random speech bubbles from kids
-        bubbleTimer = setInterval(() => {
-            if (Math.random() < 0.3) { // 30% chance every interval
-                showSpeechBubble();
+        // Speech bubble timer
+        speechTimer = setInterval(() => {
+            if (Math.random() < 0.3) { // 30% chance every 4 seconds
+                const kid = Math.random() < 0.5 ? cassian : charlie;
+                const message = encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
+                showSpeechBubble(kid, message);
             }
         }, 4000);
+        
+        // Initial welcome message
+        setTimeout(() => {
+            showSpeechBubble(cassian, "Go Mom! 💪");
+        }, 1000);
+        setTimeout(() => {
+            showSpeechBubble(charlie, "Love you! 💕");
+        }, 2000);
     }
 
     function spawnCollectible() {
         if (!gameRunning) return;
         
-        const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'croissant', 'tea'];
+        const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water'];
         const negativeTypes = ['dirty-dish', 'laundry'];
-        const allTypes = [...positiveTypes, ...positiveTypes, ...positiveTypes, ...negativeTypes]; // 3:1 ratio
+        const allTypes = [...positiveTypes, ...negativeTypes];
         
-        const type = allTypes[Math.floor(Math.random() * allTypes.length)];
+        // 70% chance for positive, 30% for negative
+        const isPositive = Math.random() < 0.7;
+        const types = isPositive ? positiveTypes : negativeTypes;
+        const type = types[Math.floor(Math.random() * types.length)];
         
         const collectible = document.createElement('div');
         collectible.className = `collectible ${type}`;
         
-        // Spawn away from tables and player
-        let x, y, validPosition = false, attempts = 0;
-        
-        while (!validPosition && attempts < 20) {
-            x = Math.random() * (window.innerWidth - 50);
-            y = Math.random() * (window.innerHeight - 150) + 100;
-            
-            validPosition = true;
-            
-            // Check distance from tables
-            tablePositions.forEach(table => {
-                const distance = Math.sqrt((x - table.x) ** 2 + (y - table.y) ** 2);
-                if (distance < 100) validPosition = false;
-            });
-            
-            // Check distance from player
-            const playerDistance = Math.sqrt((x - playerX) ** 2 + (y - playerY) ** 2);
-            if (playerDistance < 80) validPosition = false;
-            
+        // Spawn in safe areas (not too close to static elements)
+        let x, y, attempts = 0;
+        do {
+            x = Math.random() * (window.innerWidth - 60) + 30;
+            y = Math.random() * (window.innerHeight - 180) + 120;
             attempts++;
-        }
+        } while (attempts < 10 && isNearStaticElement(x, y));
         
         collectible.style.left = x + 'px';
         collectible.style.top = y + 'px';
@@ -774,35 +796,26 @@ Copy<div id="gameContainer">
         gameContainer.appendChild(collectible);
         collectibles.push(collectible);
         
-        // Remove after 12 seconds if not collected
+        // Remove after 6-12 seconds if not collected
+        const lifetime = 6000 + Math.random() * 6000;
         setTimeout(() => {
             if (collectible.parentNode) {
                 collectible.parentNode.removeChild(collectible);
                 const index = collectibles.indexOf(collectible);
                 if (index > -1) collectibles.splice(index, 1);
             }
-        }, 12000);
+        }, lifetime);
     }
 
-    function showSpeechBubble() {
-        const kid = Math.random() < 0.5 ? cassian : charlie;
-        const message = kidMessages[Math.floor(Math.random() * kidMessages.length)];
-        
-        const bubble = document.createElement('div');
-        bubble.className = 'speech-bubble';
-        bubble.textContent = message;
-        
-        const kidRect = kid.getBoundingClientRect();
-        bubble.style.left = (kidRect.left + kidRect.width/2 - 60) + 'px';
-        bubble.style.top = (kidRect.top - 50) + 'px';
-        
-        document.body.appendChild(bubble);
-        
-        setTimeout(() => {
-            if (bubble.parentNode) {
-                bubble.parentNode.removeChild(bubble);
-            }
-        }, 3000);
+    function isNearStaticElement(x, y) {
+        // Check if position is too close to tables or bookshelves
+        const elements = document.querySelectorAll('.cafe-table, .bookshelf');
+        for (let element of elements) {
+            const rect = element.getBoundingClientRect();
+            const distance = Math.sqrt(Math.pow(x - (rect.left + rect.width/2), 2) + Math.pow(y - (rect.top + rect.height/2), 2));
+            if (distance < 80) return true;
+        }
+        return false;
     }
 
     function checkCollisions() {
@@ -815,7 +828,6 @@ Copy<div id="gameContainer">
                 rect1.top < rect2.bottom && 
                 rect1.bottom > rect2.top) {
                 
-                // Collision detected
                 collectCollectible(collectible, index);
             }
         });
@@ -831,30 +843,44 @@ Copy<div id="gameContainer">
             case 'coffee': points = 20; break;
             case 'healthy-snack': points = 30; break;
             case 'running-shoe': points = 35; break;
-            case 'croissant': points = 15; break;
-            case 'tea': points = 18; break;
+            case 'apple': points = 15; break;
+            case 'water': points = 15; break;
             case 'dirty-dish': points = -20; isNegative = true; break;
-            case 'laundry': points = -15; isNegative = true; break;
+            case 'laundry': points = -25; isNegative = true; break;
         }
         
         score += points;
-        if (score < 0) score = 0; // Don't go below 0
         updateScore();
         
         if (isNegative) {
             playNegativeSound();
-            // Screen shake effect
-            gameContainer.classList.add('screen-shake');
-            setTimeout(() => {
-                gameContainer.classList.remove('screen-shake');
-            }, 500);
+            collectible.classList.add('flex-hit');
+            createNegativeParticles(collectible);
+            
+            // Show negative speech bubble
+            const kid = Math.random() < 0.5 ? cassian : charlie;
+            const negativeMessages = ["Oh no! 😱", "Watch out! ⚠️", "Avoid those! 🚫"];
+            const message = negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
+            showSpeechBubble(kid, message);
         } else {
             playCollectSound();
             createParticles(collectible);
+            
+            // Show positive speech bubble occasionally
+            if (Math.random() < 0.4) {
+                const kid = Math.random() < 0.5 ? cassian : charlie;
+                const positiveMessages = ["Great job! 🌟", "Nice one! 👏", "Keep going! 💪", "Awesome! ⭐"];
+                const message = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
+                showSpeechBubble(kid, message);
+            }
         }
         
         // Remove collectible
-        collectible.parentNode.removeChild(collectible);
+        setTimeout(() => {
+            if (collectible.parentNode) {
+                collectible.parentNode.removeChild(collectible);
+            }
+        }, 100);
         collectibles.splice(index, 1);
     }
 
@@ -875,6 +901,23 @@ Copy<div id="gameContainer">
         }
     }
 
+    function createNegativeParticles(element) {
+        const rect = element.getBoundingClientRect();
+        for (let i = 0; i < 8; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle negative-particle';
+            particle.style.left = (rect.left + rect.width/2 + Math.random() * 30 - 15) + 'px';
+            particle.style.top = (rect.top + rect.height/2 + Math.random() * 30 - 15) + 'px';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 2000);
+        }
+    }
+
     function updateScore() {
         document.getElementById('score').textContent = `Score: ${score}`;
     }
@@ -887,23 +930,27 @@ Copy<div id="gameContainer">
         gameRunning = false;
         clearInterval(gameTimer);
         clearInterval(spawnTimer);
-        clearInterval(bubbleTimer);
+        clearInterval(speechTimer);
         
         playWinSound();
         
+        // Final encouraging messages from kids
+        showSpeechBubble(cassian, "You did great! 🏆");
+        showSpeechBubble(charlie, "Love you Mom! 💕");
+        
         let finalMessage = "";
-        if (score >= 300) {
-            finalMessage = "Happy Birthday From Charlie, Cassian and Dada! 🎉💕<br>You're absolutely incredible!";
+        if (score >= 500) {
+            finalMessage = winMessages[0];
         } else if (score >= 200) {
-            finalMessage = "You completed your literary café adventure! 📚☕<br>The kids are so proud of you!";
+            finalMessage = winMessages[1];
         } else {
-            finalMessage = "33 years of being absolutely wonderful! ✨🎂<br>We love you so much!";
+            finalMessage = winMessages[2];
         }
         
         setTimeout(() => {
             showPopup("🎉 Game Complete! 🎉", 
-                `${finalMessage}<br><br>Final Score: ${score}<br><br>Cassian and Charlie: "Best mommy ever!" 👑`);
-        }, 1000);
+                `${finalMessage}<br><br>Final Score: ${score}<br>You're amazing at 33! 💕<br><br>Cassian and Charlie are so proud of you!`);
+        }, 2000);
     }
 
     function showPopup(title, message) {
@@ -919,8 +966,8 @@ Copy<div id="gameContainer">
     // Game loop
     function gameLoop() {
         if (gameRunning) {
-            updateKidsPositions();
             checkCollisions();
+            updateKidsPositions();
         }
         requestAnimationFrame(gameLoop);
     }
@@ -934,18 +981,10 @@ Copy<div id="gameContainer">
     // Handle orientation changes
     window.addEventListener('orientationchange', () => {
         setTimeout(() => {
-            playerX = Math.min(playerX, window.innerWidth - 90);
-            playerY = Math.min(playerY, window.innerHeight - 90);
+            playerX = Math.min(playerX, window.innerWidth - 75);
+            playerY = Math.min(playerY, window.innerHeight - 75);
             updatePlayerPosition();
         }, 100);
     });
 </script>
-</body>
-</html>
-</html>
-<css>
-/* All CSS is included in the HTML above for easier deployment */
-</css>
-<javascript>
-/* All JavaScript is included in the HTML above for easier deployment */
-</javascript>
+</body> </html> </html> <css> /* All CSS is included in the HTML above for easier deployment */ </css> <javascript> /* All JavaScript is included in the HTML above for easier deployment */ </javascript>
