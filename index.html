@@ -698,7 +698,7 @@
         const MAX_SPEED = 1;
         const PLAYER_SMOOTHING = 0.2;
         const UI_HEIGHT = 140;
-        const COLLISION_FORCE = 0.1; // Stronger collision repulsion
+        const COLLISION_FORCE = 0.3; // Stronger collision repulsion
         
         // Minimum distances - sum of radii to prevent overlap
         const MIN_DISTANCE_PLAYER_TO_KID = PLAYER_RADIUS + KID_RADIUS + 5; // 70px + small buffer
@@ -903,6 +903,7 @@
             }, 25000);
         }
 
+        // Modify the createFlyingAirplane() function:
         function createFlyingAirplane() {
             if (!gameRunning) return;
             
@@ -910,27 +911,17 @@
             airplane.className = 'flying-airplane';
             airplane.style.top = (UI_HEIGHT + 30 + Math.random() * 50) + 'px';
             airplane.style.left = '-100px';
+            airplane.isAirplane = true; // Add identifier
             gameContainer.appendChild(airplane);
             
-            // Make it clickable for bonus points
+            // Add to collectibles array so it gets checked for collisions
+            collectibles.push(airplane);
+            
+            // Keep the click handler as backup
             let collected = false;
             airplane.addEventListener('click', () => {
                 if (!collected && gameRunning) {
-                    collected = true;
-                    const rect = airplane.getBoundingClientRect();
-                    showScorePopup(rect.left + rect.width/2, rect.top + rect.height/2, 100);
-                    score += 100;
-                    updateScore();
-                    playCollectSound();
-                    createParticles(airplane);
-                    airplane.style.animation = 'none';
-                    airplane.style.transform = 'scale(1.5)';
-                    airplane.style.opacity = '0';
-                    
-                    if (!currentSpeakingKid) {
-                        const kid = Math.random() < 0.5 ? cassian : charlie;
-                        showSpeechBubble(kid, "Amazing catch! ✈️✨");
-                    }
+                    collectAirplane(airplane);
                 }
             });
             
@@ -938,8 +929,35 @@
             setTimeout(() => {
                 if (airplane.parentNode) {
                     airplane.parentNode.removeChild(airplane);
+                    // Remove from collectibles array
+                    const index = collectibles.indexOf(airplane);
+                    if (index > -1) collectibles.splice(index, 1);
                 }
             }, 8000);
+        }
+
+        // Add a separate function to handle airplane collection:
+        function collectAirplane(airplane) {
+            const rect = airplane.getBoundingClientRect();
+            showScorePopup(rect.left + rect.width/2, rect.top + rect.height/2, 100);
+            score += 100;
+            updateScore();
+            playCollectSound();
+            createParticles(airplane);
+            
+            // Remove from collectibles array
+            const index = collectibles.indexOf(airplane);
+            if (index > -1) collectibles.splice(index, 1);
+            
+            // Remove from DOM
+            if (airplane.parentNode) {
+                airplane.parentNode.removeChild(airplane);
+            }
+            
+            if (!currentSpeakingKid) {
+                const kid = Math.random() < 0.5 ? cassian : charlie;
+                showSpeechBubble(kid, "Amazing catch! ✈️✨");
+            }
         }
 
         function handleTouch(e) {
@@ -1032,9 +1050,15 @@
             if (cassianPlayerDistance < MIN_DISTANCE_PLAYER_TO_KID) {
                 const overlap = MIN_DISTANCE_PLAYER_TO_KID - cassianPlayerDistance;
                 const pushAngle = Math.atan2(cassianCenterY - playerCenterY, cassianCenterX - playerCenterX);
-                const pushForce = overlap * COLLISION_FORCE * 2;
+                const pushForce = overlap * COLLISION_FORCE * 3; // Increased multiplier from 2 to 3
                 cassianTargetX += Math.cos(pushAngle) * pushForce;
                 cassianTargetY += Math.sin(pushAngle) * pushForce;
+                
+                // Add immediate position correction for severe overlaps
+                if (overlap > 10) {
+                    cassianX += Math.cos(pushAngle) * (overlap * 0.1);
+                    cassianY += Math.sin(pushAngle) * (overlap * 0.1);
+                }
             }
             
             // PRECISE COLLISION AVOIDANCE - Charlie with player
@@ -1042,9 +1066,15 @@
             if (charliePlayerDistance < MIN_DISTANCE_PLAYER_TO_KID) {
                 const overlap = MIN_DISTANCE_PLAYER_TO_KID - charliePlayerDistance;
                 const pushAngle = Math.atan2(charlieCenterY - playerCenterY, charlieCenterX - playerCenterX);
-                const pushForce = overlap * COLLISION_FORCE * 2;
+                const pushForce = overlap * COLLISION_FORCE * 3; // Increased multiplier from 2 to 3
                 charlieTargetX += Math.cos(pushAngle) * pushForce;
                 charlieTargetY += Math.sin(pushAngle) * pushForce;
+                
+                // Add immediate position correction for severe overlaps
+                if (overlap > 10) {
+                    charlieX += Math.cos(pushAngle) * (overlap * 0.1);
+                    charlieY += Math.sin(pushAngle) * (overlap * 0.1);
+                }
             }
             
             // Enhanced physics for Cassian
@@ -1391,7 +1421,15 @@
             });
         }
 
+        // Modify the collectCollectible function to handle airplanes:
         function collectCollectible(collectible, index) {
+            // Check if it's an airplane
+            if (collectible.isAirplane) {
+                collectAirplane(collectible);
+                return;
+            }
+            
+            // Rest of the existing collectCollectible code remains the same...
             const type = collectible.classList[1];
             let points = 0;
             let isNegative = false;
