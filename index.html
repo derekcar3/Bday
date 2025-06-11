@@ -29,9 +29,31 @@
                 background-attachment: fixed;
                 transition: transform 0.1s ease-out;
             }
-    
-            .screen-shake {
-                animation: screen-shake 0.5s ease-in-out;
+            
+            .screen-shake .speech-bubble {
+                transform: translateX(-50%) !important;
+                animation: none !important;
+            }
+
+            .speech-bubble {
+                position: absolute;
+                background: white;
+                border: 3px solid #FF69B4;
+                border-radius: 15px;
+                padding: 8px 12px;
+                font-size: 12px;
+                font-weight: bold;
+                color: #8B008B;
+                max-width: 120px;
+                text-align: center;
+                z-index: 9999 !important;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                opacity: 1;
+                transform: translateX(-50%);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                /* Force new stacking context */
+                isolation: isolate;
+                will-change: auto;
             }
 
             /* Add this new class for content that should shake */
