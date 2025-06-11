@@ -47,30 +47,6 @@
                 90% { transform: translate(-2px, 1px) rotate(0); }
                 100% { transform: translate(0); }
             }
-    
-            .cafe-table {
-                position: absolute;
-                width: 80px;
-                height: 80px;
-                background: radial-gradient(circle, #8B4513 30%, #654321 70%);
-                border-radius: 50%;
-                border: 3px solid #4A4A4A;
-                box-shadow: 0 5px 12px rgba(0,0,0,0.4);
-                z-index: 10;
-            }
-    
-            .cafe-table:after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 30px;
-                height: 30px;
-                background: radial-gradient(circle, #654321, #4A4A4A);
-                border-radius: 50%;
-                box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-            }
 
             .tree {
                 position: absolute;
@@ -87,6 +63,23 @@
                 transform: translate(-50%, -50%);
                 font-size: 60px;
                 filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+            }
+
+            .cloud {
+                position: absolute;
+                z-index: 2;
+                animation: cloud-float 20s linear infinite;
+            }
+
+            .cloud:before {
+                content: '☁️';
+                font-size: 40px;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            }
+
+            @keyframes cloud-float {
+                0% { transform: translateX(-80px); }
+                100% { transform: translateX(calc(100vw + 80px)); }
             }
     
             #player {
@@ -316,19 +309,45 @@
                 font-size: 40px;
             }
 
-            .airplane {
+            .flying-airplane {
+                position: absolute;
+                width: 80px;
+                height: 80px;
                 background: linear-gradient(45deg, #87CEEB, #4169E1);
+                border-radius: 50%;
                 border: 3px solid #FFF;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                z-index: 120;
+                animation: fly-across 8s linear forwards;
             }
-    
-            .airplane:before {
+
+            .flying-airplane:before {
                 content: '✈️';
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 40px;
+                font-size: 50px;
+            }
+
+            @keyframes fly-across {
+                0% { 
+                    left: -100px; 
+                    transform: translateY(0) rotate(0deg);
+                }
+                25% {
+                    transform: translateY(-10px) rotate(5deg);
+                }
+                50% {
+                    transform: translateY(5px) rotate(-2deg);
+                }
+                75% {
+                    transform: translateY(-5px) rotate(3deg);
+                }
+                100% { 
+                    left: calc(100vw + 100px);
+                    transform: translateY(0) rotate(0deg);
+                }
             }
 
             .birthday-cake {
@@ -602,12 +621,13 @@
     <div id="startScreen">
         <h1>🎉 Happy 33rd Birthday! 🎉</h1>
         <p>Welcome to your personalized Café Literary Quest!<br>
-           Explore the charming Parisian bookstore café,<br>
+           Explore the charming outdoor café garden,<br>
            collect books, coffee, and healthy treats!<br>
            Cassian and Charlie will cheer you on!<br><br>
            👆 Tap anywhere to move<br>
            📚 Collect good items for points<br>
            🍽️ Avoid dirty dishes and laundry!<br>
+           ✈️ Watch for special flying airplanes!<br>
            ⏰ Beat the clock!</p>
         <button id="startButton">Start Your Adventure!</button>
     </div>
@@ -644,6 +664,8 @@
         let gameTimer;
         let spawnTimer;
         let speechTimer;
+        let airplaneTimer;
+        let cloudTimer;
         let currentSpeakingKid = null;
         
         // Player position with smoother tracking
@@ -666,22 +688,21 @@
         let playerHistory = [];
         let maxHistoryLength = 30; // Frames of delay
         
-        // Enhanced movement physics with collision avoidance
+        // Character radii for precise collision detection
+        const PLAYER_RADIUS = 35; // Half of 70px width
+        const KID_RADIUS = 30;    // Half of 60px width
+        
+        // Enhanced movement physics with precise collision boundaries
         const FOLLOW_STRENGTH = 0.02;
         const DAMPING = 0.92;
         const MAX_SPEED = 1;
-        const MIN_DISTANCE = 50;
-        const MIN_DISTANCE_FROM_PLAYER = 85; // Prevent overlap with mom
-        const MIN_DISTANCE_BETWEEN_KIDS = 80; // Prevent kids overlapping
-        const PLAYER_SMOOTHING = 0.2; // For smoother player movement
-        const UI_HEIGHT = 140; // Height of UI section
-        const COLLISION_REPULSION = 0.05; // Strength of collision avoidance
+        const PLAYER_SMOOTHING = 0.2;
+        const UI_HEIGHT = 140;
+        const COLLISION_FORCE = 0.1; // Stronger collision repulsion
         
-        // Track occupied spawn areas
-        let spawnAreas = {
-            positive: [],
-            negative: []
-        };
+        // Minimum distances - sum of radii to prevent overlap
+        const MIN_DISTANCE_PLAYER_TO_KID = PLAYER_RADIUS + KID_RADIUS + 5; // 70px + small buffer
+        const MIN_DISTANCE_KID_TO_KID = KID_RADIUS + KID_RADIUS + 5;      // 65px + small buffer
         
         // Speech bubble messages for kids
         const encouragingMessages = [
@@ -802,7 +823,6 @@
             }
             
             if (restartButton) {
-                // Use mousedown for more immediate response
                 restartButton.addEventListener('mousedown', handleRestartClick);
                 restartButton.addEventListener('touchstart', handleRestartClick, { passive: false });
                 console.log('Restart button listeners added');
@@ -828,36 +848,32 @@
 
         function createStaticElements() {
             // Clear existing static elements
-            document.querySelectorAll('.cafe-table, .tree').forEach(el => el.remove());
+            document.querySelectorAll('.tree, .cloud').forEach(el => el.remove());
             
             const startY = UI_HEIGHT + 80;
             
-            // Simple layout with 3 tables
-            const tablePositions = [
-                {x: window.innerWidth * 0.25, y: window.innerHeight * 0.4},
-                {x: window.innerWidth * 0.5, y: window.innerHeight * 0.6},
-                {x: window.innerWidth * 0.75, y: window.innerHeight * 0.35}
-            ];
-            
-            tablePositions.forEach(pos => {
-                if (pos.y > startY && pos.x > 80 && pos.x < window.innerWidth - 80) {
-                    const table = document.createElement('div');
-                    table.className = 'cafe-table';
-                    table.style.left = (pos.x - 40) + 'px';
-                    table.style.top = (pos.y - 40) + 'px';
-                    gameContainer.appendChild(table);
-                }
-            });
-            
-            // Add trees around the edges
+            // Add many trees around the area
             const treePositions = [
-                {x: 60, y: startY + 40},
-                {x: window.innerWidth - 140, y: startY + 40},
-                {x: 60, y: window.innerHeight - 140},
-                {x: window.innerWidth - 140, y: window.innerHeight - 140},
-                {x: window.innerWidth * 0.5 - 40, y: startY + 20},
-                {x: window.innerWidth * 0.2 - 40, y: window.innerHeight - 140},
-                {x: window.innerWidth * 0.8 - 40, y: window.innerHeight - 140}
+                // Border trees
+                {x: 50, y: startY + 40},
+                {x: window.innerWidth - 130, y: startY + 40},
+                {x: 50, y: window.innerHeight - 150},
+                {x: window.innerWidth - 130, y: window.innerHeight - 150},
+                
+                // Scattered trees
+                {x: window.innerWidth * 0.2, y: startY + 60},
+                {x: window.innerWidth * 0.8, y: startY + 60},
+                {x: window.innerWidth * 0.15, y: window.innerHeight * 0.6},
+                {x: window.innerWidth * 0.85, y: window.innerHeight * 0.6},
+                {x: window.innerWidth * 0.3, y: window.innerHeight - 180},
+                {x: window.innerWidth * 0.7, y: window.innerHeight - 180},
+                
+                // Center area trees (sparse)
+                {x: window.innerWidth * 0.1, y: window.innerHeight * 0.4},
+                {x: window.innerWidth * 0.9, y: window.innerHeight * 0.4},
+                {x: window.innerWidth * 0.5, y: startY + 30},
+                {x: window.innerWidth * 0.25, y: window.innerHeight * 0.75},
+                {x: window.innerWidth * 0.75, y: window.innerHeight * 0.25}
             ];
             
             treePositions.forEach(pos => {
@@ -869,6 +885,61 @@
                     gameContainer.appendChild(tree);
                 }
             });
+        }
+
+        function createCloud() {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            cloud.style.top = (UI_HEIGHT + 20 + Math.random() * 100) + 'px';
+            cloud.style.left = '-80px';
+            cloud.style.animationDuration = (15 + Math.random() * 10) + 's';
+            gameContainer.appendChild(cloud);
+            
+            // Remove cloud after animation
+            setTimeout(() => {
+                if (cloud.parentNode) {
+                    cloud.parentNode.removeChild(cloud);
+                }
+            }, 25000);
+        }
+
+        function createFlyingAirplane() {
+            if (!gameRunning) return;
+            
+            const airplane = document.createElement('div');
+            airplane.className = 'flying-airplane';
+            airplane.style.top = (UI_HEIGHT + 30 + Math.random() * 50) + 'px';
+            airplane.style.left = '-100px';
+            gameContainer.appendChild(airplane);
+            
+            // Make it clickable for bonus points
+            let collected = false;
+            airplane.addEventListener('click', () => {
+                if (!collected && gameRunning) {
+                    collected = true;
+                    const rect = airplane.getBoundingClientRect();
+                    showScorePopup(rect.left + rect.width/2, rect.top + rect.height/2, 100);
+                    score += 100;
+                    updateScore();
+                    playCollectSound();
+                    createParticles(airplane);
+                    airplane.style.animation = 'none';
+                    airplane.style.transform = 'scale(1.5)';
+                    airplane.style.opacity = '0';
+                    
+                    if (!currentSpeakingKid) {
+                        const kid = Math.random() < 0.5 ? cassian : charlie;
+                        showSpeechBubble(kid, "Amazing catch! ✈️✨");
+                    }
+                }
+            });
+            
+            // Remove airplane after animation
+            setTimeout(() => {
+                if (airplane.parentNode) {
+                    airplane.parentNode.removeChild(airplane);
+                }
+            }, 8000);
         }
 
         function handleTouch(e) {
@@ -900,8 +971,8 @@
         
         function setPlayerTarget(x, y) {
             // Ensure player stays well below UI
-            targetX = Math.max(35, Math.min(window.innerWidth - 35, x - 35));
-            targetY = Math.max(UI_HEIGHT + 35, Math.min(window.innerHeight - 35, y - 35));
+            targetX = Math.max(PLAYER_RADIUS, Math.min(window.innerWidth - PLAYER_RADIUS, x - PLAYER_RADIUS));
+            targetY = Math.max(UI_HEIGHT + PLAYER_RADIUS, Math.min(window.innerHeight - PLAYER_RADIUS, y - PLAYER_RADIUS));
         }
 
         function updatePlayerPosition() {
@@ -927,6 +998,14 @@
             const cassianTarget = playerHistory[Math.max(0, playerHistory.length - cassianDelay - 1)];
             const charlieTarget = playerHistory[Math.max(0, playerHistory.length - charlieDelay - 1)];
             
+            // Calculate center positions for collision detection
+            const playerCenterX = playerX + PLAYER_RADIUS;
+            const playerCenterY = playerY + PLAYER_RADIUS;
+            const cassianCenterX = cassianX + KID_RADIUS;
+            const cassianCenterY = cassianY + KID_RADIUS;
+            const charlieCenterX = charlieX + KID_RADIUS;
+            const charlieCenterY = charlieY + KID_RADIUS;
+            
             // Add some wandering behavior
             const time = Date.now() * 0.001;
             let cassianTargetX = cassianTarget.x + Math.sin(time * 0.5) * 25;
@@ -934,32 +1013,36 @@
             let charlieTargetX = charlieTarget.x + Math.cos(time * 0.6) * 30;
             let charlieTargetY = charlieTarget.y + Math.sin(time * 0.4) * 25;
             
-            // COLLISION AVOIDANCE - Kids with each other
-            const kidDistance = Math.sqrt(Math.pow(charlieX - cassianX, 2) + Math.pow(charlieY - cassianY, 2));
-            if (kidDistance < MIN_DISTANCE_BETWEEN_KIDS) {
-                const pushAngle = Math.atan2(charlieY - cassianY, charlieX - cassianX);
-                const pushForce = (MIN_DISTANCE_BETWEEN_KIDS - kidDistance) * COLLISION_REPULSION;
+            // PRECISE COLLISION AVOIDANCE - Kids with each other
+            const kidDistance = Math.sqrt(Math.pow(charlieCenterX - cassianCenterX, 2) + Math.pow(charlieCenterY - cassianCenterY, 2));
+            if (kidDistance < MIN_DISTANCE_KID_TO_KID) {
+                const overlap = MIN_DISTANCE_KID_TO_KID - kidDistance;
+                const pushAngle = Math.atan2(charlieCenterY - cassianCenterY, charlieCenterX - cassianCenterX);
+                const pushForce = overlap * COLLISION_FORCE;
                 
-                // Push kids away from each other
+                // Push kids away from each other equally
                 cassianTargetX -= Math.cos(pushAngle) * pushForce;
                 cassianTargetY -= Math.sin(pushAngle) * pushForce;
                 charlieTargetX += Math.cos(pushAngle) * pushForce;
                 charlieTargetY += Math.sin(pushAngle) * pushForce;
             }
             
-            // COLLISION AVOIDANCE - Kids with player
-            const cassianPlayerDistance = Math.sqrt(Math.pow(playerX - cassianX, 2) + Math.pow(playerY - cassianY, 2));
-            if (cassianPlayerDistance < MIN_DISTANCE_FROM_PLAYER) {
-                const pushAngle = Math.atan2(cassianY - playerY, cassianX - playerX);
-                const pushForce = (MIN_DISTANCE_FROM_PLAYER - cassianPlayerDistance) * COLLISION_REPULSION * 2;
+            // PRECISE COLLISION AVOIDANCE - Cassian with player
+            const cassianPlayerDistance = Math.sqrt(Math.pow(playerCenterX - cassianCenterX, 2) + Math.pow(playerCenterY - cassianCenterY, 2));
+            if (cassianPlayerDistance < MIN_DISTANCE_PLAYER_TO_KID) {
+                const overlap = MIN_DISTANCE_PLAYER_TO_KID - cassianPlayerDistance;
+                const pushAngle = Math.atan2(cassianCenterY - playerCenterY, cassianCenterX - playerCenterX);
+                const pushForce = overlap * COLLISION_FORCE * 2;
                 cassianTargetX += Math.cos(pushAngle) * pushForce;
                 cassianTargetY += Math.sin(pushAngle) * pushForce;
             }
             
-            const charliePlayerDistance = Math.sqrt(Math.pow(playerX - charlieX, 2) + Math.pow(playerY - charlieY, 2));
-            if (charliePlayerDistance < MIN_DISTANCE_FROM_PLAYER) {
-                const pushAngle = Math.atan2(charlieY - playerY, charlieX - playerX);
-                const pushForce = (MIN_DISTANCE_FROM_PLAYER - charliePlayerDistance) * COLLISION_REPULSION * 2;
+            // PRECISE COLLISION AVOIDANCE - Charlie with player
+            const charliePlayerDistance = Math.sqrt(Math.pow(playerCenterX - charlieCenterX, 2) + Math.pow(playerCenterY - charlieCenterY, 2));
+            if (charliePlayerDistance < MIN_DISTANCE_PLAYER_TO_KID) {
+                const overlap = MIN_DISTANCE_PLAYER_TO_KID - charliePlayerDistance;
+                const pushAngle = Math.atan2(charlieCenterY - playerCenterY, charlieCenterX - playerCenterX);
+                const pushForce = overlap * COLLISION_FORCE * 2;
                 charlieTargetX += Math.cos(pushAngle) * pushForce;
                 charlieTargetY += Math.sin(pushAngle) * pushForce;
             }
@@ -1010,10 +1093,10 @@
             charlieY += charlieVelY;
             
             // Keep kids in bounds and below UI
-            cassianX = Math.max(30, Math.min(window.innerWidth - 30, cassianX));
-            cassianY = Math.max(UI_HEIGHT + 30, Math.min(window.innerHeight - 30, cassianY));
-            charlieX = Math.max(30, Math.min(window.innerWidth - 30, charlieX));
-            charlieY = Math.max(UI_HEIGHT + 30, Math.min(window.innerHeight - 30, charlieY));
+            cassianX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, cassianX));
+            cassianY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, cassianY));
+            charlieX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, charlieX));
+            charlieY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, charlieY));
             
             // Update DOM positions
             cassian.style.left = cassianX + 'px';
@@ -1066,7 +1149,6 @@
             gameRunning = true;
             score = 0;
             timeLeft = 60;
-            spawnAreas = { positive: [], negative: [] };
             currentSpeakingKid = null;
             
             // Clear existing collectibles
@@ -1093,7 +1175,7 @@
                 }
             }, 1000);
             
-            spawnTimer = setInterval(spawnCollectible, 400);
+            spawnTimer = setInterval(spawnCollectible, 600);
             
             speechTimer = setInterval(() => {
                 if (Math.random() < 0.3 && !currentSpeakingKid) {
@@ -1102,6 +1184,24 @@
                     showSpeechBubble(kid, message);
                 }
             }, 4000);
+            
+            // Flying airplane every 12-20 seconds
+            airplaneTimer = setInterval(() => {
+                if (Math.random() < 0.6) {
+                    createFlyingAirplane();
+                }
+            }, 15000);
+            
+            // Clouds every 8-15 seconds
+            cloudTimer = setInterval(() => {
+                if (Math.random() < 0.7) {
+                    createCloud();
+                }
+            }, 10000);
+            
+            // Initial cloud and first airplane
+            setTimeout(() => createCloud(), 2000);
+            setTimeout(() => createFlyingAirplane(), 8000);
             
             setTimeout(() => {
                 showSpeechBubble(cassian, "Go Mom! 💪");
@@ -1127,10 +1227,19 @@
                 clearInterval(speechTimer);
                 speechTimer = null;
             }
+            if (airplaneTimer) {
+                clearInterval(airplaneTimer);
+                airplaneTimer = null;
+            }
+            if (cloudTimer) {
+                clearInterval(cloudTimer);
+                cloudTimer = null;
+            }
             
             // Clear all visual elements
             document.querySelectorAll('.speech-bubble').forEach(bubble => bubble.remove());
             document.querySelectorAll('.score-popup').forEach(popup => popup.remove());
+            document.querySelectorAll('.flying-airplane').forEach(plane => plane.remove());
             currentSpeakingKid = null;
             
             // Clear collectibles
@@ -1141,17 +1250,17 @@
             });
             collectibles = [];
             
-            // Reset positions below UI with more separation
-            playerX = window.innerWidth / 2 - 35;
-            playerY = (window.innerHeight + UI_HEIGHT) / 2 - 35;
+            // Reset positions below UI with proper separation
+            playerX = window.innerWidth / 2 - PLAYER_RADIUS;
+            playerY = (window.innerHeight + UI_HEIGHT) / 2 - PLAYER_RADIUS;
             targetX = playerX;
             targetY = playerY;
-            cassianX = playerX - 120;
-            cassianY = playerY + 100;
+            cassianX = playerX - MIN_DISTANCE_PLAYER_TO_KID - 20;
+            cassianY = playerY + MIN_DISTANCE_PLAYER_TO_KID + 20;
             cassianVelX = 0;
             cassianVelY = 0;
-            charlieX = playerX + 120;
-            charlieY = playerY - 100;
+            charlieX = playerX + MIN_DISTANCE_PLAYER_TO_KID + 20;
+            charlieY = playerY - MIN_DISTANCE_PLAYER_TO_KID - 20;
             charlieVelX = 0;
             charlieVelY = 0;
             
@@ -1172,7 +1281,7 @@
         function spawnCollectible() {
             if (!gameRunning) return;
             
-            const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water', 'airplane', 'birthday-cake'];
+            const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water', 'birthday-cake'];
             const negativeTypes = ['dirty-dish', 'laundry'];
             
             const isPositive = Math.random() < 0.75;
@@ -1232,18 +1341,12 @@
         }
 
         function isNearStaticElement(x, y) {
-            const MIN_DISTANCE_FROM_STATIC = 120;
+            const MIN_DISTANCE_FROM_STATIC = 100;
             
-            const elements = document.querySelectorAll('.cafe-table, .tree');
+            const elements = document.querySelectorAll('.tree');
             for (let element of elements) {
-                let elementX, elementY;
-                if (element.classList.contains('cafe-table')) {
-                    elementX = parseInt(element.style.left) + 40;
-                    elementY = parseInt(element.style.top) + 40;
-                } else if (element.classList.contains('tree')) {
-                    elementX = parseInt(element.style.left) + 40;
-                    elementY = parseInt(element.style.top) + 50;
-                }
+                const elementX = parseInt(element.style.left) + 40;
+                const elementY = parseInt(element.style.top) + 50;
                 
                 const distance = Math.sqrt(Math.pow(x - elementX, 2) + Math.pow(y - elementY, 2));
                 if (distance < MIN_DISTANCE_FROM_STATIC) {
@@ -1257,12 +1360,12 @@
             const MIN_DISTANCE_FROM_PLAYER = 120;
             const MIN_DISTANCE_FROM_KIDS = 100;
             
-            const playerCenterX = playerX + 35;
-            const playerCenterY = playerY + 35;
-            const cassianCenterX = cassianX + 30;
-            const cassianCenterY = cassianY + 30;
-            const charlieCenterX = charlieX + 30;
-            const charlieCenterY = charlieY + 30;
+            const playerCenterX = playerX + PLAYER_RADIUS;
+            const playerCenterY = playerY + PLAYER_RADIUS;
+            const cassianCenterX = cassianX + KID_RADIUS;
+            const cassianCenterY = cassianY + KID_RADIUS;
+            const charlieCenterX = charlieX + KID_RADIUS;
+            const charlieCenterY = charlieY + KID_RADIUS;
             
             const playerDistance = Math.sqrt(Math.pow(x - playerCenterX, 2) + Math.pow(y - playerCenterY, 2));
             const cassianDistance = Math.sqrt(Math.pow(x - cassianCenterX, 2) + Math.pow(y - cassianCenterY, 2));
@@ -1300,7 +1403,6 @@
                 case 'running-shoe': points = 35; break;
                 case 'apple': points = 15; break;
                 case 'water': points = 15; break;
-                case 'airplane': points = 40; break;
                 case 'birthday-cake': points = 50; break;
                 case 'dirty-dish': points = -20; isNegative = true; break;
                 case 'laundry': points = -25; isNegative = true; break;
@@ -1407,6 +1509,8 @@
             clearInterval(gameTimer);
             clearInterval(spawnTimer);
             clearInterval(speechTimer);
+            clearInterval(airplaneTimer);
+            clearInterval(cloudTimer);
             
             playWinSound();
             
