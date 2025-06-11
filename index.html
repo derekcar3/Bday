@@ -967,9 +967,11 @@
             const collectible = document.createElement('div');
             collectible.className = `collectible ${type}`;
             
-            // Enhanced spawn positioning to prevent overlap
+            // Enhanced spawn positioning to prevent ALL overlaps
             let x, y, attempts = 0;
             let validPosition = false;
+            const ITEM_SIZE = 45; // Size of collectible items
+            const MIN_SPACING = 80; // Minimum distance between items
             
             do {
                 x = Math.random() * (window.innerWidth - 100) + 50;
@@ -977,12 +979,15 @@
                 attempts++;
                 
                 validPosition = !isNearStaticElement(x, y) && 
-                               !isNearOtherCollectibles(x, y, isPositive) &&
+                               !isNearAnyCollectibles(x, y, MIN_SPACING) &&
                                !isNearPlayer(x, y);
                 
-            } while (!validPosition && attempts < 20);
+            } while (!validPosition && attempts < 50); // Increased attempts
             
-            if (!validPosition) return; // Skip spawn if no valid position found
+            if (!validPosition) {
+                console.log("Could not find valid spawn position, skipping this spawn");
+                return; // Skip spawn if no valid position found
+            }
             
             collectible.style.left = x + 'px';
             collectible.style.top = y + 'px';
@@ -990,68 +995,59 @@
             gameContainer.appendChild(collectible);
             collectibles.push(collectible);
             
-            // Track spawn areas
-            const spawnCategory = isPositive ? 'positive' : 'negative';
-            spawnAreas[spawnCategory].push({ x, y, radius: 80 });
-            
-            // Clean up old spawn areas
-            if (spawnAreas[spawnCategory].length > 5) {
-                spawnAreas[spawnCategory].shift();
-            }
-            
             const lifetime = 8000 + Math.random() * 4000;
             setTimeout(() => {
                 if (collectible.parentNode) {
                     collectible.parentNode.removeChild(collectible);
                     const index = collectibles.indexOf(collectible);
                     if (index > -1) collectibles.splice(index, 1);
-                    
-                    // Remove from spawn areas
-                    const areaIndex = spawnAreas[spawnCategory].findIndex(area => 
-                        Math.abs(area.x - x) < 10 && Math.abs(area.y - y) < 10
-                    );
-                    if (areaIndex > -1) {
-                        spawnAreas[spawnCategory].splice(areaIndex, 1);
-                    }
                 }
             }, lifetime);
         }
 
         function isNearStaticElement(x, y) {
+            const MIN_DISTANCE_FROM_STATIC = 100; // Minimum distance from tables/bookshelves
+            
             const elements = document.querySelectorAll('.cafe-table, .bookshelf');
             for (let element of elements) {
                 const rect = element.getBoundingClientRect();
-                const distance = Math.sqrt(Math.pow(x - (rect.left + rect.width/2), 2) + Math.pow(y - (rect.top + rect.height/2), 2));
-                if (distance < 90) return true;
+                const elementX = rect.left + rect.width / 2;
+                const elementY = rect.top + rect.height / 2;
+                
+                const distance = Math.sqrt(Math.pow(x - elementX, 2) + Math.pow(y - elementY, 2));
+                if (distance < MIN_DISTANCE_FROM_STATIC) {
+                    return true;
+                }
             }
             return false;
         }
 
-        function isNearOtherCollectibles(x, y, isPositive) {
-            // Check against opposite type spawn areas to prevent overlap
-            const oppositeType = isPositive ? 'negative' : 'positive';
-            
-            for (let area of spawnAreas[oppositeType]) {
-                const distance = Math.sqrt(Math.pow(x - area.x, 2) + Math.pow(y - area.y, 2));
-                if (distance < area.radius) return true;
-            }
-            
-            // Also check existing collectibles
+        function isNearAnyCollectibles(x, y, minDistance) {
+            // Check against ALL existing collectibles
             for (let collectible of collectibles) {
                 const rect = collectible.getBoundingClientRect();
-                const distance = Math.sqrt(Math.pow(x - (rect.left + rect.width/2), 2) + Math.pow(y - (rect.top + rect.height/2), 2));
-                if (distance < 70) return true;
+                const existingX = rect.left + rect.width / 2;
+                const existingY = rect.top + rect.height / 2;
+                
+                const distance = Math.sqrt(Math.pow(x - existingX, 2) + Math.pow(y - existingY, 2));
+                if (distance < minDistance) {
+                    return true; // Too close to existing item
+                }
             }
-            
-            return false;
+            return false; // Safe to spawn here
         }
 
         function isNearPlayer(x, y) {
-            const playerDistance = Math.sqrt(Math.pow(x - playerX, 2) + Math.pow(y - playerY, 2));
-            const cassianDistance = Math.sqrt(Math.pow(x - cassianX, 2) + Math.pow(y - cassianY, 2));
-            const charlieDistance = Math.sqrt(Math.pow(x - charlieX, 2) + Math.pow(y - charlieY, 2));
+            const MIN_DISTANCE_FROM_PLAYER = 120; // Don't spawn too close to player
+            const MIN_DISTANCE_FROM_KIDS = 100;   // Don't spawn too close to kids
             
-            return playerDistance < 100 || cassianDistance < 80 || charlieDistance < 80;
+            const playerDistance = Math.sqrt(Math.pow(x - (playerX + 25), 2) + Math.pow(y - (playerY + 25), 2));
+            const cassianDistance = Math.sqrt(Math.pow(x - (cassianX + 22.5), 2) + Math.pow(y - (cassianY + 22.5), 2));
+            const charlieDistance = Math.sqrt(Math.pow(x - (charlieX + 22.5), 2) + Math.pow(y - (charlieY + 22.5), 2));
+            
+            return playerDistance < MIN_DISTANCE_FROM_PLAYER || 
+                   cassianDistance < MIN_DISTANCE_FROM_KIDS || 
+                   charlieDistance < MIN_DISTANCE_FROM_KIDS;
         }
 
         function checkCollisions() {
