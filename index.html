@@ -720,17 +720,20 @@
             if (!gameRunning) return;
             
             const touch = e.touches[0] || e.changedTouches[0];
-            setPlayerTarget(touch.clientX, touch.clientY);
+            // Center the character on the touch point
+            setPlayerTarget(touch.clientX - 25, touch.clientY - 25);
         }
-
+        
         function handleClick(e) {
             if (!gameRunning) return;
-            setPlayerTarget(e.clientX, e.clientY);
+            // Center the character on the click point
+            setPlayerTarget(e.clientX - 25, e.clientY - 25);
         }
-
+        
         function setPlayerTarget(x, y) {
-            targetX = Math.max(25, Math.min(window.innerWidth - 75, x - 25));
-            targetY = Math.max(90, Math.min(window.innerHeight - 75, y - 25));
+            // Keep the character centered on the target while respecting boundaries
+            targetX = Math.max(0, Math.min(window.innerWidth - 50, x));
+            targetY = Math.max(65, Math.min(window.innerHeight - 50, y));
         }
 
         function updatePlayerPosition() {
