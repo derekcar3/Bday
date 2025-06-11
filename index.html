@@ -175,6 +175,36 @@
             #charlie:before {
                 display: none;
             }
+
+            #dada {
+                background: linear-gradient(45deg, #8B4513, #D2691E); /* Brown/dad colors */
+                display: none; /* Hidden initially */
+            }
+
+            #dada:before {
+                content: '👨';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 32px;
+            }
+
+            /* Animation for Dada's entrance */
+            @keyframes dada-entrance {
+                0% { 
+                    right: -100px; 
+                    opacity: 0;
+                }
+                100% { 
+                    right: 50px; 
+                    opacity: 1;
+                }
+            }
+
+            .dada-enter {
+                animation: dada-entrance 2s ease-out forwards;
+            }
     
             .speech-bubble {
                 position: absolute;
@@ -679,6 +709,7 @@
             <div id="player"></div>
             <div id="cassian" class="kid"></div>
             <div id="charlie" class="kid"></div>
+            <div id="dada" class="kid"></div>
         </div>
     </div>
 
@@ -697,6 +728,7 @@
         let player = document.getElementById('player');
         let cassian = document.getElementById('cassian');
         let charlie = document.getElementById('charlie');
+        let dada = document.getElementById('dada');
         let gameContainer = document.getElementById('gameContainer');
         let collectibles = [];
         let gameTimer;
@@ -808,6 +840,23 @@
             setTimeout(() => {
                 gameContainer.classList.remove('screen-shake');
             }, 500);
+        }
+
+        function showDadaEntrance() {
+            // Position Dada off-screen to the right
+            dada.style.position = 'absolute';
+            dada.style.right = '-100px';
+            dada.style.top = (window.innerHeight / 2) + 'px';
+            dada.style.display = 'block';
+            dada.style.zIndex = '95';
+            
+            // Start the entrance animation
+            dada.classList.add('dada-enter');
+            
+            // Show Dada's speech bubble after he's halfway in
+            setTimeout(() => {
+                showSpeechBubble(dada, "11/10! 🏆", true);
+            }, 1000);
         }
 
         function showScorePopup(x, y, points) {
@@ -1329,6 +1378,11 @@
                 }
             });
             collectibles = [];
+
+            // Add this line in restartGameImmediate() with the other cleanup
+            dada.style.display = 'none';
+            dada.classList.remove('dada-enter');
+
             
             // Reset positions below UI with proper separation
             playerX = window.innerWidth / 2 - PLAYER_RADIUS;
@@ -1628,14 +1682,19 @@
                 }, 2000);
             }
             
+            // Add Dada entrance after 1 second
+            setTimeout(() => {
+                showDadaEntrance();
+            }, 1000);
+            
             let finalMessage = "";
             finalMessage = winMessages[0];
             
             setTimeout(() => {
                 showPopup("🎉 Game Complete! 🎉", 
-                    `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br>💕<br>Cassian and Charlie are so proud of you!`);
-            }, 3000);
-        }
+                    `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br><br>You're amazing at 33! 💕<br>Cassian and Charlie are so proud of you!`);
+            }, 4000); // Delay popup to let Dada appear first
+}
 
         function showPopup(title, message) {
             document.getElementById('popupTitle').textContent = title;
