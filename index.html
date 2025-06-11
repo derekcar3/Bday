@@ -1082,7 +1082,7 @@
                 createNegativeParticles(collectible);
                 
                 const kid = Math.random() < 0.5 ? cassian : charlie;
-                const negativeMessages = ["Oh no! 😱", "Watch out! ⚠️", "Avoid those! 🚫", "Yucky! 🤢"];
+                const negativeMessages = ["Oh no! 😱", "Laundry is annoying!", "Let Dada Do Dishes 🚫", "Yucky! 🤢"];
                 const message = negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
                 showSpeechBubble(kid, message);
             } else {
@@ -1091,7 +1091,7 @@
                 
                 if (Math.random() < 0.4) {
                     const kid = Math.random() < 0.5 ? cassian : charlie;
-                    const positiveMessages = ["Great job! 🌟", "Nice one! 👏", "Keep going! 💪", "Awesome! ⭐", "Perfect! 🎯"];
+                    const positiveMessages = ["Great job Mama! 🌟", "Happy Birthday Mama!!"];
                     const message = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
                     showSpeechBubble(kid, message);
                 }
