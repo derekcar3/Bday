@@ -720,20 +720,30 @@
             if (!gameRunning) return;
             
             const touch = e.touches[0] || e.changedTouches[0];
-            // Center the character on the touch point
-            setPlayerTarget(touch.clientX - 75, touch.clientY - 55);
+            // Get the actual touch position relative to the game container
+            const rect = gameContainer.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+            
+            setPlayerTarget(touchX, touchY);
         }
         
         function handleClick(e) {
             if (!gameRunning) return;
-            // Center the character on the click point
-            setPlayerTarget(e.clientX - 75, e.clientY - 75);
+            
+            // Get click position relative to the game container
+            const rect = gameContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+            
+            setPlayerTarget(clickX, clickY);
         }
         
         function setPlayerTarget(x, y) {
-            // Keep the character centered on the target while respecting boundaries
-            targetX = Math.max(0, Math.min(window.innerWidth - 50, x));
-            targetY = Math.max(65, Math.min(window.innerHeight - 50, y));
+            // Center the character on the touch/click point with proper boundaries
+            // Character is 50px wide/tall, so offset by 25px to center it
+            targetX = Math.max(25, Math.min(window.innerWidth - 25, x - 25));
+            targetY = Math.max(90, Math.min(window.innerHeight - 25, y - 25));
         }
 
         function updatePlayerPosition() {
@@ -832,38 +842,38 @@
                 charlieVelY += Math.sin(angle) * pushForce;
             }
             
-            // Keep kids on screen with bouncing
-            if (cassianX < 25) {
-                cassianX = 25;
+            // Keep kids on screen with bouncing - update these boundary checks
+            if (cassianX < 22.5) {
+                cassianX = 22.5;
                 cassianVelX = Math.abs(cassianVelX) * 0.8;
             }
-            if (cassianX > window.innerWidth - 70) {
-                cassianX = window.innerWidth - 70;
+            if (cassianX > window.innerWidth - 22.5) {
+                cassianX = window.innerWidth - 22.5;
                 cassianVelX = -Math.abs(cassianVelX) * 0.8;
             }
             if (cassianY < 90) {
                 cassianY = 90;
                 cassianVelY = Math.abs(cassianVelY) * 0.8;
             }
-            if (cassianY > window.innerHeight - 70) {
-                cassianY = window.innerHeight - 70;
+            if (cassianY > window.innerHeight - 22.5) {
+                cassianY = window.innerHeight - 22.5;
                 cassianVelY = -Math.abs(cassianVelY) * 0.8;
             }
             
-            if (charlieX < 25) {
-                charlieX = 25;
+            if (charlieX < 22.5) {
+                charlieX = 22.5;
                 charlieVelX = Math.abs(charlieVelX) * 0.8;
             }
-            if (charlieX > window.innerWidth - 70) {
-                charlieX = window.innerWidth - 70;
+            if (charlieX > window.innerWidth - 22.5) {
+                charlieX = window.innerWidth - 22.5;
                 charlieVelX = -Math.abs(charlieVelX) * 0.8;
             }
             if (charlieY < 90) {
                 charlieY = 90;
                 charlieVelY = Math.abs(charlieVelY) * 0.8;
             }
-            if (charlieY > window.innerHeight - 70) {
-                charlieY = window.innerHeight - 70;
+            if (charlieY > window.innerHeight - 22.5) {
+                charlieY = window.innerHeight - 22.5;
                 charlieVelY = -Math.abs(charlieVelY) * 0.8;
             }
             
