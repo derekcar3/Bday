@@ -332,6 +332,9 @@
             font-size: 24px;
             filter: brightness(0.6) saturate(1.5);
         }
+        .collectible:before {
+    font-size: 32px !important; /* This will override all collectible icon sizes */
+}
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
@@ -1100,7 +1103,7 @@
                 createNegativeParticles(collectible);
                 
                 const kid = Math.random() < 0.5 ? cassian : charlie;
-                const negativeMessages = ["Oh no! 😱", "Laundry is annoying!", "Let Dada Do Dishes 🚫", "Yucky! 🤢"];
+                const negativeMessages = ["Laundry is annoying!", "Let Dada Do Dishes 🚫", "Yucky! 🤢"];
                 const message = negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
                 showSpeechBubble(kid, message);
             } else {
