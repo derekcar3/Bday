@@ -181,25 +181,17 @@
                 background-size: cover;
                 background-position: center;
                 display: none; /* Hidden initially */
+                /* Remove any position/left/right rules from here */
             }
 
             #dada:before {
-                display: none;
+                display: none; /* Hide the emoji */
             }
 
-        /* Remove the CSS animation since we're using JavaScript animation */
-        @keyframes dada-entrance {
-            0% { 
-                opacity: 0;
-            }
-            100% { 
+            /* Simplify the entrance animation */
+            .dada-enter {
                 opacity: 1;
             }
-        }
-
-        .dada-enter {
-            animation: dada-entrance 0.5s ease-out forwards;
-        }
     
             .speech-bubble {
                 position: absolute;
@@ -838,24 +830,31 @@
         }
 
         function showDadaEntrance() {
-            // Position Dada off-screen to the right using left positioning
-            const startX = window.innerWidth + 50; // Off-screen right
-            const startY = (window.innerHeight / 2) - KID_RADIUS;
+            console.log('Dada entrance starting...');
             
+            // COMPLETELY reset Dada's positioning
             dada.style.position = 'absolute';
-            dada.style.left = startX + 'px';
-            dada.style.top = startY + 'px';
+            dada.style.right = '';  // Clear any right positioning
+            dada.style.left = (window.innerWidth + 50) + 'px'; // Start off-screen right
+            dada.style.top = ((window.innerHeight / 2) - KID_RADIUS) + 'px';
             dada.style.display = 'block';
             dada.style.zIndex = '95';
+            dada.style.opacity = '1';
+            
+            console.log('Dada positioned at:', dada.style.left, dada.style.top);
             
             // Animate Dada sliding in from the right
             const finalX = window.innerWidth - 100; // Stop near right edge
-            animateToPosition(dada, finalX, startY, 2000);
+            const finalY = (window.innerHeight / 2) - KID_RADIUS;
+            
+            setTimeout(() => {
+                animateToPosition(dada, finalX, finalY, 2000);
+            }, 100); // Small delay to ensure positioning is set
             
             // Show Dada's speech bubble after he's moved in
             setTimeout(() => {
                 showSpeechBubble(dada, "11/10! 🏆", true);
-            }, 2000);
+            }, 2200);
             
             // Gather family around centered Mama after speech
             setTimeout(() => {
@@ -1379,6 +1378,14 @@
             document.querySelectorAll('.flying-airplane').forEach(plane => plane.remove());
             currentSpeakingKid = null;
             
+            // PROPERLY RESET DADA
+            dada.style.display = 'none';
+            dada.style.left = '';
+            dada.style.right = '';
+            dada.style.top = '';
+            dada.style.position = '';
+            dada.classList.remove('dada-enter');
+            
             // Clear collectibles
             collectibles.forEach(collectible => {
                 if (collectible.parentNode) {
@@ -1386,23 +1393,21 @@
                 }
             });
             collectibles = [];
-
-            // Add this line in restartGameImmediate() with the other cleanup
-            dada.style.display = 'none';
-            dada.classList.remove('dada-enter');
-
             
-            // Reset positions below UI with proper separation
+            // Reset positions below UI with GUARANTEED proper separation
             playerX = window.innerWidth / 2 - PLAYER_RADIUS;
             playerY = (window.innerHeight + UI_HEIGHT) / 2 - PLAYER_RADIUS;
             targetX = playerX;
             targetY = playerY;
             
-            // Position kids at safe distances
-            cassianX = playerX - MIN_DISTANCE_PLAYER_TO_KID - 20;
-            cassianY = playerY + MIN_DISTANCE_PLAYER_TO_KID + 20;
-            charlieX = playerX + MIN_DISTANCE_PLAYER_TO_KID + 20;
-            charlieY = playerY - MIN_DISTANCE_PLAYER_TO_KID - 20;
+            // Position kids at exact minimum distances in opposite directions
+            const playerCenterX = playerX + PLAYER_RADIUS;
+            const playerCenterY = playerY + PLAYER_RADIUS;
+            
+            cassianX = playerCenterX - MIN_DISTANCE_PLAYER_TO_KID - 20 - KID_RADIUS;
+            cassianY = playerCenterY + MIN_DISTANCE_PLAYER_TO_KID + 20 - KID_RADIUS;
+            charlieX = playerCenterX + MIN_DISTANCE_PLAYER_TO_KID + 20 - KID_RADIUS;
+            charlieY = playerCenterY - MIN_DISTANCE_PLAYER_TO_KID - 20 - KID_RADIUS;
             
             cassianVelX = 0;
             cassianVelY = 0;
