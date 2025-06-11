@@ -1182,7 +1182,7 @@
             if (!priority && currentSpeakingKid && currentSpeakingKid !== kid) {
                 return;
             }
-        
+
             // Clear any existing bubble from ANY kid if this is priority
             if (priority) {
                 document.querySelectorAll('.speech-bubble').forEach(bubble => {
@@ -1190,10 +1190,23 @@
                 });
                 currentSpeakingKid = null;
             }
-        
+
             const existingBubble = kid.querySelector('.speech-bubble');
             if (existingBubble) {
                 existingBubble.remove();
+            }
+            
+            // Check if kids are too close for speech bubble
+            const kidRect = kid.getBoundingClientRect();
+            const otherKid = kid === cassian ? charlie : cassian;
+            const otherKidRect = otherKid.getBoundingClientRect();
+            
+            const horizontalDistance = Math.abs(kidRect.left - otherKidRect.left);
+            const verticalDistance = Math.abs(kidRect.top - otherKidRect.top);
+            
+            // If kids are too close for comfortable speech bubble display
+            if (horizontalDistance < 160 && verticalDistance < 100) {
+                gentlySeparateKidsForSpeech(kid, otherKid);
             }
             
             currentSpeakingKid = kid;
@@ -1224,6 +1237,40 @@
             }, 3000);
         }
 
+        function gentlySeparateKidsForSpeech(speakingKid, otherKid) {
+            // Get current player position for reference
+            const playerCenterX = playerX + PLAYER_RADIUS;
+            const playerCenterY = playerY + PLAYER_RADIUS;
+            
+            // Get positions
+            const speakingKidCenterX = (speakingKid === cassian ? cassianX : charlieX) + KID_RADIUS;
+            const speakingKidCenterY = (speakingKid === cassian ? cassianY : charlieY) + KID_RADIUS;
+            const otherKidCenterX = (otherKid === cassian ? cassianX : charlieX) + KID_RADIUS;
+            const otherKidCenterY = (otherKid === cassian ? cassianY : charlieY) + KID_RADIUS;
+            
+            // Calculate gentle separation direction
+            let pushX, pushY;
+            
+            if (Math.abs(speakingKidCenterX - otherKidCenterX) > Math.abs(speakingKidCenterY - otherKidCenterY)) {
+                // Separate horizontally
+                pushX = speakingKidCenterX < otherKidCenterX ? 20 : -20;
+                pushY = 0;
+            } else {
+                // Separate vertically
+                pushX = 0;
+                pushY = speakingKidCenterY < otherKidCenterY ? 20 : -20;
+            }
+            
+            // Apply very gentle push
+            if (otherKid === cassian) {
+                cassianVelX += pushX * 0.08; // Very gentle
+                cassianVelY += pushY * 0.08;
+            } else {
+                charlieVelX += pushX * 0.08;
+                charlieVelY += pushY * 0.08;
+            }
+        }
+        
         function startGame() {
             console.log('Starting game...');
             document.getElementById('startScreen').style.display = 'none';
