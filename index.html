@@ -409,10 +409,8 @@
                 font-size: 40px;
             }
     
-            /* Negative Items - Smaller for precision */
+            /* Negative Items - Same size as positive but with special styling */
             .dirty-dish {
-                width: 45px;
-                height: 45px;
                 background: linear-gradient(45deg, #FF0000, #DC143C);
                 border: 3px solid #8B0000;
                 box-shadow: 0 4px 8px rgba(139,0,0,0.5);
@@ -425,13 +423,11 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 30px;
+                font-size: 40px;
                 filter: brightness(0.7) contrast(1.2);
             }
     
             .laundry {
-                width: 45px;
-                height: 45px;
                 background: linear-gradient(45deg, #FF0000, #B22222);
                 border: 3px solid #8B0000;
                 box-shadow: 0 4px 8px rgba(139,0,0,0.5);
@@ -444,7 +440,7 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 30px;
+                font-size: 40px;
                 filter: brightness(0.6) saturate(1.5);
             }
     
@@ -742,17 +738,18 @@
         const PLAYER_RADIUS = 35; // Half of 70px width
         const KID_RADIUS = 30;    // Half of 60px width
         
-        // Enhanced movement physics with GUARANTEED non-overlap
+        // SOFT BOUNCE collision system
         const FOLLOW_STRENGTH = 0.02;
         const DAMPING = 0.92;
         const MAX_SPEED = 1;
         const PLAYER_SMOOTHING = 0.2;
         const UI_HEIGHT = 140;
         
-        // ABSOLUTE MINIMUM DISTANCES - NO OVERLAP ALLOWED
-        const MIN_DISTANCE_PLAYER_TO_KID = PLAYER_RADIUS + KID_RADIUS + 15; // 80px + larger buffer
-        const MIN_DISTANCE_KID_TO_KID = KID_RADIUS + KID_RADIUS + 15;      // 75px + larger buffer
-        const EMERGENCY_SEPARATION_DISTANCE = 25; // For emergency separation
+        // Soft collision parameters
+        const MIN_DISTANCE_PLAYER_TO_KID = PLAYER_RADIUS + KID_RADIUS + 10; // 75px
+        const MIN_DISTANCE_KID_TO_KID = KID_RADIUS + KID_RADIUS + 10;      // 70px
+        const SOFT_COLLISION_STRENGTH = 0.3; // How strong the repulsion is
+        const COLLISION_DAMPING = 0.7; // How much velocity is reduced during collision
         
         // Speech bubble messages for kids
         const encouragingMessages = [
@@ -1051,7 +1048,7 @@
             player.style.top = playerY + 'px';
         }
 
-        // COMPLETELY REWRITTEN updateKidsPositions() with GUARANTEED non-overlap
+        // SOFT BOUNCE collision system - no teleporting
         function updateKidsPositions() {
             // Get delayed positions from player history for more natural following
             const cassianDelay = Math.floor(maxHistoryLength * 0.6);
@@ -1063,10 +1060,10 @@
             // Calculate center positions for collision detection
             const playerCenterX = playerX + PLAYER_RADIUS;
             const playerCenterY = playerY + PLAYER_RADIUS;
-            let cassianCenterX = cassianX + KID_RADIUS;
-            let cassianCenterY = cassianY + KID_RADIUS;
-            let charlieCenterX = charlieX + KID_RADIUS;
-            let charlieCenterY = charlieY + KID_RADIUS;
+            const cassianCenterX = cassianX + KID_RADIUS;
+            const cassianCenterY = cassianY + KID_RADIUS;
+            const charlieCenterX = charlieX + KID_RADIUS;
+            const charlieCenterY = charlieY + KID_RADIUS;
             
             // Add some wandering behavior to targets
             const time = Date.now() * 0.001;
@@ -1075,7 +1072,7 @@
             let charlieTargetX = charlieTarget.x + Math.cos(time * 0.6) * 30;
             let charlieTargetY = charlieTarget.y + Math.sin(time * 0.4) * 25;
             
-            // PHASE 1: Calculate physics-based movement toward targets
+            // Normal physics-based movement toward targets
             const cassianDist = Math.sqrt(Math.pow(cassianTargetX - cassianX, 2) + Math.pow(cassianTargetY - cassianY, 2));
             const cassianForceMultiplier = Math.min(cassianDist / 50, 1.5);
             
@@ -1084,8 +1081,6 @@
             
             cassianVelX += cassianForceX;
             cassianVelY += cassianForceY;
-            cassianVelX *= DAMPING;
-            cassianVelY *= DAMPING;
             
             const charlieDist = Math.sqrt(Math.pow(charlieTargetX - charlieX, 2) + Math.pow(charlieTargetY - charlieY, 2));
             const charlieForceMultiplier = Math.min(charlieDist / 50, 1.5);
@@ -1095,6 +1090,64 @@
             
             charlieVelX += charlieForceX;
             charlieVelY += charlieForceY;
+            
+            // SOFT COLLISION HANDLING - Kids with each other
+            const kidDistance = Math.sqrt(Math.pow(charlieCenterX - cassianCenterX, 2) + Math.pow(charlieCenterY - cassianCenterY, 2));
+            if (kidDistance < MIN_DISTANCE_KID_TO_KID && kidDistance > 0) {
+                const overlap = MIN_DISTANCE_KID_TO_KID - kidDistance;
+                const pushAngle = Math.atan2(charlieCenterY - cassianCenterY, charlieCenterX - cassianCenterX);
+                
+                // Soft repulsion force proportional to overlap
+                const repulsionForce = overlap * SOFT_COLLISION_STRENGTH;
+                
+                // Apply repulsion to velocities (not positions)
+                cassianVelX -= Math.cos(pushAngle) * repulsionForce;
+                cassianVelY -= Math.sin(pushAngle) * repulsionForce;
+                charlieVelX += Math.cos(pushAngle) * repulsionForce;
+                charlieVelY += Math.sin(pushAngle) * repulsionForce;
+                
+                // Reduce velocities during collision for softer bounce
+                cassianVelX *= COLLISION_DAMPING;
+                cassianVelY *= COLLISION_DAMPING;
+                charlieVelX *= COLLISION_DAMPING;
+                charlieVelY *= COLLISION_DAMPING;
+            }
+            
+            // SOFT COLLISION HANDLING - Cassian with player
+            const cassianPlayerDistance = Math.sqrt(Math.pow(playerCenterX - cassianCenterX, 2) + Math.pow(playerCenterY - cassianCenterY, 2));
+            if (cassianPlayerDistance < MIN_DISTANCE_PLAYER_TO_KID && cassianPlayerDistance > 0) {
+                const overlap = MIN_DISTANCE_PLAYER_TO_KID - cassianPlayerDistance;
+                const pushAngle = Math.atan2(cassianCenterY - playerCenterY, cassianCenterX - playerCenterX);
+                
+                // Soft repulsion from player
+                const repulsionForce = overlap * SOFT_COLLISION_STRENGTH;
+                cassianVelX += Math.cos(pushAngle) * repulsionForce;
+                cassianVelY += Math.sin(pushAngle) * repulsionForce;
+                
+                // Dampen velocity during collision
+                cassianVelX *= COLLISION_DAMPING;
+                cassianVelY *= COLLISION_DAMPING;
+            }
+            
+            // SOFT COLLISION HANDLING - Charlie with player
+            const charliePlayerDistance = Math.sqrt(Math.pow(playerCenterX - charlieCenterX, 2) + Math.pow(playerCenterY - charlieCenterY, 2));
+            if (charliePlayerDistance < MIN_DISTANCE_PLAYER_TO_KID && charliePlayerDistance > 0) {
+                const overlap = MIN_DISTANCE_PLAYER_TO_KID - charliePlayerDistance;
+                const pushAngle = Math.atan2(charlieCenterY - playerCenterY, charlieCenterX - playerCenterX);
+                
+                // Soft repulsion from player
+                const repulsionForce = overlap * SOFT_COLLISION_STRENGTH;
+                charlieVelX += Math.cos(pushAngle) * repulsionForce;
+                charlieVelY += Math.sin(pushAngle) * repulsionForce;
+                
+                // Dampen velocity during collision
+                charlieVelX *= COLLISION_DAMPING;
+                charlieVelY *= COLLISION_DAMPING;
+            }
+            
+            // Apply general damping
+            cassianVelX *= DAMPING;
+            cassianVelY *= DAMPING;
             charlieVelX *= DAMPING;
             charlieVelY *= DAMPING;
             
@@ -1113,121 +1166,17 @@
                 charlieVelY = (charlieVelY / charlieSpeed) * maxCharlieSpeed;
             }
             
-            // PHASE 2: Apply velocities to get potential new positions
-            let newCassianX = cassianX + cassianVelX;
-            let newCassianY = cassianY + cassianVelY;
-            let newCharlieX = charlieX + charlieVelX;
-            let newCharlieY = charlieY + charlieVelY;
+            // Apply velocities to get new positions
+            cassianX += cassianVelX;
+            cassianY += cassianVelY;
+            charlieX += charlieVelX;
+            charlieY += charlieVelY;
             
-            // PHASE 3: ABSOLUTE COLLISION PREVENTION - Kids with each other
-            let newCassianCenterX = newCassianX + KID_RADIUS;
-            let newCassianCenterY = newCassianY + KID_RADIUS;
-            let newCharlieCenterX = newCharlieX + KID_RADIUS;
-            let newCharlieCenterY = newCharlieY + KID_RADIUS;
-            
-            const kidDistance = Math.sqrt(
-                Math.pow(newCharlieCenterX - newCassianCenterX, 2) + 
-                Math.pow(newCharlieCenterY - newCassianCenterY, 2)
-            );
-            
-            if (kidDistance < MIN_DISTANCE_KID_TO_KID) {
-                // EMERGENCY SEPARATION: Force them apart
-                const pushAngle = Math.atan2(newCharlieCenterY - newCassianCenterY, newCharlieCenterX - newCassianCenterX);
-                const requiredSeparation = MIN_DISTANCE_KID_TO_KID;
-                const halfSeparation = requiredSeparation / 2;
-                
-                // Calculate exact positions that maintain minimum distance
-                newCassianX = newCassianCenterX - Math.cos(pushAngle) * halfSeparation - KID_RADIUS;
-                newCassianY = newCassianCenterY - Math.sin(pushAngle) * halfSeparation - KID_RADIUS;
-                newCharlieX = newCassianCenterX + Math.cos(pushAngle) * halfSeparation - KID_RADIUS;
-                newCharlieY = newCassianCenterY + Math.sin(pushAngle) * halfSeparation - KID_RADIUS;
-                
-                // Update center positions
-                newCassianCenterX = newCassianX + KID_RADIUS;
-                newCassianCenterY = newCassianY + KID_RADIUS;
-                newCharlieCenterX = newCharlieX + KID_RADIUS;
-                newCharlieCenterY = newCharlieY + KID_RADIUS;
-                
-                // Kill velocities to prevent oscillation
-                cassianVelX *= 0.1;
-                cassianVelY *= 0.1;
-                charlieVelX *= 0.1;
-                charlieVelY *= 0.1;
-            }
-            
-            // PHASE 4: ABSOLUTE COLLISION PREVENTION - Kids with player
-            const cassianPlayerDistance = Math.sqrt(
-                Math.pow(playerCenterX - newCassianCenterX, 2) + 
-                Math.pow(playerCenterY - newCassianCenterY, 2)
-            );
-            
-            if (cassianPlayerDistance < MIN_DISTANCE_PLAYER_TO_KID) {
-                // Force Cassian to exact minimum distance from player
-                const pushAngle = Math.atan2(newCassianCenterY - playerCenterY, newCassianCenterX - playerCenterX);
-                newCassianX = playerCenterX + Math.cos(pushAngle) * MIN_DISTANCE_PLAYER_TO_KID - KID_RADIUS;
-                newCassianY = playerCenterY + Math.sin(pushAngle) * MIN_DISTANCE_PLAYER_TO_KID - KID_RADIUS;
-                newCassianCenterX = newCassianX + KID_RADIUS;
-                newCassianCenterY = newCassianY + KID_RADIUS;
-                
-                // Kill velocity toward player
-                cassianVelX *= 0.1;
-                cassianVelY *= 0.1;
-            }
-            
-            const charliePlayerDistance = Math.sqrt(
-                Math.pow(playerCenterX - newCharlieCenterX, 2) + 
-                Math.pow(playerCenterY - newCharlieCenterY, 2)
-            );
-            
-            if (charliePlayerDistance < MIN_DISTANCE_PLAYER_TO_KID) {
-                // Force Charlie to exact minimum distance from player
-                const pushAngle = Math.atan2(newCharlieCenterY - playerCenterY, newCharlieCenterX - playerCenterX);
-                newCharlieX = playerCenterX + Math.cos(pushAngle) * MIN_DISTANCE_PLAYER_TO_KID - KID_RADIUS;
-                newCharlieY = playerCenterY + Math.sin(pushAngle) * MIN_DISTANCE_PLAYER_TO_KID - KID_RADIUS;
-                newCharlieCenterX = newCharlieX + KID_RADIUS;
-                newCharlieCenterY = newCharlieY + KID_RADIUS;
-                
-                // Kill velocity toward player  
-                charlieVelX *= 0.1;
-                charlieVelY *= 0.1;
-            }
-            
-            // PHASE 5: Final bounds checking and position assignment
-            cassianX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, newCassianX));
-            cassianY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, newCassianY));
-            charlieX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, newCharlieX));
-            charlieY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, newCharlieY));
-            
-            // PHASE 6: Emergency overlap check and correction (last resort)
-            const finalCassianCenterX = cassianX + KID_RADIUS;
-            const finalCassianCenterY = cassianY + KID_RADIUS;
-            const finalCharlieCenterX = charlieX + KID_RADIUS;
-            const finalCharlieCenterY = charlieY + KID_RADIUS;
-            
-            // Final kid-to-kid check
-            const finalKidDistance = Math.sqrt(
-                Math.pow(finalCharlieCenterX - finalCassianCenterX, 2) + 
-                Math.pow(finalCharlieCenterY - finalCassianCenterY, 2)
-            );
-            
-            if (finalKidDistance < MIN_DISTANCE_KID_TO_KID) {
-                // NUCLEAR OPTION: Teleport them to safe positions
-                console.log('Emergency separation activated!');
-                const safeAngle = Math.random() * Math.PI * 2;
-                cassianX = playerCenterX + Math.cos(safeAngle) * (MIN_DISTANCE_PLAYER_TO_KID + 10) - KID_RADIUS;
-                cassianY = playerCenterY + Math.sin(safeAngle) * (MIN_DISTANCE_PLAYER_TO_KID + 10) - KID_RADIUS;
-                charlieX = playerCenterX + Math.cos(safeAngle + Math.PI) * (MIN_DISTANCE_PLAYER_TO_KID + 10) - KID_RADIUS;
-                charlieY = playerCenterY + Math.sin(safeAngle + Math.PI) * (MIN_DISTANCE_PLAYER_TO_KID + 10) - KID_RADIUS;
-                
-                // Bounds check after teleport
-                cassianX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, cassianX));
-                cassianY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, cassianY));
-                charlieX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, charlieX));
-                charlieY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, charlieY));
-                
-                // Reset velocities
-                cassianVelX = cassianVelY = charlieVelX = charlieVelY = 0;
-            }
+            // Keep kids in bounds
+            cassianX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, cassianX));
+            cassianY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, cassianY));
+            charlieX = Math.max(KID_RADIUS, Math.min(window.innerWidth - KID_RADIUS, charlieX));
+            charlieY = Math.max(UI_HEIGHT + KID_RADIUS, Math.min(window.innerHeight - KID_RADIUS, charlieY));
             
             // Update DOM positions
             cassian.style.left = cassianX + 'px';
@@ -1381,20 +1330,17 @@
             });
             collectibles = [];
             
-            // Reset positions below UI with GUARANTEED proper separation
+            // Reset positions below UI with proper separation
             playerX = window.innerWidth / 2 - PLAYER_RADIUS;
             playerY = (window.innerHeight + UI_HEIGHT) / 2 - PLAYER_RADIUS;
             targetX = playerX;
             targetY = playerY;
             
-            // Position kids at exact minimum distances in opposite directions
-            const playerCenterX = playerX + PLAYER_RADIUS;
-            const playerCenterY = playerY + PLAYER_RADIUS;
-            
-            cassianX = playerCenterX - MIN_DISTANCE_PLAYER_TO_KID - 20 - KID_RADIUS;
-            cassianY = playerCenterY + MIN_DISTANCE_PLAYER_TO_KID + 20 - KID_RADIUS;
-            charlieX = playerCenterX + MIN_DISTANCE_PLAYER_TO_KID + 20 - KID_RADIUS;
-            charlieY = playerCenterY - MIN_DISTANCE_PLAYER_TO_KID - 20 - KID_RADIUS;
+            // Position kids at safe distances
+            cassianX = playerX - MIN_DISTANCE_PLAYER_TO_KID - 20;
+            cassianY = playerY + MIN_DISTANCE_PLAYER_TO_KID + 20;
+            charlieX = playerX + MIN_DISTANCE_PLAYER_TO_KID + 20;
+            charlieY = playerY - MIN_DISTANCE_PLAYER_TO_KID - 20;
             
             cassianVelX = 0;
             cassianVelY = 0;
@@ -1415,7 +1361,6 @@
             startGame();
         }
 
-        // ENHANCED spawnCollectible with GUARANTEED no overlap
         function spawnCollectible() {
             if (!gameRunning) return;
             
@@ -1431,22 +1376,19 @@
             
             let x, y, attempts = 0;
             let validPosition = false;
-            const MIN_SPACING = isPositive ? 100 : 120; // Larger spacing for all items
-            const EXTRA_NEGATIVE_BUFFER = 40; // Extra buffer for negative items
+            const MIN_SPACING = 100; // Same spacing for all items now
             
             do {
                 x = Math.random() * (window.innerWidth - 120) + 60;
                 y = Math.random() * (window.innerHeight - UI_HEIGHT - 120) + UI_HEIGHT + 60;
                 attempts++;
                 
-                const spacing = isPositive ? MIN_SPACING : MIN_SPACING + EXTRA_NEGATIVE_BUFFER;
-                
                 validPosition = !isNearStaticElement(x, y, 120) && 
-                               !isNearAnyCollectibles(x, y, spacing) &&
-                               !isNearPlayer(x, y, isPositive ? 140 : 180) && // Larger buffer for negative items
-                               y > UI_HEIGHT + 80; // Extra margin from UI
+                               !isNearAnyCollectibles(x, y, MIN_SPACING) &&
+                               !isNearPlayer(x, y, 140) &&
+                               y > UI_HEIGHT + 80;
                 
-            } while (!validPosition && attempts < 100); // More attempts
+            } while (!validPosition && attempts < 100);
             
             if (!validPosition) {
                 console.log('Could not find valid position for collectible after 100 attempts');
@@ -1513,25 +1455,35 @@
                    charlieDistance < (minDistance * 0.8);
         }
 
-        // ENHANCED collision detection with smaller hit boxes for negative items
+        // Collision detection with smaller hit boxes for negative items
         function checkCollisions() {
             collectibles.forEach((collectible, index) => {
                 const rect1 = player.getBoundingClientRect();
                 const rect2 = collectible.getBoundingClientRect();
                 
-                // Smaller collision box for negative items (require more precision)
-                let collisionBuffer = 0;
+                // Create smaller hit box for negative items
                 const isNegativeItem = collectible.classList.contains('dirty-dish') || 
                                       collectible.classList.contains('laundry');
                 
+                let hitBoxLeft = rect2.left;
+                let hitBoxRight = rect2.right;
+                let hitBoxTop = rect2.top;
+                let hitBoxBottom = rect2.bottom;
+                
                 if (isNegativeItem) {
-                    collisionBuffer = 8; // Shrink hit box by 8px on all sides
+                    // Shrink hit box by 15px on all sides for negative items
+                    const shrinkAmount = 15;
+                    hitBoxLeft += shrinkAmount;
+                    hitBoxRight -= shrinkAmount;
+                    hitBoxTop += shrinkAmount;
+                    hitBoxBottom -= shrinkAmount;
                 }
                 
-                if (rect1.left < rect2.right - collisionBuffer && 
-                    rect1.right > rect2.left + collisionBuffer && 
-                    rect1.top < rect2.bottom - collisionBuffer && 
-                    rect1.bottom > rect2.top + collisionBuffer) {
+                // Check collision with adjusted hit box
+                if (rect1.left < hitBoxRight && 
+                    rect1.right > hitBoxLeft && 
+                    rect1.top < hitBoxBottom && 
+                    rect1.bottom > hitBoxTop) {
                     
                     collectCollectible(collectible, index);
                 }
