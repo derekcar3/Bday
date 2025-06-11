@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 33rd Birthday - Café Literary Quest</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-Copy    body {
+<html> <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Happy 33rd Birthday - Café Literary Quest</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+Copy
+    body {
         font-family: 'Georgia', serif;
         background: linear-gradient(135deg, #8B4513, #D2691E, #CD853F);
         overflow: hidden;
@@ -127,7 +119,7 @@ Copy    body {
         background: linear-gradient(45deg, #FFE135, #FFA500);
         border-radius: 50%;
         border: 3px solid #FFF;
-        transition: all 0.4s ease-out;
+        transition: all 0.3s ease-out;
         z-index: 95;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
@@ -512,21 +504,11 @@ Copy    body {
         #popup p { font-size: 16px; }
     }
 </style>
-</head>
-<body>
-    <div id="startScreen">
-        <h1>🎉 Happy 33rd Birthday! 🎉</h1>
-        <p>Welcome to your personalized Café Literary Quest!<br>
-        Explore the charming Parisian bookstore café,<br>
-        collect books, coffee, and healthy treats!<br>
-        Cassian and Charlie will slowly chase after you!<br><br>
-        👆 Tap anywhere to move<br>
-        📚 Collect good items for points<br>
-        🍽️ Avoid dirty dishes and laundry!<br>
-        ⏰ Beat the clock!</p>
-        <button id="startButton">Start Your Adventure!</button>
-    </div>
-Copy<div id="gameContainer">
+</head> <body> <div id="startScreen"> <h1>🎉 Happy 33rd Birthday! 🎉</h1> <p>Welcome to your personalized Café Literary Quest!<br> Explore the charming Parisian bookstore café,<br> collect books, coffee, and healthy treats!<br> Cassian and Charlie will cheer you on!<br><br> 👆 Tap anywhere to move<br> 📚 Collect good items for points<br> 🍽️ Avoid dirty dishes and laundry!<br> ⏰ Beat the clock!</p> <button id="startButton">Start Your Adventure!</button> </div>
+
+
+Copy
+<div id="gameContainer">
     <div id="ui">
         <div id="score">Score: 0</div>
         <div id="timer">Time: 90</div>
@@ -555,33 +537,37 @@ Copy<div id="gameContainer">
     let gameTimer;
     let spawnTimer;
     let speechTimer;
-    let gameStartTime = 0;
     
     // Player and kids positions with velocity for natural movement
     let playerX = window.innerWidth / 2 - 25;
     let playerY = window.innerHeight / 2 - 25;
-    let cassianX = playerX - 150;
-    let cassianY = playerY + 120;
+    let cassianX = playerX - 80;
+    let cassianY = playerY + 60;
     let cassianVelX = 0;
     let cassianVelY = 0;
-    let charlieX = playerX + 150;
-    let charlieY = playerY - 120;
+    let charlieX = playerX + 80;
+    let charlieY = playerY - 60;
     let charlieVelX = 0;
     let charlieVelY = 0;
     
-    // Movement physics constants - slower and more gradual
-    const FOLLOW_STRENGTH = 0.008; // Much weaker attraction force
-    const DAMPING = 0.92; // Higher damping for smoother movement
-    const MAX_SPEED = 1.5; // Slower maximum speed
+    // Movement physics constants
+    const FOLLOW_STRENGTH = 0.02; // How strongly kids are attracted to follow positions
+    const DAMPING = 0.85; // Velocity damping to prevent overshooting
+    const MAX_SPEED = 3; // Maximum speed for kids
     const MIN_DISTANCE = 45; // Minimum distance between kids (touching circumference)
-    const SPAWN_SAFE_DISTANCE = 80; // Safe distance from mom and other collectibles
     
     // Speech bubble messages for kids
     const encouragingMessages = [
-        "Go Mama! 💪",
-        "Love you Mama! 💕",
-        "Happy Birthday! 🎂',
-        "We love you! 💖
+        "Go Mom! 💪",
+        "You're amazing! ✨",
+        "Keep going! 🌟",
+        "Love you Mom! 💕",
+        "You're the best! 🏆",
+        "Super Mom! 🦸‍♀️",
+        "You got this! 💪",
+        "Happy Birthday! 🎂",
+        "So proud! 🌈",
+        "You're awesome! ⭐"
     ];
     
     const winMessages = [
@@ -723,19 +709,16 @@ Copy<div id="gameContainer">
     }
 
     function updateKidsPositions() {
-        // Kids gradually get closer over time
-        const gameTime = (Date.now() - gameStartTime) / 1000; // seconds since game start
-        const baseDistance = Math.max(60, 150 - (gameTime * 2)); // Start at 150px, gradually decrease to 60px
-        
+        // Calculate desired follow positions with different offsets and patterns
         const time = Date.now() * 0.001;
         
-        // Cassian follows from behind with gradual approach
-        const cassianTargetX = playerX - baseDistance + Math.sin(time * 0.3) * 20;
-        const cassianTargetY = playerY + (baseDistance * 0.8) + Math.cos(time * 0.2) * 15;
+        // Cassian follows from behind-left with slight wandering
+        const cassianTargetX = playerX - 100 + Math.sin(time * 0.5) * 30;
+        const cassianTargetY = playerY + 80 + Math.cos(time * 0.3) * 20;
         
-        // Charlie follows from different angle with gradual approach
-        const charlieTargetX = playerX + baseDistance + Math.cos(time * 0.25) * 25;
-        const charlieTargetY = playerY - (baseDistance * 0.6) + Math.sin(time * 0.35) * 18;
+        // Charlie follows from behind-right with different wandering pattern
+        const charlieTargetX = playerX + 100 + Math.cos(time * 0.4) * 35;
+        const charlieTargetY = playerY - 80 + Math.sin(time * 0.6) * 25;
         
         // Apply physics-based movement for Cassian
         const cassianForceX = (cassianTargetX - cassianX) * FOLLOW_STRENGTH;
@@ -789,10 +772,10 @@ Copy<div id="gameContainer">
             charlieY += Math.sin(angle) * pushDistance;
             
             // Adjust velocities to prevent continued collision
-            cassianVelX -= Math.cos(angle) * 0.2;
-            cassianVelY -= Math.sin(angle) * 0.2;
-            charlieVelX += Math.cos(angle) * 0.2;
-            charlieVelY += Math.sin(angle) * 0.2;
+            cassianVelX -= Math.cos(angle) * 0.5;
+            cassianVelY -= Math.sin(angle) * 0.5;
+            charlieVelX += Math.cos(angle) * 0.5;
+            charlieVelY += Math.sin(angle) * 0.5;
         }
         
         // Keep kids on screen
@@ -845,7 +828,6 @@ Copy<div id="gameContainer">
         gameRunning = true;
         score = 0;
         timeLeft = 90;
-        gameStartTime = Date.now();
         
         // Resume audio context
         if (audioContext.state === 'suspended') {
@@ -878,54 +860,11 @@ Copy<div id="gameContainer">
         
         // Initial welcome messages
         setTimeout(() => {
-            showSpeechBubble(cassian, "Chasing you Mom! 💪");
+            showSpeechBubble(cassian, "Go Mom! 💪");
         }, 1000);
         setTimeout(() => {
-            showSpeechBubble(charlie, "We're coming! 💕");
+            showSpeechBubble(charlie, "Love you! 💕");
         }, 2000);
-    }
-
-    function isValidSpawnPosition(x, y, isNegative = false) {
-        // Check distance from mom
-        const distanceFromMom = Math.sqrt(Math.pow(x - (playerX + 25), 2) + Math.pow(y - (playerY + 25), 2));
-        if (distanceFromMom < SPAWN_SAFE_DISTANCE) {
-            return false;
-        }
-        
-        // Check distance from static elements
-        const elements = document.querySelectorAll('.cafe-table, .bookshelf');
-        for (let element of elements) {
-            const rect = element.getBoundingClientRect();
-            const distance = Math.sqrt(Math.pow(x - (rect.left + rect.width/2), 2) + Math.pow(y - (rect.top + rect.height/2), 2));
-            if (distance < 80) return false;
-        }
-        
-        // Check distance from existing collectibles
-        for (let collectible of collectibles) {
-            const rect = collectible.getBoundingClientRect();
-            const distance = Math.sqrt(Math.pow(x - (rect.left + rect.width/2), 2) + Math.pow(y - (rect.top + rect.height/2), 2));
-            
-            // If this is a negative item, ensure it doesn't overlap with positive items
-            if (isNegative) {
-                const isPositive = !collectible.classList.contains('dirty-dish') && !collectible.classList.contains('laundry');
-                if (isPositive && distance < 100) { // Extra spacing between positive and negative
-                    return false;
-                }
-            } else {
-                // Positive items avoid negative items
-                const isExistingNegative = collectible.classList.contains('dirty-dish') || collectible.classList.contains('laundry');
-                if (isExistingNegative && distance < 100) {
-                    return false;
-                }
-            }
-            
-            // General spacing between all items
-            if (distance < 70) {
-                return false;
-            }
-        }
-        
-        return true;
     }
 
     function spawnCollectible() {
@@ -942,20 +881,13 @@ Copy<div id="gameContainer">
         const collectible = document.createElement('div');
         collectible.className = `collectible ${type}`;
         
-        // Find valid spawn position with smart placement
+        // Spawn in safe areas (not too close to static elements)
         let x, y, attempts = 0;
-        const maxAttempts = 20;
-        
         do {
             x = Math.random() * (window.innerWidth - 60) + 30;
             y = Math.random() * (window.innerHeight - 180) + 120;
             attempts++;
-        } while (attempts < maxAttempts && !isValidSpawnPosition(x, y, !isPositive));
-        
-        // If we couldn't find a good position after many attempts, skip this spawn
-        if (attempts >= maxAttempts) {
-            return;
-        }
+        } while (attempts < 10 && isNearStaticElement(x, y));
         
         collectible.style.left = x + 'px';
         collectible.style.top = y + 'px';
@@ -963,8 +895,8 @@ Copy<div id="gameContainer">
         gameContainer.appendChild(collectible);
         collectibles.push(collectible);
         
-        // Remove after 8-15 seconds if not collected
-        const lifetime = 8000 + Math.random() * 7000;
+        // Remove after 6-12 seconds if not collected
+        const lifetime = 6000 + Math.random() * 6000;
         setTimeout(() => {
             if (collectible.parentNode) {
                 collectible.parentNode.removeChild(collectible);
@@ -972,6 +904,17 @@ Copy<div id="gameContainer">
                 if (index > -1) collectibles.splice(index, 1);
             }
         }, lifetime);
+    }
+
+    function isNearStaticElement(x, y) {
+        // Check if position is too close to tables or bookshelves
+        const elements = document.querySelectorAll('.cafe-table, .bookshelf');
+        for (let element of elements) {
+            const rect = element.getBoundingClientRect();
+            const distance = Math.sqrt(Math.pow(x - (rect.left + rect.width/2), 2) + Math.pow(y - (rect.top + rect.height/2), 2));
+            if (distance < 80) return true;
+        }
+        return false;
     }
 
     function checkCollisions() {
@@ -1016,7 +959,7 @@ Copy<div id="gameContainer">
             
             // Show negative speech bubble
             const kid = Math.random() < 0.5 ? cassian : charlie;
-            const negativeMessages = ["Oh no! 😱", "Watch out! ⚠️", "Avoid those! 🚫", "Yucky! 🤢", "Stay away! 😵"];
+            const negativeMessages = ["Oh no! 😱", "Watch out! ⚠️", "Avoid those! 🚫", "Yucky! 🤢"];
             const message = negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
             showSpeechBubble(kid, message);
         } else {
@@ -1026,7 +969,7 @@ Copy<div id="gameContainer">
             // Show positive speech bubble occasionally
             if (Math.random() < 0.4) {
                 const kid = Math.random() < 0.5 ? cassian : charlie;
-                const positiveMessages = ["Great job! 🌟", "Nice one! 👏", "Keep going! 💪", "Awesome! ⭐", "Perfect! 🎯", "Amazing! 🏆"];
+                const positiveMessages = ["Great job! 🌟", "Nice one! 👏", "Keep going! 💪", "Awesome! ⭐", "Perfect! 🎯"];
                 const message = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
                 showSpeechBubble(kid, message);
             }
@@ -1106,7 +1049,7 @@ Copy<div id="gameContainer">
         
         setTimeout(() => {
             showPopup("🎉 Game Complete! 🎉", 
-                `${finalMessage}<br><br>Final Score: ${score}<br>You're amazing at 33! 💕<br><br>Cassian and Charlie had so much fun chasing you around the café!`);
+                `${finalMessage}<br><br>Final Score: ${score}<br>You're amazing at 33! 💕<br><br>Cassian and Charlie are so proud of you!`);
         }, 2000);
     }
 
@@ -1144,12 +1087,4 @@ Copy<div id="gameContainer">
         }, 100);
     });
 </script>
-</body>
-</html>
-</html>
-<css>
-/* All CSS is included in the HTML above for easier deployment */
-</css>
-<javascript>
-/* All JavaScript is included in the HTML above for easier deployment */
-</javascript>
+</body> </html> </html> <css> /* All CSS is included in the HTML above for easier deployment */ </css> <javascript> /* All JavaScript is included in the HTML above for easier deployment */ </javascript>
