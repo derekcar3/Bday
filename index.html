@@ -48,89 +48,10 @@
                 100% { transform: translate(0); }
             }
     
-            .bookshelf {
-                position: absolute;
-                width: 90px;
-                height: 160px;
-                background: linear-gradient(90deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
-                border: 3px solid #654321;
-                border-radius: 8px;
-                box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-                z-index: 10;
-            }
-    
-            .bookshelf:before {
-                content: '';
-                position: absolute;
-                top: 20px;
-                left: 8px;
-                right: 8px;
-                height: 22px;
-                background: repeating-linear-gradient(90deg, 
-                    #FF6B6B 0px, #FF6B6B 10px, 
-                    #4ECDC4 10px, #4ECDC4 20px, 
-                    #45B7D1 20px, #45B7D1 30px, 
-                    #96CEB4 30px, #96CEB4 40px);
-                border-radius: 3px;
-                box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-            }
-    
-            .bookshelf:after {
-                content: '';
-                position: absolute;
-                bottom: 20px;
-                left: 8px;
-                right: 8px;
-                height: 22px;
-                background: repeating-linear-gradient(90deg, 
-                    #DDA0DD 0px, #DDA0DD 10px, 
-                    #F0E68C 10px, #F0E68C 20px, 
-                    #FFB6C1 20px, #FFB6C1 30px, 
-                    #98FB98 30px, #98FB98 40px);
-                border-radius: 3px;
-                box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-            }
-
-            .couch {
-                position: absolute;
-                width: 110px;
-                height: 70px;
-                background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
-                border-radius: 12px;
-                border: 3px solid #654321;
-                box-shadow: 0 6px 14px rgba(0,0,0,0.3);
-                z-index: 10;
-            }
-
-            .couch:before {
-                content: '';
-                position: absolute;
-                top: -6px;
-                left: 8px;
-                right: 8px;
-                height: 18px;
-                background: linear-gradient(135deg, #A0522D, #8B4513);
-                border-radius: 8px 8px 4px 4px;
-                border: 2px solid #654321;
-            }
-
-            .couch:after {
-                content: '';
-                position: absolute;
-                top: 12px;
-                left: 12px;
-                right: 12px;
-                bottom: 8px;
-                background: repeating-linear-gradient(45deg, 
-                    transparent, transparent 6px, 
-                    rgba(101, 67, 33, 0.15) 6px, rgba(101, 67, 33, 0.15) 8px);
-                border-radius: 6px;
-            }
-    
             .cafe-table {
                 position: absolute;
-                width: 70px;
-                height: 70px;
+                width: 80px;
+                height: 80px;
                 background: radial-gradient(circle, #8B4513 30%, #654321 70%);
                 border-radius: 50%;
                 border: 3px solid #4A4A4A;
@@ -144,27 +65,27 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 25px;
-                height: 25px;
+                width: 30px;
+                height: 30px;
                 background: radial-gradient(circle, #654321, #4A4A4A);
                 border-radius: 50%;
                 box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
             }
 
-            .plant {
+            .tree {
                 position: absolute;
-                width: 60px;
-                height: 80px;
-                z-index: 10;
+                width: 80px;
+                height: 100px;
+                z-index: 5;
             }
 
-            .plant:before {
-                content: '🌱';
+            .tree:before {
+                content: '🌳';
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 45px;
+                font-size: 60px;
                 filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
             }
     
@@ -403,6 +324,21 @@
     
             .airplane:before {
                 content: '✈️';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 40px;
+            }
+
+            .birthday-cake {
+                background: linear-gradient(45deg, #FFB6C1, #FF69B4);
+                border: 3px solid #FFF;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            }
+    
+            .birthday-cake:before {
+                content: '🎂';
                 position: absolute;
                 top: 50%;
                 left: 50%;
@@ -717,12 +653,12 @@
         let targetY = playerY;
         
         // Kids positions with more natural following
-        let cassianX = playerX - 100;
-        let cassianY = playerY + 80;
+        let cassianX = playerX - 120;
+        let cassianY = playerY + 100;
         let cassianVelX = 0;
         let cassianVelY = 0;
-        let charlieX = playerX + 100;
-        let charlieY = playerY - 80;
+        let charlieX = playerX + 120;
+        let charlieY = playerY - 100;
         let charlieVelX = 0;
         let charlieVelY = 0;
         
@@ -730,14 +666,16 @@
         let playerHistory = [];
         let maxHistoryLength = 30; // Frames of delay
         
-        // Enhanced movement physics
+        // Enhanced movement physics with collision avoidance
         const FOLLOW_STRENGTH = 0.02;
         const DAMPING = 0.92;
         const MAX_SPEED = 1;
         const MIN_DISTANCE = 50;
-        const MIN_DISTANCE_FROM_PLAYER = 65; // Prevent overlap with mom
+        const MIN_DISTANCE_FROM_PLAYER = 85; // Prevent overlap with mom
+        const MIN_DISTANCE_BETWEEN_KIDS = 80; // Prevent kids overlapping
         const PLAYER_SMOOTHING = 0.2; // For smoother player movement
-        const UI_HEIGHT = 140; // Height of UI section - INCREASED
+        const UI_HEIGHT = 140; // Height of UI section
+        const COLLISION_REPULSION = 0.05; // Strength of collision avoidance
         
         // Track occupied spawn areas
         let spawnAreas = {
@@ -890,142 +828,45 @@
 
         function createStaticElements() {
             // Clear existing static elements
-            document.querySelectorAll('.bookshelf, .cafe-table, .couch, .plant').forEach(el => el.remove());
+            document.querySelectorAll('.cafe-table, .tree').forEach(el => el.remove());
             
-            // Grid system to prevent overlaps - WELL BELOW UI
-            const startY = UI_HEIGHT + 60; // MUCH MORE SPACE BELOW UI
-            const gridSize = 140; // Spacing between elements
-            const elementSpacing = 160; // Minimum distance between elements
+            const startY = UI_HEIGHT + 80;
             
-            // Create a clean grid layout
-            const cols = Math.floor((window.innerWidth - 100) / gridSize);
-            const rows = Math.floor((window.innerHeight - startY - 100) / gridSize);
-            
-            console.log(`Creating grid: ${cols}x${rows}, startY: ${startY}`);
-            
-            // Track occupied positions
-            const occupiedPositions = new Set();
-            
-            // Function to check if position is safe
-            function isPositionSafe(x, y, width, height) {
-                // Check if it's below UI
-                if (y < startY) return false;
-                
-                // Check boundaries
-                if (x < 50 || x + width > window.innerWidth - 50) return false;
-                if (y + height > window.innerHeight - 50) return false;
-                
-                return true;
-            }
-            
-            // Function to get grid key
-            function getGridKey(gridX, gridY) {
-                return `${gridX}-${gridY}`;
-            }
-            
-            // Place bookshelves in corners and edges
-            const bookshelfPositions = [
-                {gridX: 0, gridY: 0},
-                {gridX: cols-1, gridY: 0},
-                {gridX: 0, gridY: Math.floor(rows/2)},
-                {gridX: cols-1, gridY: Math.floor(rows/2)},
-                {gridX: Math.floor(cols/2), gridY: 0},
-            ];
-            
-            bookshelfPositions.forEach(pos => {
-                if (pos.gridY < rows && pos.gridX < cols) {
-                    const x = 50 + pos.gridX * gridSize;
-                    const y = startY + pos.gridY * gridSize;
-                    const key = getGridKey(pos.gridX, pos.gridY);
-                    
-                    if (isPositionSafe(x, y, 90, 160) && !occupiedPositions.has(key)) {
-                        const bookshelf = document.createElement('div');
-                        bookshelf.className = 'bookshelf';
-                        bookshelf.style.left = x + 'px';
-                        bookshelf.style.top = y + 'px';
-                        gameContainer.appendChild(bookshelf);
-                        occupiedPositions.add(key);
-                        console.log(`Bookshelf placed at ${x}, ${y}`);
-                    }
-                }
-            });
-            
-            // Place couches in mid areas
-            const couchPositions = [
-                {gridX: 1, gridY: 1},
-                {gridX: cols-2, gridY: 1},
-                {gridX: 1, gridY: Math.floor(rows/2) + 1},
-                {gridX: cols-2, gridY: Math.floor(rows/2) + 1},
-            ];
-            
-            couchPositions.forEach(pos => {
-                if (pos.gridY < rows && pos.gridX < cols && pos.gridX >= 0) {
-                    const x = 50 + pos.gridX * gridSize;
-                    const y = startY + pos.gridY * gridSize;
-                    const key = getGridKey(pos.gridX, pos.gridY);
-                    
-                    if (isPositionSafe(x, y, 110, 70) && !occupiedPositions.has(key)) {
-                        const couch = document.createElement('div');
-                        couch.className = 'couch';
-                        couch.style.left = x + 'px';
-                        couch.style.top = y + 'px';
-                        gameContainer.appendChild(couch);
-                        occupiedPositions.add(key);
-                        console.log(`Couch placed at ${x}, ${y}`);
-                    }
-                }
-            });
-            
-            // Place tables scattered around
+            // Simple layout with 3 tables
             const tablePositions = [
-                {gridX: Math.floor(cols/4), gridY: 1},
-                {gridX: Math.floor(cols*3/4), gridY: 1},
-                {gridX: Math.floor(cols/4), gridY: Math.floor(rows/2)},
-                {gridX: Math.floor(cols*3/4), gridY: Math.floor(rows/2)},
-                {gridX: Math.floor(cols/2), gridY: Math.floor(rows/3)},
+                {x: window.innerWidth * 0.25, y: window.innerHeight * 0.4},
+                {x: window.innerWidth * 0.5, y: window.innerHeight * 0.6},
+                {x: window.innerWidth * 0.75, y: window.innerHeight * 0.35}
             ];
             
             tablePositions.forEach(pos => {
-                if (pos.gridY < rows && pos.gridX < cols) {
-                    const x = 50 + pos.gridX * gridSize;
-                    const y = startY + pos.gridY * gridSize;
-                    const key = getGridKey(pos.gridX, pos.gridY);
-                    
-                    if (isPositionSafe(x, y, 70, 70) && !occupiedPositions.has(key)) {
-                        const table = document.createElement('div');
-                        table.className = 'cafe-table';
-                        table.style.left = x + 'px';
-                        table.style.top = y + 'px';
-                        gameContainer.appendChild(table);
-                        occupiedPositions.add(key);
-                        console.log(`Table placed at ${x}, ${y}`);
-                    }
+                if (pos.y > startY && pos.x > 80 && pos.x < window.innerWidth - 80) {
+                    const table = document.createElement('div');
+                    table.className = 'cafe-table';
+                    table.style.left = (pos.x - 40) + 'px';
+                    table.style.top = (pos.y - 40) + 'px';
+                    gameContainer.appendChild(table);
                 }
             });
             
-            // Place plants as decoration
-            const plantPositions = [
-                {gridX: Math.floor(cols/3), gridY: 2},
-                {gridX: Math.floor(cols*2/3), gridY: 2},
-                {gridX: 2, gridY: Math.floor(rows/3)},
-                {gridX: cols-3, gridY: Math.floor(rows/3)},
+            // Add trees around the edges
+            const treePositions = [
+                {x: 60, y: startY + 40},
+                {x: window.innerWidth - 140, y: startY + 40},
+                {x: 60, y: window.innerHeight - 140},
+                {x: window.innerWidth - 140, y: window.innerHeight - 140},
+                {x: window.innerWidth * 0.5 - 40, y: startY + 20},
+                {x: window.innerWidth * 0.2 - 40, y: window.innerHeight - 140},
+                {x: window.innerWidth * 0.8 - 40, y: window.innerHeight - 140}
             ];
             
-            plantPositions.forEach(pos => {
-                if (pos.gridY < rows && pos.gridX < cols && pos.gridX >= 0) {
-                    const x = 50 + pos.gridX * gridSize;
-                    const y = startY + pos.gridY * gridSize;
-                    const key = getGridKey(pos.gridX, pos.gridY);
-                    
-                    if (isPositionSafe(x, y, 60, 80) && !occupiedPositions.has(key)) {
-                        const plant = document.createElement('div');
-                        plant.className = 'plant';
-                        plant.style.left = x + 'px';
-                        plant.style.top = y + 'px';
-                        gameContainer.appendChild(plant);
-                        occupiedPositions.add(key);
-                        console.log(`Plant placed at ${x}, ${y}`);
-                    }
+            treePositions.forEach(pos => {
+                if (pos.y > startY && pos.x > 40 && pos.x < window.innerWidth - 120) {
+                    const tree = document.createElement('div');
+                    tree.className = 'tree';
+                    tree.style.left = pos.x + 'px';
+                    tree.style.top = pos.y + 'px';
+                    gameContainer.appendChild(tree);
                 }
             });
         }
@@ -1088,10 +929,40 @@
             
             // Add some wandering behavior
             const time = Date.now() * 0.001;
-            const cassianTargetX = cassianTarget.x + Math.sin(time * 0.5) * 25;
-            const cassianTargetY = cassianTarget.y + Math.cos(time * 0.7) * 20;
-            const charlieTargetX = charlieTarget.x + Math.cos(time * 0.6) * 30;
-            const charlieTargetY = charlieTarget.y + Math.sin(time * 0.4) * 25;
+            let cassianTargetX = cassianTarget.x + Math.sin(time * 0.5) * 25;
+            let cassianTargetY = cassianTarget.y + Math.cos(time * 0.7) * 20;
+            let charlieTargetX = charlieTarget.x + Math.cos(time * 0.6) * 30;
+            let charlieTargetY = charlieTarget.y + Math.sin(time * 0.4) * 25;
+            
+            // COLLISION AVOIDANCE - Kids with each other
+            const kidDistance = Math.sqrt(Math.pow(charlieX - cassianX, 2) + Math.pow(charlieY - cassianY, 2));
+            if (kidDistance < MIN_DISTANCE_BETWEEN_KIDS) {
+                const pushAngle = Math.atan2(charlieY - cassianY, charlieX - cassianX);
+                const pushForce = (MIN_DISTANCE_BETWEEN_KIDS - kidDistance) * COLLISION_REPULSION;
+                
+                // Push kids away from each other
+                cassianTargetX -= Math.cos(pushAngle) * pushForce;
+                cassianTargetY -= Math.sin(pushAngle) * pushForce;
+                charlieTargetX += Math.cos(pushAngle) * pushForce;
+                charlieTargetY += Math.sin(pushAngle) * pushForce;
+            }
+            
+            // COLLISION AVOIDANCE - Kids with player
+            const cassianPlayerDistance = Math.sqrt(Math.pow(playerX - cassianX, 2) + Math.pow(playerY - cassianY, 2));
+            if (cassianPlayerDistance < MIN_DISTANCE_FROM_PLAYER) {
+                const pushAngle = Math.atan2(cassianY - playerY, cassianX - playerX);
+                const pushForce = (MIN_DISTANCE_FROM_PLAYER - cassianPlayerDistance) * COLLISION_REPULSION * 2;
+                cassianTargetX += Math.cos(pushAngle) * pushForce;
+                cassianTargetY += Math.sin(pushAngle) * pushForce;
+            }
+            
+            const charliePlayerDistance = Math.sqrt(Math.pow(playerX - charlieX, 2) + Math.pow(playerY - charlieY, 2));
+            if (charliePlayerDistance < MIN_DISTANCE_FROM_PLAYER) {
+                const pushAngle = Math.atan2(charlieY - playerY, charlieX - playerX);
+                const pushForce = (MIN_DISTANCE_FROM_PLAYER - charliePlayerDistance) * COLLISION_REPULSION * 2;
+                charlieTargetX += Math.cos(pushAngle) * pushForce;
+                charlieTargetY += Math.sin(pushAngle) * pushForce;
+            }
             
             // Enhanced physics for Cassian
             const cassianDist = Math.sqrt(Math.pow(cassianTargetX - cassianX, 2) + Math.pow(cassianTargetY - cassianY, 2));
@@ -1270,17 +1141,17 @@
             });
             collectibles = [];
             
-            // Reset positions below UI
+            // Reset positions below UI with more separation
             playerX = window.innerWidth / 2 - 35;
             playerY = (window.innerHeight + UI_HEIGHT) / 2 - 35;
             targetX = playerX;
             targetY = playerY;
-            cassianX = playerX - 100;
-            cassianY = playerY + 80;
+            cassianX = playerX - 120;
+            cassianY = playerY + 100;
             cassianVelX = 0;
             cassianVelY = 0;
-            charlieX = playerX + 100;
-            charlieY = playerY - 80;
+            charlieX = playerX + 120;
+            charlieY = playerY - 100;
             charlieVelX = 0;
             charlieVelY = 0;
             
@@ -1301,7 +1172,7 @@
         function spawnCollectible() {
             if (!gameRunning) return;
             
-            const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water', 'airplane'];
+            const positiveTypes = ['book', 'coffee', 'healthy-snack', 'running-shoe', 'apple', 'water', 'airplane', 'birthday-cake'];
             const negativeTypes = ['dirty-dish', 'laundry'];
             
             const isPositive = Math.random() < 0.75;
@@ -1323,7 +1194,7 @@
                 validPosition = !isNearStaticElement(x, y) && 
                                !isNearAnyCollectibles(x, y, MIN_SPACING) &&
                                !isNearPlayer(x, y) &&
-                               y > UI_HEIGHT + 60; // ENSURE BELOW UI
+                               y > UI_HEIGHT + 60;
                 
             } while (!validPosition && attempts < 50);
             
@@ -1363,21 +1234,15 @@
         function isNearStaticElement(x, y) {
             const MIN_DISTANCE_FROM_STATIC = 120;
             
-            const elements = document.querySelectorAll('.cafe-table, .bookshelf, .couch, .plant');
+            const elements = document.querySelectorAll('.cafe-table, .tree');
             for (let element of elements) {
                 let elementX, elementY;
                 if (element.classList.contains('cafe-table')) {
-                    elementX = parseInt(element.style.left) + 35;
-                    elementY = parseInt(element.style.top) + 35;
-                } else if (element.classList.contains('bookshelf')) {
-                    elementX = parseInt(element.style.left) + 45;
-                    elementY = parseInt(element.style.top) + 80;
-                } else if (element.classList.contains('couch')) {
-                    elementX = parseInt(element.style.left) + 55;
-                    elementY = parseInt(element.style.top) + 35;
-                } else if (element.classList.contains('plant')) {
-                    elementX = parseInt(element.style.left) + 30;
+                    elementX = parseInt(element.style.left) + 40;
                     elementY = parseInt(element.style.top) + 40;
+                } else if (element.classList.contains('tree')) {
+                    elementX = parseInt(element.style.left) + 40;
+                    elementY = parseInt(element.style.top) + 50;
                 }
                 
                 const distance = Math.sqrt(Math.pow(x - elementX, 2) + Math.pow(y - elementY, 2));
@@ -1436,6 +1301,7 @@
                 case 'apple': points = 15; break;
                 case 'water': points = 15; break;
                 case 'airplane': points = 40; break;
+                case 'birthday-cake': points = 50; break;
                 case 'dirty-dish': points = -20; isNegative = true; break;
                 case 'laundry': points = -25; isNegative = true; break;
             }
