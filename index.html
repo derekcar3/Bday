@@ -1205,7 +1205,7 @@
                 }
             }, 1000);
             
-            spawnTimer = setInterval(spawnCollectible, 600);
+            spawnTimer = setInterval(spawnCollectible, 300);
             
             speechTimer = setInterval(() => {
                 if (Math.random() < 0.3 && !currentSpeakingKid) {
@@ -1224,10 +1224,10 @@
             
             // Clouds every 8-15 seconds
             cloudTimer = setInterval(() => {
-                if (Math.random() < 0.7) {
+                if (Math.random() < 0.97) {
                     createCloud();
                 }
-            }, 10000);
+            }, 1000);
             
             // Initial cloud and first airplane
             setTimeout(() => createCloud(), 2000);
