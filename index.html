@@ -1383,9 +1383,8 @@
                 y = Math.random() * (window.innerHeight - UI_HEIGHT - 120) + UI_HEIGHT + 60;
                 attempts++;
                 
-                validPosition = !isNearStaticElement(x, y, 80) &&  // Reduced from 120
-                               !isNearAnyCollectibles(x, y, MIN_SPACING) &&
-                               !isNearPlayer(x, y, 90) &&  // Reduced from 140
+                validPosition = !isNearAnyCollectibles(x, y, MIN_SPACING) &&
+                               !isNearPlayer(x, y, 90) &&
                                y > UI_HEIGHT + 80;
                 
             } while (!validPosition && attempts < 200); // Increased from 100
