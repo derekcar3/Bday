@@ -187,14 +187,21 @@
                 color: #8B008B;
                 max-width: 120px;
                 text-align: center;
-                z-index: 250; /* Much higher than anything else */
+                z-index: 250 !important;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-                opacity: 0;
-                transform: scale(0);
-                transition: all 0.3s ease;
-                /* Force hardware acceleration */
-                will-change: transform, opacity;
+                /* Remove initial hidden state */
+                opacity: 1;
+                transform: scale(1);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                /* Force to top layer */
+                will-change: auto;
                 transform-origin: center bottom;
+            }
+
+            .speech-bubble.show {
+                /* No longer needed since we start visible */
+                opacity: 1;
+                transform: scale(1);
             }
     
             .speech-bubble:after {
@@ -1199,38 +1206,30 @@
                 existingBubble.remove();
             }
             
-            // Check if kids are too close for speech bubble
-            const kidRect = kid.getBoundingClientRect();
-            const otherKid = kid === cassian ? charlie : cassian;
-            const otherKidRect = otherKid.getBoundingClientRect();
-            
-            const horizontalDistance = Math.abs(kidRect.left - otherKidRect.left);
-            const verticalDistance = Math.abs(kidRect.top - otherKidRect.top);
-            
-            // If kids are too close for comfortable speech bubble display
-            if (horizontalDistance < 160 && verticalDistance < 100) {
-                gentlySeparateKidsForSpeech(kid, otherKid);
-            }
-            
             currentSpeakingKid = kid;
             
             const bubble = document.createElement('div');
             bubble.className = 'speech-bubble';
             bubble.textContent = message;
+            
+            // Set positioning and make immediately visible at top level
             bubble.style.bottom = '65px';
             bubble.style.left = '50%';
-            bubble.style.transform = 'translateX(-50%)';
-            bubble.style.zIndex = '250'; // Force high z-index immediately
-            bubble.style.position = 'absolute'; // Ensure positioning context
+            bubble.style.transform = 'translateX(-50%) scale(1)'; // Full size immediately
+            bubble.style.opacity = '1'; // Fully visible immediately
+            bubble.style.zIndex = '250';
+            bubble.style.position = 'absolute';
             
             kid.appendChild(bubble);
             
-            setTimeout(() => {
-                bubble.classList.add('show');
-            }, 50);
+            // Add the show class immediately (no delay)
+            bubble.classList.add('show');
             
+            // Remove after 3 seconds
             setTimeout(() => {
-                bubble.classList.remove('show');
+                bubble.style.opacity = '0';
+                bubble.style.transform = 'translateX(-50%) scale(0.8)';
+                
                 setTimeout(() => {
                     if (bubble.parentNode) {
                         bubble.remove();
