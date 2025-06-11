@@ -187,11 +187,14 @@
                 color: #8B008B;
                 max-width: 120px;
                 text-align: center;
-                z-index: 250;
+                z-index: 250; /* Much higher than anything else */
                 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
                 opacity: 0;
                 transform: scale(0);
                 transition: all 0.3s ease;
+                /* Force hardware acceleration */
+                will-change: transform, opacity;
+                transform-origin: center bottom;
             }
     
             .speech-bubble:after {
@@ -1217,6 +1220,8 @@
             bubble.style.bottom = '65px';
             bubble.style.left = '50%';
             bubble.style.transform = 'translateX(-50%)';
+            bubble.style.zIndex = '250'; // Force high z-index immediately
+            bubble.style.position = 'absolute'; // Ensure positioning context
             
             kid.appendChild(bubble);
             
