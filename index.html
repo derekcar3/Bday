@@ -24,11 +24,60 @@
                 height: 100vh;
                 position: relative;
                 background: 
-                    radial-gradient(circle at 20% 20%, rgba(255,215,0,0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 60%, rgba(255,140,0,0.1) 0%, transparent 50%),
-                    linear-gradient(45deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
+                    /* Coffee beans scattered around */
+                    radial-gradient(circle at 15% 25%, rgba(101, 67, 33, 0.8) 2px, transparent 2px),
+                    radial-gradient(circle at 85% 15%, rgba(101, 67, 33, 0.8) 2px, transparent 2px),
+                    radial-gradient(circle at 25% 75%, rgba(101, 67, 33, 0.8) 1.5px, transparent 1.5px),
+                    radial-gradient(circle at 75% 85%, rgba(101, 67, 33, 0.8) 2px, transparent 2px),
+                    radial-gradient(circle at 45% 35%, rgba(101, 67, 33, 0.8) 1px, transparent 1px),
+                    radial-gradient(circle at 65% 55%, rgba(101, 67, 33, 0.8) 1.5px, transparent 1.5px),
+                    /* Floating book pages */
+                    radial-gradient(ellipse at 30% 40%, rgba(255, 248, 220, 0.3) 0%, transparent 15%),
+                    radial-gradient(ellipse at 70% 30%, rgba(255, 248, 220, 0.25) 0%, transparent 12%),
+                    radial-gradient(ellipse at 20% 70%, rgba(255, 248, 220, 0.2) 0%, transparent 10%),
+                    radial-gradient(ellipse at 80% 80%, rgba(255, 248, 220, 0.3) 0%, transparent 14%),
+                    /* Coffee steam effects */
+                    radial-gradient(circle at 40% 20%, rgba(255,255,255,0.1) 0%, transparent 30%),
+                    radial-gradient(circle at 60% 60%, rgba(255,255,255,0.08) 0%, transparent 25%),
+                    /* Warm lighting */
+                    radial-gradient(circle at 20% 20%, rgba(255,215,0,0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 60%, rgba(255,140,0,0.12) 0%, transparent 50%),
+                    /* Base coffee shop atmosphere */
+                    linear-gradient(45deg, #8B4513 0%, #A0522D 25%, #CD853F 50%, #D2691E 75%, #8B4513 100%);
+                background-size: 
+                    200px 200px, 250px 250px, 180px 180px, 220px 220px, 150px 150px, 190px 190px,
+                    300px 200px, 280px 180px, 250px 160px, 320px 220px,
+                    400px 400px, 350px 350px,
+                    600px 600px, 550px 550px,
+                    100% 100%;
+                background-position: 
+                    0 0, 100px 50px, 200px 150px, 50px 100px, 300px 80px, 150px 200px,
+                    0 0, 200px 100px, 100px 200px, 300px 50px,
+                    0 0, 200px 200px,
+                    0 0, 400px 300px,
+                    0 0;
+                animation: subtle-float 20s ease-in-out infinite;
                 background-attachment: fixed;
                 transition: transform 0.1s ease-out;
+            }
+
+            @keyframes subtle-float {
+                0%, 100% { 
+                    background-position: 
+                        0 0, 100px 50px, 200px 150px, 50px 100px, 300px 80px, 150px 200px,
+                        0 0, 200px 100px, 100px 200px, 300px 50px,
+                        0 0, 200px 200px,
+                        0 0, 400px 300px,
+                        0 0;
+                }
+                50% { 
+                    background-position: 
+                        10px 5px, 110px 55px, 210px 155px, 60px 105px, 310px 85px, 160px 205px,
+                        5px 3px, 205px 103px, 105px 203px, 305px 53px,
+                        0 0, 200px 200px,
+                        0 0, 400px 300px,
+                        0 0;
+                }
             }
     
             .screen-shake {
@@ -363,55 +412,77 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
             }
     
-            #score, #timer {
-                background: rgba(0,0,0,0.8);
+            #score, #timer, #highScore {
+                background: rgba(0,0,0,0.9);
                 color: #FFD700;
-                padding: 12px 18px;
-                border-radius: 25px;
-                font-size: 20px;
+                padding: 10px 15px;
+                border-radius: 20px;
+                font-size: 16px;
                 font-weight: bold;
-                border: 3px solid #FFD700;
+                border: 2px solid #FFD700;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                backdrop-filter: blur(5px);
+            }
+    
+            #restartButton {
+                background: linear-gradient(45deg, #FF69B4, #FF1493);
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            }
+    
+            #restartButton:hover {
+                transform: scale(1.05);
             }
     
             #popup {
                 position: fixed;
-                top: 50%;
+                top: 60%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 background: linear-gradient(135deg, #FFE4E1, #FFF0F5);
-                padding: 30px;
+                padding: 25px;
                 border-radius: 20px;
                 border: 4px solid #FF69B4;
                 text-align: center;
                 z-index: 300;
                 display: none;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                max-width: 90%;
+                max-width: 85%;
+                max-height: 35%;
+                overflow-y: auto;
             }
     
             #popup h2 {
                 color: #FF1493;
-                margin-bottom: 15px;
-                font-size: 24px;
+                margin-bottom: 12px;
+                font-size: 20px;
             }
     
             #popup p {
                 color: #8B008B;
-                font-size: 18px;
-                margin-bottom: 20px;
-                line-height: 1.4;
+                font-size: 16px;
+                margin-bottom: 15px;
+                line-height: 1.3;
             }
     
             #popup button {
                 background: linear-gradient(45deg, #FF69B4, #FF1493);
                 color: white;
                 border: none;
-                padding: 12px 25px;
-                border-radius: 25px;
-                font-size: 16px;
+                padding: 10px 20px;
+                border-radius: 20px;
+                font-size: 14px;
                 font-weight: bold;
                 cursor: pointer;
                 transition: transform 0.2s;
@@ -508,8 +579,11 @@
             @media (max-height: 600px) {
                 #startScreen h1 { font-size: 24px; }
                 #startScreen p { font-size: 14px; }
-                #popup h2 { font-size: 20px; }
-                #popup p { font-size: 16px; }
+                #popup h2 { font-size: 18px; }
+                #popup p { font-size: 14px; }
+                #ui { gap: 5px; }
+                #score, #timer, #highScore { font-size: 14px; padding: 8px 12px; }
+                #popup { top: 55%; max-height: 40%; }
             }
     </style>
 </head>
@@ -531,6 +605,8 @@
         <div id="ui">
             <div id="score">Score: 0</div>
             <div id="timer">Time: 90</div>
+            <div id="highScore">High Score: 0</div>
+            <button id="restartButton">Restart Game</button>
         </div>
         <div id="player"></div>
         <div id="cassian" class="kid"></div>
@@ -547,6 +623,7 @@
         // Game variables
         let score = 0;
         let timeLeft = 90;
+        let highScore = localStorage.getItem('cafeQuestHighScore') || 0;
         let gameRunning = false;
         let player = document.getElementById('player');
         let cassian = document.getElementById('cassian');
@@ -556,10 +633,11 @@
         let gameTimer;
         let spawnTimer;
         let speechTimer;
+        let currentSpeakingKid = null; // Track which kid is currently speaking
         
         // Player position with smoother tracking
-        let playerX = window.innerWidth / 2 - 25;
-        let playerY = window.innerHeight / 2 - 25;
+        let playerX = window.innerWidth / 2 - 35;
+        let playerY = window.innerHeight / 2 - 35;
         let targetX = playerX;
         let targetY = playerY;
         
@@ -582,6 +660,7 @@
         const DAMPING = 0.92;
         const MAX_SPEED = 1;
         const MIN_DISTANCE = 50;
+        const MIN_DISTANCE_FROM_PLAYER = 65; // Prevent overlap with mom
         const PLAYER_SMOOTHING = 0.2; // For smoother player movement
         
         // Track occupied spawn areas
@@ -595,6 +674,18 @@
             "Go Mama! 💪",
             "Love you Mama! 💕",
             "Happy Birthday! 🎂"
+        ];
+        
+        const laundryMessages = [
+            "Laundry is annoying! 😤",
+            "No more laundry! 🚫",
+            "Laundry stinks! 👎"
+        ];
+
+        const dishMessages = [
+            "Let Dada do dishes! 🚫",
+            "Nasty dishes! 🤢",
+            "Yucky plates! 😝"
         ];
         
         const winMessages = [
@@ -657,6 +748,7 @@
             updatePlayerPosition();
             updateKidsPositions();
             createStaticElements();
+            updateHighScore();
             
             // Touch controls with better responsiveness
             gameContainer.addEventListener('touchstart', handleTouch, { passive: false });
@@ -664,9 +756,13 @@
             gameContainer.addEventListener('click', handleClick);
             
             document.getElementById('startButton').addEventListener('click', startGame);
+            document.getElementById('restartButton').addEventListener('click', restartGame);
         }
 
         function createStaticElements() {
+            // Clear existing static elements
+            document.querySelectorAll('.bookshelf, .cafe-table').forEach(el => el.remove());
+            
             // Create bookshelves in organized pattern
             const positions = [
                 {x: 50, y: 120}, {x: 50, y: 320}, {x: 50, y: 520},
@@ -741,9 +837,9 @@
         
         function setPlayerTarget(x, y) {
             // Center the character on the touch/click point with proper boundaries
-            // Character is 50px wide/tall, so offset by 25px to center it
-            targetX = Math.max(25, Math.min(window.innerWidth - 25, x - 25));
-            targetY = Math.max(90, Math.min(window.innerHeight - 25, y - 25));
+            // Character is 70px wide/tall, so offset by 35px to center it
+            targetX = Math.max(35, Math.min(window.innerWidth - 35, x - 35));
+            targetY = Math.max(125, Math.min(window.innerHeight - 35, y - 35));
         }
 
         function updatePlayerPosition() {
@@ -841,39 +937,67 @@
                 charlieVelX += Math.cos(angle) * pushForce;
                 charlieVelY += Math.sin(angle) * pushForce;
             }
+
+            // Prevent kids from overlapping with player
+            const playerCenterX = playerX + 35;
+            const playerCenterY = playerY + 35;
+            
+            // Check Cassian-Player overlap
+            const cassianPlayerDist = Math.sqrt(Math.pow(cassianX + 30 - playerCenterX, 2) + Math.pow(cassianY + 30 - playerCenterY, 2));
+            if (cassianPlayerDist < MIN_DISTANCE_FROM_PLAYER) {
+                const angle = Math.atan2(cassianY + 30 - playerCenterY, cassianX + 30 - playerCenterX);
+                const pushDistance = MIN_DISTANCE_FROM_PLAYER - cassianPlayerDist;
+                
+                cassianX += Math.cos(angle) * pushDistance;
+                cassianY += Math.sin(angle) * pushDistance;
+                cassianVelX += Math.cos(angle) * 0.5;
+                cassianVelY += Math.sin(angle) * 0.5;
+            }
+            
+            // Check Charlie-Player overlap
+            const charliePlayerDist = Math.sqrt(Math.pow(charlieX + 30 - playerCenterX, 2) + Math.pow(charlieY + 30 - playerCenterY, 2));
+            if (charliePlayerDist < MIN_DISTANCE_FROM_PLAYER) {
+                const angle = Math.atan2(charlieY + 30 - playerCenterY, charlieX + 30 - playerCenterX);
+                const pushDistance = MIN_DISTANCE_FROM_PLAYER - charliePlayerDist;
+                
+                charlieX += Math.cos(angle) * pushDistance;
+                charlieY += Math.sin(angle) * pushDistance;
+                charlieVelX += Math.cos(angle) * 0.5;
+                charlieVelY += Math.sin(angle) * 0.5;
+            }
             
             // Keep kids on screen with bouncing - update these boundary checks
-            if (cassianX < 22.5) {
-                cassianX = 22.5;
+            if (cassianX < 30) {
+                cassianX = 30;
                 cassianVelX = Math.abs(cassianVelX) * 0.8;
             }
-            if (cassianX > window.innerWidth - 22.5) {
-                cassianX = window.innerWidth - 22.5;
+            if (cassianX > window.innerWidth - 30) {
+                cassianX = window.innerWidth - 30;
                 cassianVelX = -Math.abs(cassianVelX) * 0.8;
             }
-            if (cassianY < 90) {
-                cassianY = 90;
+            if (cassianY < 125) {
+                cassianY = 125;
                 cassianVelY = Math.abs(cassianVelY) * 0.8;
             }
-            if (cassianY > window.innerHeight - 22.5) {
-                cassianY = window.innerHeight - 22.5;
+            if (cassianY > window.innerHeight - 30) {
+                cassianY = window.innerHeight - 30;
                 cassianVelY = -Math.abs(cassianVelY) * 0.8;
             }
             
-            if (charlieX < 22.5) {
-                charlieX = 22.5;
+            if (charlieX < 30) {
+                charlieX = 30;
                 charlieVelX = Math.abs(charlieVelX) * 0.8;
             }
-            if (charlieX > window.innerWidth - 22.5) {
-                charlieX = window.innerWidth - 22.5;
+            if (charlieX > window.innerWidth - 30) {
+                charlieX = window.innerWidth - 30;
                 charlieVelX = -Math.abs(charlieVelX) * 0.8;
             }
-            if (charlieY < 90) {
-                charlieY = 90;
+            if (charlieY < 125) {
+                charlieY = 125;
                 charlieVelY = Math.abs(charlieVelY) * 0.8;
             }
-            if (charlieY > window.innerHeight - 22.5) {
-                charlieY = window.innerHeight - 22.5;
+            if (charlieY > window.innerHeight - 30) {
+                charlieY = window.innerHeight - 30;
                 charlieVelY = -Math.abs(charlieVelY) * 0.8;
             }
             
@@ -885,15 +1009,24 @@
         }
 
         function showSpeechBubble(kid, message) {
+            // Don't show if another kid is already speaking
+            if (currentSpeakingKid && currentSpeakingKid !== kid) {
+                return;
+            }
+
+            // Remove any existing bubble for this kid
             const existingBubble = kid.querySelector('.speech-bubble');
             if (existingBubble) {
                 existingBubble.remove();
             }
             
+            // Set current speaking kid
+            currentSpeakingKid = kid;
+            
             const bubble = document.createElement('div');
             bubble.className = 'speech-bubble';
             bubble.textContent = message;
-            bubble.style.bottom = '55px';
+            bubble.style.bottom = '65px';
             bubble.style.left = '50%';
             bubble.style.transform = 'translateX(-50%)';
             
@@ -909,6 +1042,10 @@
                     if (bubble.parentNode) {
                         bubble.remove();
                     }
+                    // Clear current speaking kid when bubble is completely gone
+                    if (currentSpeakingKid === kid) {
+                        currentSpeakingKid = null;
+                    }
                 }, 300);
             }, 3000);
         }
@@ -919,6 +1056,15 @@
             score = 0;
             timeLeft = 90;
             spawnAreas = { positive: [], negative: [] };
+            currentSpeakingKid = null;
+            
+            // Clear existing collectibles
+            collectibles.forEach(collectible => {
+                if (collectible.parentNode) {
+                    collectible.parentNode.removeChild(collectible);
+                }
+            });
+            collectibles = [];
             
             if (audioContext.state === 'suspended') {
                 audioContext.resume();
@@ -939,7 +1085,7 @@
             spawnTimer = setInterval(spawnCollectible, 400);
             
             speechTimer = setInterval(() => {
-                if (Math.random() < 0.3) {
+                if (Math.random() < 0.3 && !currentSpeakingKid) {
                     const kid = Math.random() < 0.5 ? cassian : charlie;
                     const message = encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
                     showSpeechBubble(kid, message);
@@ -950,8 +1096,35 @@
                 showSpeechBubble(cassian, "Go Mom! 💪");
             }, 1000);
             setTimeout(() => {
-                showSpeechBubble(charlie, "Love you! 💕");
-            }, 2000);
+                if (!currentSpeakingKid) {
+                    showSpeechBubble(charlie, "Love you! 💕");
+                }
+            }, 4000);
+        }
+
+        function restartGame() {
+            // Stop current game
+            gameRunning = false;
+            if (gameTimer) clearInterval(gameTimer);
+            if (spawnTimer) clearInterval(spawnTimer);
+            if (speechTimer) clearInterval(speechTimer);
+            
+            // Clear speech bubbles
+            document.querySelectorAll('.speech-bubble').forEach(bubble => bubble.remove());
+            currentSpeakingKid = null;
+            
+            // Reset positions
+            playerX = window.innerWidth / 2 - 35;
+            playerY = window.innerHeight / 2 - 35;
+            targetX = playerX;
+            targetY = playerY;
+            cassianX = playerX - 100;
+            cassianY = playerY + 80;
+            charlieX = playerX + 100;
+            charlieY = playerY - 80;
+            
+            // Start new game
+            startGame();
         }
 
         function spawnCollectible() {
@@ -975,7 +1148,7 @@
             
             do {
                 x = Math.random() * (window.innerWidth - 100) + 50;
-                y = Math.random() * (window.innerHeight - 200) + 120;
+                y = Math.random() * (window.innerHeight - 250) + 150;
                 attempts++;
                 
                 validPosition = !isNearStaticElement(x, y) && 
@@ -1009,12 +1182,11 @@
             // Check against ALL existing collectibles using their actual positions
             for (let collectible of collectibles) {
                 // Get the collectible's position from its style properties
-                const existingX = parseInt(collectible.style.left) + 22.5; // center of 45px item
-                const existingY = parseInt(collectible.style.top) + 22.5;  // center of 45px item
+                const existingX = parseInt(collectible.style.left) + 30; // center of 60px item
+                const existingY = parseInt(collectible.style.top) + 30;  // center of 60px item
                 
                 const distance = Math.sqrt(Math.pow(x - existingX, 2) + Math.pow(y - existingY, 2));
                 if (distance < minDistance) {
-                    console.log(`Overlap detected: distance ${distance} < ${minDistance}`);
                     return true; // Too close to existing item
                 }
             }
@@ -1043,12 +1215,12 @@
             const MIN_DISTANCE_FROM_KIDS = 100;   // Don't spawn too close to kids
             
             // Use actual game coordinates, not screen coordinates
-            const playerCenterX = playerX + 25;
-            const playerCenterY = playerY + 25;
-            const cassianCenterX = cassianX + 22.5;
-            const cassianCenterY = cassianY + 22.5;
-            const charlieCenterX = charlieX + 22.5;
-            const charlieCenterY = charlieY + 22.5;
+            const playerCenterX = playerX + 35;
+            const playerCenterY = playerY + 35;
+            const cassianCenterX = cassianX + 30;
+            const cassianCenterY = cassianY + 30;
+            const charlieCenterX = charlieX + 30;
+            const charlieCenterY = charlieY + 30;
             
             const playerDistance = Math.sqrt(Math.pow(x - playerCenterX, 2) + Math.pow(y - playerCenterY, 2));
             const cassianDistance = Math.sqrt(Math.pow(x - cassianCenterX, 2) + Math.pow(y - cassianCenterY, 2));
@@ -1099,17 +1271,26 @@
                 collectible.classList.add('flex-hit');
                 createNegativeParticles(collectible);
                 
-                const kid = Math.random() < 0.5 ? cassian : charlie;
-                const negativeMessages = ["Laundry is annoying!", "Let Dada Do Dishes 🚫", "Yucky! 🤢"];
-                const message = negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
-                showSpeechBubble(kid, message);
+                // Show appropriate message for each negative item type
+                if (!currentSpeakingKid) {
+                    const kid = Math.random() < 0.5 ? cassian : charlie;
+                    let message;
+                    
+                    if (type === 'laundry') {
+                        message = laundryMessages[Math.floor(Math.random() * laundryMessages.length)];
+                    } else if (type === 'dirty-dish') {
+                        message = dishMessages[Math.floor(Math.random() * dishMessages.length)];
+                    }
+                    
+                    showSpeechBubble(kid, message);
+                }
             } else {
                 playCollectSound();
                 createParticles(collectible);
                 
-                if (Math.random() < 0.4) {
+                if (Math.random() < 0.4 && !currentSpeakingKid) {
                     const kid = Math.random() < 0.5 ? cassian : charlie;
-                    const positiveMessages = ["Great job Mama! 🌟", "Happy Birthday Mama!!"];
+                    const positiveMessages = ["Great job Mama! 🌟", "Happy Birthday Mama!!", "You're amazing! ✨"];
                     const message = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
                     showSpeechBubble(kid, message);
                 }
@@ -1159,6 +1340,17 @@
 
         function updateScore() {
             document.getElementById('score').textContent = `Score: ${score}`;
+            
+            // Update high score if current score is higher
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('cafeQuestHighScore', highScore);
+                updateHighScore();
+            }
+        }
+
+        function updateHighScore() {
+            document.getElementById('highScore').textContent = `High Score: ${highScore}`;
         }
 
         function updateTimer() {
@@ -1173,8 +1365,14 @@
             
             playWinSound();
             
-            showSpeechBubble(cassian, "You did great! 🏆");
-            showSpeechBubble(charlie, "Love you Mom! 💕");
+            if (!currentSpeakingKid) {
+                showSpeechBubble(cassian, "You did great! 🏆");
+                setTimeout(() => {
+                    if (!currentSpeakingKid) {
+                        showSpeechBubble(charlie, "Love you Mom! 💕");
+                    }
+                }, 2000);
+            }
             
             let finalMessage = "";
             if (score >= 500) {
@@ -1187,8 +1385,8 @@
             
             setTimeout(() => {
                 showPopup("🎉 Game Complete! 🎉", 
-                    `${finalMessage}<br><br>Final Score: ${score}<br>You're amazing at 33! 💕<br><br>Cassian and Charlie are so proud of you!`);
-            }, 2000);
+                    `${finalMessage}<br><br>Final Score: ${score}<br>High Score: ${highScore}<br><br>You're amazing at 33! 💕<br><br>Cassian and Charlie are so proud of you!`);
+            }, 3000);
         }
 
         function showPopup(title, message) {
@@ -1224,6 +1422,7 @@
                 targetY = Math.min(targetY, window.innerHeight - 75);
                 playerX = Math.min(playerX, window.innerWidth - 75);
                 playerY = Math.min(playerY, window.innerHeight - 75);
+                createStaticElements(); // Recreate elements for new screen size
             }, 100);
         });
     </script>
