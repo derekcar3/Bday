@@ -87,9 +87,10 @@
             backdrop-filter: blur(15px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             height: 80px;
-            /* Add this to prevent shake interference */
+            /* Add these properties to prevent shake */
             transform: translateZ(0);
             will-change: auto;
+            position: fixed !important; /* Force it to stay fixed */
         }
 
             .tree {
