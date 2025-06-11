@@ -187,21 +187,19 @@
                 display: none;
             }
 
-            /* Animation for Dada's entrance */
-            @keyframes dada-entrance {
-                0% { 
-                    right: -100px; 
-                    opacity: 0;
-                }
-                100% { 
-                    right: 50px; 
-                    opacity: 1;
-                }
+        /* Remove the CSS animation since we're using JavaScript animation */
+        @keyframes dada-entrance {
+            0% { 
+                opacity: 0;
             }
+            100% { 
+                opacity: 1;
+            }
+        }
 
-            .dada-enter {
-                animation: dada-entrance 2s ease-out forwards;
-            }
+        .dada-enter {
+            animation: dada-entrance 0.5s ease-out forwards;
+        }
     
             .speech-bubble {
                 position: absolute;
@@ -840,25 +838,29 @@
         }
 
         function showDadaEntrance() {
-            // Position Dada off-screen to the right
+            // Position Dada off-screen to the right using left positioning
+            const startX = window.innerWidth + 50; // Off-screen right
+            const startY = (window.innerHeight / 2) - KID_RADIUS;
+            
             dada.style.position = 'absolute';
-            dada.style.right = '-100px';
-            dada.style.top = (window.innerHeight / 2) + 'px';
+            dada.style.left = startX + 'px';
+            dada.style.top = startY + 'px';
             dada.style.display = 'block';
             dada.style.zIndex = '95';
             
-            // Start the entrance animation
-            dada.classList.add('dada-enter');
+            // Animate Dada sliding in from the right
+            const finalX = window.innerWidth - 100; // Stop near right edge
+            animateToPosition(dada, finalX, startY, 2000);
             
-            // Show Dada's speech bubble after he's halfway in
+            // Show Dada's speech bubble after he's moved in
             setTimeout(() => {
                 showSpeechBubble(dada, "11/10! 🏆", true);
-            }, 1000);
+            }, 2000);
             
-            // Gather family around centered Mama
+            // Gather family around centered Mama after speech
             setTimeout(() => {
                 gatherFamilyAroundMama();
-            }, 2000);
+            }, 4000);
         }
 
         function showScorePopup(x, y, points) {
@@ -1453,8 +1455,13 @@
         }
 
         function animateToPosition(element, targetX, targetY, duration) {
-            const startX = parseInt(element.style.left) || 0;
-            const startY = parseInt(element.style.top) || 0;
+            // Get current position from computed styles
+            const currentStyle = window.getComputedStyle(element);
+            const startX = parseInt(currentStyle.left) || parseInt(element.style.left) || 0;
+            const startY = parseInt(currentStyle.top) || parseInt(element.style.top) || 0;
+            
+            console.log(`Animating ${element.id} from (${startX}, ${startY}) to (${targetX}, ${targetY})`);
+            
             const startTime = Date.now();
             
             function animate() {
@@ -1472,12 +1479,13 @@
                 
                 if (progress < 1) {
                     requestAnimationFrame(animate);
+                } else {
+                    console.log(`${element.id} animation complete at (${currentX}, ${currentY})`);
                 }
             }
             
             animate();
         }
-
         function spawnCollectible() {
             if (!gameRunning) return;
             
